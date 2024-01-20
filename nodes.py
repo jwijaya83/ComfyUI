@@ -509,7 +509,6 @@ class CheckpointLoader:
                               "ckpt_name": (folder_paths.get_filename_list("checkpoints"), )}}
     RETURN_TYPES = ("MODEL", "CLIP", "VAE")
     FUNCTION = "load_checkpoint"
-
     CATEGORY = "advanced/loaders"
 
     def load_checkpoint(self, config_name, ckpt_name, output_vae=True, output_clip=True):
@@ -589,6 +588,64 @@ class CLIPSetLastLayer:
         clip = clip.clone()
         clip.clip_layer(stop_at_clip_layer)
         return (clip,)
+
+
+class QualityLoader:
+    def __init__(self):
+        self.loaded_lora = None
+    
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "quality_mode": (s.QUALITY_MODE,),
+                "dreambooth_token_name": (folder_paths.get_filename_list("checkpoints"),),
+                "dreambooth_base_name": (folder_paths.get_filename_list("checkpoints"),),
+                "lora_name": (folder_paths.get_filename_list("loras"), ),
+                "strength_model": ("FLOAT", {"default": 1.0, "min": -20.0, "max": 20.0, "step": 0.01}),
+                "strength_clip": ("FLOAT", {"default": 1.0, "min": -20.0, "max": 20.0, "step": 0.01}),
+            }
+        }
+    QUALITY_MODE = ["dreambooth_sdxl", "lora_sdxl"]
+    RETURN_TYPES = ("MODEL", "CLIP", "VAE")
+    FUNCTION = "initiate_quality_mode"
+    CATEGORY = "loaders"
+    def initiate_quality_mode(self,quality_mode, dreambooth_token_name, dreambooth_base_name, lora_name, strength_model, strength_clip):
+        match quality_mode:
+            case "dreambooth_sdxl":
+                return self.dreambooth_sdxl( dreambooth_token_name)
+            case "lora_sdxl":
+                return self.lora_sdxl(dreambooth_base_name, lora_name, strength_model, strength_clip)
+            case _:
+                return self.lora_sdxl(dreambooth_base_name, lora_name, strength_model, strength_clip)
+    
+    def dreambooth_sdxl (self, dreambooth_token_name):
+        ckpt_path = folder_paths.get_full_path("checkpoints", dreambooth_token_name)
+        ckpt = comfy.sd.load_checkpoint_guess_config(ckpt_path, output_vae=True, output_clip=True, embedding_directory=folder_paths.get_folder_paths("embeddings"))
+        return ckpt[:3]
+
+    def lora_sdxl (self, dreambooth_base_name, lora_name, strength_model, strength_clip):
+        ckpt_path = folder_paths.get_full_path("checkpoints", dreambooth_base_name)
+        ckpt = comfy.sd.load_checkpoint_guess_config(ckpt_path, output_vae=True, output_clip=True, embedding_directory=folder_paths.get_folder_paths("embeddings"))
+        if strength_model == 0 and strength_clip == 0:
+            return ckpt[:3]
+
+        lora_path = folder_paths.get_full_path("loras", lora_name)
+        lora = None
+        if self.loaded_lora is not None:
+            if self.loaded_lora[0] == lora_path:
+                lora = self.loaded_lora[1]
+            else:
+                temp = self.loaded_lora
+                self.loaded_lora = None
+                del temp
+
+        if lora is None:
+            lora = comfy.utils.load_torch_file(lora_path, safe_load=True)
+            self.loaded_lora = (lora_path, lora)
+
+        model_lora, clip_lora = comfy.sd.load_lora_for_models(ckpt[0], ckpt[1], lora, strength_model, strength_clip)
+        return (model_lora, clip_lora, ckpt[2])
 
 class LoraLoader:
     def __init__(self):
@@ -1726,6 +1783,7 @@ class ImagePadForOutpaint:
 
 
 NODE_CLASS_MAPPINGS = {
+    "QualityLoader" : QualityLoader,
     "KSampler": KSampler,
     "CheckpointLoaderSimple": CheckpointLoaderSimple,
     "CLIPTextEncode": CLIPTextEncode,
@@ -1798,6 +1856,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "KSampler": "KSampler",
     "KSamplerAdvanced": "KSampler (Advanced)",
     # Loaders
+    "QualityLoader": "Load model and clip based on quality chosen",
     "CheckpointLoader": "Load Checkpoint With Config (DEPRECATED)",
     "CheckpointLoaderSimple": "Load Checkpoint",
     "VAELoader": "Load VAE",

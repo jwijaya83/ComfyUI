@@ -483,6 +483,7 @@ class PromptServer():
                     outputs_to_execute = valid[2]
                     self.prompt_queue.put((number, prompt_id, prompt, extra_data, outputs_to_execute))
                     response = {"prompt_id": prompt_id, "number": number, "node_errors": valid[3]}
+                    print("returning response now before image is done")
                     return web.json_response(response)
                 else:
                     print("invalid prompt:", valid[1])
