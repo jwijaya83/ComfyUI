@@ -1,13 +1,9 @@
 from .k_diffusion import sampling as k_diffusion_sampling
 from .extra_samplers import uni_pc
 import torch
-import enum
 import collections
 from comfy import model_management
 import math
-from comfy import model_base
-import comfy.utils
-import comfy.conds
 
 def get_area_and_mult(conds, x_in, timestep_in):
     area = (x_in.shape[2], x_in.shape[3], 0, 0)
@@ -639,7 +635,7 @@ def calculate_sigmas_scheduler(model, scheduler_name, steps):
     elif scheduler_name == "sgm_uniform":
         sigmas = normal_scheduler(model, steps, sgm=True)
     else:
-        print("error invalid scheduler", self.scheduler)
+        print("error invalid scheduler", scheduler_name)
     return sigmas
 
 def sampler_object(name):
