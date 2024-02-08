@@ -1,0 +1,1198 @@
+** ComfyUI startup time: 2024-02-07 20:47:49.165005
+[2024-02-07 20:47] ** Platform: Linux
+[2024-02-07 20:47] ** Python version: 3.10.12 (main, Nov 20 2023, 15:14:05) [GCC 11.4.0]
+[2024-02-07 20:47] ** Python executable: /home/justin/Workspace/ComfyUI/venv/bin/python
+[2024-02-07 20:47] ** Log path: /home/justin/Workspace/ComfyUI/comfyui.log
+[2024-02-07 20:47] 
+Prestartup times for custom nodes:
+[2024-02-07 20:47]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI-Stable-Video-Diffusion
+[2024-02-07 20:47]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI-Manager
+[2024-02-07 20:47] 
+[2024-02-07 20:47] Total VRAM 15836 MB, total RAM 64144 MB
+[2024-02-07 20:47] xformers version: 0.0.23.post1
+[2024-02-07 20:47] Set vram state to: NORMAL_VRAM
+[2024-02-07 20:47] Device: cuda:0 NVIDIA GeForce RTX 4080 : cudaMallocAsync
+[2024-02-07 20:47] VAE dtype: torch.bfloat16
+[2024-02-07 20:47] Using xformers cross attention
+[2024-02-07 20:47] ## clipseg model not found: /home/justin/Workspace/ComfyUI/models/clipseg,pls download from https://huggingface.co/CIDAS/clipseg-rd64-refined/tree/main
+[2024-02-07 20:47] --------------
+[2024-02-07 20:47] [91m ### Mixlab Nodes: [93mLoaded
+[2024-02-07 20:47] ## lama torchscript model not found: /home/justin/Workspace/ComfyUI/models/lama/big-lama.pt,pls download from https://github.com/enesmsahin/simple-lama-inpainting/releases/download/v0.1.0/big-lama.pt
+[2024-02-07 20:47] LaMaInpainting.available True
+[2024-02-07 20:47] ## clip_interrogator_model not found: /home/justin/Workspace/ComfyUI/models/clip_interrogator/Salesforce/blip-image-captioning-base, pls download from https://huggingface.co/Salesforce/blip-image-captioning-base
+[2024-02-07 20:47] ClipInterrogator.available True
+[2024-02-07 20:47] ## text_generator_model not found: /home/justin/Workspace/ComfyUI/models/prompt_generator/text2image-prompt-generator, pls download from https://huggingface.co/succinctly/text2image-prompt-generator/tree/main
+[2024-02-07 20:47] ## zh_en_model not found: /home/justin/Workspace/ComfyUI/models/prompt_generator/opus-mt-zh-en, pls download from https://huggingface.co/Helsinki-NLP/opus-mt-zh-en/tree/main
+[2024-02-07 20:47] PromptGenerate.available True
+[2024-02-07 20:47] ChinesePrompt.available True
+[2024-02-07 20:47] RembgNode_.available True
+[2024-02-07 20:47] [93m -------------- [0m
+[2024-02-07 20:47] ### Loading: ComfyUI-Manager (V1.25.2)
+[2024-02-07 20:47] ### ComfyUI Revision: 1918 [25ac06cf] | Released on '2024-01-19'
+[2024-02-07 20:47] FETCH DATA from: https://raw.githubusercontent.com/ltdrdata/ComfyUI-Manager/main/custom-node-list.json
+[2024-02-07 20:47] FETCH DATA from: https://raw.githubusercontent.com/ltdrdata/ComfyUI-Manager/main/extension-node-map.json
+[2024-02-07 20:47] FETCH DATA from: https://raw.githubusercontent.com/ltdrdata/ComfyUI-Manager/main/model-list.json
+[2024-02-07 20:47] FETCH DATA from: https://raw.githubusercontent.com/ltdrdata/ComfyUI-Manager/main/alter-list.json
+[2024-02-07 20:47] [ComfyUI-Manager] default cache updated: https://raw.githubusercontent.com/ltdrdata/ComfyUI-Manager/main/alter-list.json
+[2024-02-07 20:47] [ComfyUI-Manager] default cache updated: https://raw.githubusercontent.com/ltdrdata/ComfyUI-Manager/main/model-list.json
+[2024-02-07 20:47] [ComfyUI-Manager] default cache updated: https://raw.githubusercontent.com/ltdrdata/ComfyUI-Manager/main/extension-node-map.json
+[2024-02-07 20:47] [ComfyUI-Manager] default cache updated: https://raw.githubusercontent.com/ltdrdata/ComfyUI-Manager/main/custom-node-list.json
+[2024-02-07 20:47] ### Loading: ComfyUI-Inspire-Pack (V0.61.5)
+[36;20m[comfyui_controlnet_aux] | INFO -> Using ckpts path: /home/justin/Workspace/ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts[0m
+[2024-02-07 20:47] [36;20m[comfyui_controlnet_aux] | INFO -> Using symlinks: False[0m
+[2024-02-07 20:47] [36;20m[comfyui_controlnet_aux] | INFO -> Using ort providers: ['CUDAExecutionProvider', 'DirectMLExecutionProvider', 'OpenVINOExecutionProvider', 'ROCMExecutionProvider', 'CPUExecutionProvider', 'CoreMLExecutionProvider'][0m
+[2024-02-07 20:47] /home/justin/Workspace/ComfyUI/custom_nodes/comfyui_controlnet_aux/node_wrappers/dwpose.py:26: UserWarning: DWPose: Onnxruntime not found or doesn't come with acceleration providers, switch to OpenCV with CPU device. DWPose might run very slowly
+  warnings.warn("DWPose: Onnxruntime not found or doesn't come with acceleration providers, switch to OpenCV with CPU device. DWPose might run very slowly")
+[2024-02-07 20:47] ComfyUI_stable_fast: tensorrt_node import failed.
+[2024-02-07 20:47] Traceback (most recent call last):
+[2024-02-07 20:47]   File "/home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI_stable_fast/__init__.py", line 26, in <module>
+    from .tensorrt_node import (
+[2024-02-07 20:47]   File "/home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI_stable_fast/tensorrt_node.py", line 13, in <module>
+    from .module.controlnet_tensorrt import (
+[2024-02-07 20:47]   File "/home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI_stable_fast/module/controlnet_tensorrt.py", line 1, in <module>
+    from .tensorrt_wrapper import CallableTensorRTEngineWrapper
+[2024-02-07 20:47]   File "/home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI_stable_fast/module/tensorrt_wrapper.py", line 19, in <module>
+    from .tensorrt_utilities import Engine
+[2024-02-07 20:47]   File "/home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI_stable_fast/module/tensorrt_utilities.py", line 24, in <module>
+    import onnx
+[2024-02-07 20:47] ModuleNotFoundError: No module named 'onnx'
+[2024-02-07 20:47] [2024-02-07 20:47] ### Loading: ComfyUI-Impact-Pack (V4.70)
+[2024-02-07 20:47] ### Loading: ComfyUI-Impact-Pack (Subpack: V0.4)
+[2024-02-07 20:47] 
+Import times for custom nodes:
+[2024-02-07 20:47]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/sdxl-recommended-res-calc
+[2024-02-07 20:47]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI-Logic
+[2024-02-07 20:47]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/extended-saveimage-comfyui
+[2024-02-07 20:47]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI_IPAdapter_plus
+[2024-02-07 20:47]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/Comfy_Felsirnodes
+[2024-02-07 20:47]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyMath
+[2024-02-07 20:47]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI_UltimateSDUpscale
+[2024-02-07 20:47]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI-VideoHelperSuite
+[2024-02-07 20:47]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI-Frame-Interpolation
+[2024-02-07 20:47]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI_stable_fast
+[2024-02-07 20:47]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI-Inspire-Pack
+[2024-02-07 20:47]    0.1 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI-Manager
+[2024-02-07 20:47]    0.1 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI-Stable-Video-Diffusion
+[2024-02-07 20:47]    0.3 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI-Impact-Pack
+[2024-02-07 20:47]    0.3 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/comfyui_controlnet_aux
+[2024-02-07 20:47]    1.8 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/comfyui-mixlab-nodes
+[2024-02-07 20:47] [Impact Pack] Wildcards loading done.   2.1 seconds:
+[2024-02-07 20:47]  /home/justin/Workspace/ComfyUI/custom_nodes/comfyui_segment_anything
+[2024-02-07 20:47] 
+[2024-02-07 20:47] https_key OK:  /home/justin/Workspace/ComfyUI/custom_nodes/comfyui-mixlab-nodes/https/certificate.crt /home/justin/Workspace/ComfyUI/custom_nodes/comfyui-mixlab-nodes/https/private.key
+[2024-02-07 20:47] [93mStarting server
+[2024-02-07 20:47] 
+[2024-02-07 20:47] [93mTo see the GUI go to: http://127.0.0.1:8188
+[2024-02-07 20:47] [93mTo see the GUI go to: https://127.0.0.1:8189[0m
+[2024-02-07 20:48] got prompt
+ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:48] got prompt
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:48] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:48] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:48] ERROR:root:Output will be ignored
+[2024-02-07 20:48] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 207:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 204:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 208:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 206:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 207:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 204:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 208:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 206:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 207:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 204:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 208:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 206:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 207:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 204:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 208:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 206:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 207:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 204:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 208:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 206:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 204:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 204:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 204:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 204:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 204:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 207:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] got prompt
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 201:
+[2024-02-07 20:49] ERROR:root:* QualityLoader 205:
+[2024-02-07 20:49] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 191:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 181:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] ERROR:root:Failed to validate prompt for output 186:
+[2024-02-07 20:49] ERROR:root:Output will be ignored
+[2024-02-07 20:49] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2024-02-07 20:49] 
+Stopped server

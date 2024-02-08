@@ -646,7 +646,7 @@ class QualityLoader:
 
         model_lora, clip_lora = comfy.sd.load_lora_for_models(ckpt[0], ckpt[1], lora, strength_model, strength_clip)
         return (model_lora, clip_lora, ckpt[2])
-
+    
 class LoraLoader:
     def __init__(self):
         self.loaded_lora = None
