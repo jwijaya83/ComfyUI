@@ -1,4 +1,5 @@
 import torch
+import logging
 from comfy.ldm.modules.diffusionmodules.openaimodel import UNetModel, Timestep
 from comfy.ldm.cascade.stage_c import StageC
 from comfy.ldm.cascade.stage_b import StageB
@@ -15,9 +16,10 @@ class ModelType(Enum):
     V_PREDICTION = 2
     V_PREDICTION_EDM = 3
     STABLE_CASCADE = 4
+    EDM = 5
 
 
-from comfy.model_sampling import EPS, V_PREDICTION, ModelSamplingDiscrete, ModelSamplingContinuousEDM, StableCascadeSampling
+from comfy.model_sampling import EPS, V_PREDICTION, EDM, ModelSamplingDiscrete, ModelSamplingContinuousEDM, StableCascadeSampling
 
 
 def model_sampling(model_config, model_type):
@@ -33,6 +35,9 @@ def model_sampling(model_config, model_type):
     elif model_type == ModelType.STABLE_CASCADE:
         c = EPS
         s = StableCascadeSampling
+    elif model_type == ModelType.EDM:
+        c = EDM
+        s = ModelSamplingContinuousEDM
 
     class ModelSampling(s, c):
         pass
@@ -62,8 +67,8 @@ class BaseModel(torch.nn.Module):
         if self.adm_channels is None:
             self.adm_channels = 0
         self.inpaint_model = False
-        print("model_type", model_type.name)
-        print("adm", self.adm_channels)
+        logging.info("model_type {}".format(model_type.name))
+        logging.debug("adm {}".format(self.adm_channels))
 
     def apply_model(self, x, t, c_concat=None, c_crossattn=None, control=None, transformer_options={}, **kwargs):
         sigma = t
@@ -163,6 +168,10 @@ class BaseModel(torch.nn.Module):
         if cross_attn_cnet is not None:
             out['crossattn_controlnet'] = comfy.conds.CONDCrossAttn(cross_attn_cnet)
 
+        c_concat = kwargs.get("noise_concat", None)
+        if c_concat is not None:
+            out['c_concat'] = comfy.conds.CONDNoiseShape(data)
+
         return out
 
     def load_model_weights(self, sd, unet_prefix=""):
@@ -175,10 +184,10 @@ class BaseModel(torch.nn.Module):
         to_load = self.model_config.process_unet_state_dict(to_load)
         m, u = self.diffusion_model.load_state_dict(to_load, strict=False)
         if len(m) > 0:
-            print("unet missing:", m)
+            logging.warning("unet missing: {}".format(m))
 
         if len(u) > 0:
-            print("unet unexpected:", u)
+            logging.warning("unet unexpected: {}".format(u))
         del to_load
         return self
 
@@ -368,7 +377,6 @@ class SVD_img2vid(BaseModel):
         if "time_conditioning" in kwargs:
             out["time_context"] = comfy.conds.CONDCrossAttn(kwargs["time_conditioning"])
 
-        out['image_only_indicator'] = comfy.conds.CONDConstant(torch.zeros((1,), device=device))
         out['num_video_frames'] = comfy.conds.CONDConstant(noise.shape[0])
         return out
 
@@ -474,15 +482,11 @@ class StableCascade_B(BaseModel):
 
         clip_text_pooled = kwargs["pooled_output"]
         if clip_text_pooled is not None:
-            out['clip_text_pooled'] = comfy.conds.CONDRegular(clip_text_pooled)
+            out['clip'] = comfy.conds.CONDRegular(clip_text_pooled)
 
         #size of prior doesn't really matter if zeros because it gets resized but I still want it to get batched
         prior = kwargs.get("stable_cascade_prior", torch.zeros((1, 16, (noise.shape[2] * 4) // 42, (noise.shape[3] * 4) // 42), dtype=noise.dtype, layout=noise.layout, device=noise.device))
 
         out["effnet"] = comfy.conds.CONDRegular(prior)
         out["sca"] = comfy.conds.CONDRegular(torch.zeros((1,)))
-
-        cross_attn = kwargs.get("cross_attn", None)
-        if cross_attn is not None:
-            out['clip'] = comfy.conds.CONDCrossAttn(cross_attn)
         return out
