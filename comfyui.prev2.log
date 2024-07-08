@@ -1,652 +1,817 @@
-** ComfyUI startup time: 2024-02-07 20:46:54.734511
-[2024-02-07 20:46] ** Platform: Linux
-[2024-02-07 20:46] ** Python version: 3.10.12 (main, Nov 20 2023, 15:14:05) [GCC 11.4.0]
-[2024-02-07 20:46] ** Python executable: /home/justin/Workspace/ComfyUI/venv/bin/python
-[2024-02-07 20:46] ** Log path: /home/justin/Workspace/ComfyUI/comfyui.log
-[2024-02-07 20:46] 
+## ComfyUI-Manager: installing dependencies done.
+[2024-06-28 12:53] ** ComfyUI startup time: 2024-06-28 12:53:04.369138
+[2024-06-28 12:53] ** Platform: Linux
+[2024-06-28 12:53] ** Python version: 3.10.12 (main, Nov 20 2023, 15:14:05) [GCC 11.4.0]
+[2024-06-28 12:53] ** Python executable: /home/justin/Workspace/ComfyUI/venv/bin/python3
+[2024-06-28 12:53] ** Log path: /home/justin/Workspace/ComfyUI/comfyui.log
+[2024-06-28 12:53] 
 Prestartup times for custom nodes:
-[2024-02-07 20:46]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI-Stable-Video-Diffusion
-[2024-02-07 20:46]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI-Manager
-[2024-02-07 20:46] 
-[2024-02-07 20:46] Total VRAM 15836 MB, total RAM 64144 MB
-[2024-02-07 20:46] xformers version: 0.0.23.post1
-[2024-02-07 20:46] Set vram state to: NORMAL_VRAM
-[2024-02-07 20:46] Device: cuda:0 NVIDIA GeForce RTX 4080 : cudaMallocAsync
-[2024-02-07 20:46] VAE dtype: torch.bfloat16
-[2024-02-07 20:46] Using xformers cross attention
-[2024-02-07 20:46] ## clipseg model not found: /home/justin/Workspace/ComfyUI/models/clipseg,pls download from https://huggingface.co/CIDAS/clipseg-rd64-refined/tree/main
-[2024-02-07 20:46] --------------
-[2024-02-07 20:46] [91m ### Mixlab Nodes: [93mLoaded
-[2024-02-07 20:46] ## lama torchscript model not found: /home/justin/Workspace/ComfyUI/models/lama/big-lama.pt,pls download from https://github.com/enesmsahin/simple-lama-inpainting/releases/download/v0.1.0/big-lama.pt
-[2024-02-07 20:46] LaMaInpainting.available True
-[2024-02-07 20:46] ## clip_interrogator_model not found: /home/justin/Workspace/ComfyUI/models/clip_interrogator/Salesforce/blip-image-captioning-base, pls download from https://huggingface.co/Salesforce/blip-image-captioning-base
-[2024-02-07 20:46] ClipInterrogator.available True
-[2024-02-07 20:46] ## text_generator_model not found: /home/justin/Workspace/ComfyUI/models/prompt_generator/text2image-prompt-generator, pls download from https://huggingface.co/succinctly/text2image-prompt-generator/tree/main
-[2024-02-07 20:46] ## zh_en_model not found: /home/justin/Workspace/ComfyUI/models/prompt_generator/opus-mt-zh-en, pls download from https://huggingface.co/Helsinki-NLP/opus-mt-zh-en/tree/main
-[2024-02-07 20:46] PromptGenerate.available True
-[2024-02-07 20:46] ChinesePrompt.available True
-[2024-02-07 20:46] RembgNode_.available True
-[2024-02-07 20:46] [93m -------------- [0m
-[2024-02-07 20:46] ### Loading: ComfyUI-Manager (V1.25.2)
-[2024-02-07 20:46] ### ComfyUI Revision: 1918 [25ac06cf] | Released on '2024-01-19'
-[2024-02-07 20:46] FETCH DATA from: https://raw.githubusercontent.com/ltdrdata/ComfyUI-Manager/main/custom-node-list.json
-[2024-02-07 20:46] FETCH DATA from: https://raw.githubusercontent.com/ltdrdata/ComfyUI-Manager/main/extension-node-map.json
-[2024-02-07 20:46] FETCH DATA from: https://raw.githubusercontent.com/ltdrdata/ComfyUI-Manager/main/model-list.json
-[2024-02-07 20:46] FETCH DATA from: https://raw.githubusercontent.com/ltdrdata/ComfyUI-Manager/main/alter-list.json
-[2024-02-07 20:46] [ComfyUI-Manager] default cache updated: https://raw.githubusercontent.com/ltdrdata/ComfyUI-Manager/main/custom-node-list.json
-[2024-02-07 20:46] [ComfyUI-Manager] default cache updated: https://raw.githubusercontent.com/ltdrdata/ComfyUI-Manager/main/model-list.json
-[2024-02-07 20:46] [ComfyUI-Manager] default cache updated: https://raw.githubusercontent.com/ltdrdata/ComfyUI-Manager/main/alter-list.json
-[2024-02-07 20:46] [ComfyUI-Manager] default cache updated: https://raw.githubusercontent.com/ltdrdata/ComfyUI-Manager/main/extension-node-map.json
-[2024-02-07 20:46] ### Loading: ComfyUI-Inspire-Pack (V0.61.5)
-[36;20m[comfyui_controlnet_aux] | INFO -> Using ckpts path: /home/justin/Workspace/ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts[0m
-[2024-02-07 20:46] [36;20m[comfyui_controlnet_aux] | INFO -> Using symlinks: False[0m
-[2024-02-07 20:46] [36;20m[comfyui_controlnet_aux] | INFO -> Using ort providers: ['CUDAExecutionProvider', 'DirectMLExecutionProvider', 'OpenVINOExecutionProvider', 'ROCMExecutionProvider', 'CPUExecutionProvider', 'CoreMLExecutionProvider'][0m
-[2024-02-07 20:46] /home/justin/Workspace/ComfyUI/custom_nodes/comfyui_controlnet_aux/node_wrappers/dwpose.py:26: UserWarning: DWPose: Onnxruntime not found or doesn't come with acceleration providers, switch to OpenCV with CPU device. DWPose might run very slowly
-  warnings.warn("DWPose: Onnxruntime not found or doesn't come with acceleration providers, switch to OpenCV with CPU device. DWPose might run very slowly")
-[2024-02-07 20:46] ComfyUI_stable_fast: tensorrt_node import failed.
-[2024-02-07 20:46] Traceback (most recent call last):
-[2024-02-07 20:46]   File "/home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI_stable_fast/__init__.py", line 26, in <module>
+[2024-06-28 12:53]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI-Stable-Video-Diffusion
+[2024-06-28 12:53]    0.3 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI-Manager
+[2024-06-28 12:53] 
+Total VRAM 15836 MB, total RAM 64144 MB
+[2024-06-28 12:53] pytorch version: 2.1.2+cu121
+[2024-06-28 12:53] xformers version: 0.0.23.post1
+[2024-06-28 12:53] Set vram state to: NORMAL_VRAM
+[2024-06-28 12:53] Device: cuda:0 NVIDIA GeForce RTX 4080 : cudaMallocAsync
+[2024-06-28 12:53] VAE dtype: torch.bfloat16
+[2024-06-28 12:53] Using xformers cross attention
+[2024-06-28 12:53] ### Loading: ComfyUI-Manager (V2.38.2)
+[2024-06-28 12:53] ### ComfyUI Revision: 2257 [7d225c40] | Released on '2024-06-12'
+[2024-06-28 12:53] [ComfyUI-Manager] default cache updated: https://raw.githubusercontent.com/ltdrdata/ComfyUI-Manager/main/custom-node-list.json
+[2024-06-28 12:53] [ComfyUI-Manager] default cache updated: https://raw.githubusercontent.com/ltdrdata/ComfyUI-Manager/main/github-stats.json
+[2024-06-28 12:53] [ComfyUI-Manager] default cache updated: https://raw.githubusercontent.com/ltdrdata/ComfyUI-Manager/main/model-list.json
+[2024-06-28 12:53] [ComfyUI-Manager] default cache updated: https://raw.githubusercontent.com/ltdrdata/ComfyUI-Manager/main/alter-list.json
+[2024-06-28 12:53] [ComfyUI-Manager] default cache updated: https://raw.githubusercontent.com/ltdrdata/ComfyUI-Manager/main/extension-node-map.json
+[2024-06-28 12:53] WARNING: Could not find OPENAI_API_KEY in .env, disabling gpt prompt generation.
+[2024-06-28 12:53] ### Loading: ComfyUI-Inspire-Pack (V0.76)
+[2024-06-28 12:53] ComfyUI_stable_fast: tensorrt_node import failed.
+[2024-06-28 12:53] Traceback (most recent call last):
+[2024-06-28 12:53]   File "/home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI_stable_fast/__init__.py", line 26, in <module>
     from .tensorrt_node import (
-[2024-02-07 20:46]   File "/home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI_stable_fast/tensorrt_node.py", line 13, in <module>
+[2024-06-28 12:53]   File "/home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI_stable_fast/tensorrt_node.py", line 13, in <module>
     from .module.controlnet_tensorrt import (
-[2024-02-07 20:46]   File "/home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI_stable_fast/module/controlnet_tensorrt.py", line 1, in <module>
+[2024-06-28 12:53]   File "/home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI_stable_fast/module/controlnet_tensorrt.py", line 1, in <module>
     from .tensorrt_wrapper import CallableTensorRTEngineWrapper
-[2024-02-07 20:46]   File "/home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI_stable_fast/module/tensorrt_wrapper.py", line 19, in <module>
+[2024-06-28 12:53]   File "/home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI_stable_fast/module/tensorrt_wrapper.py", line 19, in <module>
     from .tensorrt_utilities import Engine
-[2024-02-07 20:46]   File "/home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI_stable_fast/module/tensorrt_utilities.py", line 24, in <module>
+[2024-06-28 12:53]   File "/home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI_stable_fast/module/tensorrt_utilities.py", line 24, in <module>
     import onnx
-[2024-02-07 20:46] ModuleNotFoundError: No module named 'onnx'
-[2024-02-07 20:46] [2024-02-07 20:46] ### Loading: ComfyUI-Impact-Pack (V4.70)
-[2024-02-07 20:46] ### Loading: ComfyUI-Impact-Pack (Subpack: V0.4)
-[2024-02-07 20:46] 
+[2024-06-28 12:53] ModuleNotFoundError: No module named 'onnx'
+[2024-06-28 12:53] [2024-06-28 12:53] ### Loading: ComfyUI-Impact-Pack (V5.14)
+[2024-06-28 12:53] ### Loading: ComfyUI-Impact-Pack (Subpack: V0.6)
+
 Import times for custom nodes:
-[2024-02-07 20:46]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/sdxl-recommended-res-calc
-[2024-02-07 20:46]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI-Logic
-[2024-02-07 20:46]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI_IPAdapter_plus
-[2024-02-07 20:46]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/extended-saveimage-comfyui
-[2024-02-07 20:46]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/Comfy_Felsirnodes
-[2024-02-07 20:46]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyMath
-[2024-02-07 20:46]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI_UltimateSDUpscale
-[2024-02-07 20:46]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI-Frame-Interpolation
-[2024-02-07 20:46]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI_stable_fast
-[2024-02-07 20:46]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI-VideoHelperSuite
-[2024-02-07 20:46]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI-Stable-Video-Diffusion
-[2024-02-07 20:46]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI-Inspire-Pack
-[2024-02-07 20:46]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI-Manager
-[2024-02-07 20:46]    0.1 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI-Impact-Pack
-[2024-02-07 20:46]    0.2 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/comfyui_controlnet_aux
-[2024-02-07 20:46]    1.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/comfyui-mixlab-nodes
-[2024-02-07 20:46]    1.1 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/comfyui_segment_anything
-[2024-02-07 20:46] 
-[2024-02-07 20:46] [Impact Pack] Wildcards loading done.
-[2024-02-07 20:46] https_key OK:  /home/justin/Workspace/ComfyUI/custom_nodes/comfyui-mixlab-nodes/https/certificate.crt /home/justin/Workspace/ComfyUI/custom_nodes/comfyui-mixlab-nodes/https/private.key
-[2024-02-07 20:46] [93mStarting server
-[2024-02-07 20:46] 
-[2024-02-07 20:46] [93mTo see the GUI go to: http://127.0.0.1:8188
-[2024-02-07 20:46] [93mTo see the GUI go to: https://127.0.0.1:8189[0m
-[2024-02-07 20:47] got prompt
-ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 207:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 207:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 207:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 207:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 207:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 207:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 207:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 207:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 207:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 207:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 205:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 207:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] got prompt
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 201:
-[2024-02-07 20:47] ERROR:root:* QualityLoader 207:
-[2024-02-07 20:47] ERROR:root:  - Value not in list: lora_name: 'benchmark/lr-noReg-april_ghwdsfllkmzxttrw_white_woman_000006.safetensors' not in (list of length 48)
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 181:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 186:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] ERROR:root:Failed to validate prompt for output 191:
-[2024-02-07 20:47] ERROR:root:Output will be ignored
-[2024-02-07 20:47] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
-[2024-02-07 20:47] 
+[2024-06-28 12:53]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/websocket_image_save.py
+[2024-06-28 12:53]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/sdxl-recommended-res-calc
+[2024-06-28 12:53]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI-Logic
+[2024-06-28 12:53]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/extended-saveimage-comfyui
+[2024-06-28 12:53]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI-Stable-Video-Diffusion
+[2024-06-28 12:53]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/Comfy_Felsirnodes
+[2024-06-28 12:53]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyMath
+[2024-06-28 12:53]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI_UltimateSDUpscale
+[2024-06-28 12:53]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI-Frame-Interpolation
+[2024-06-28 12:53]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI_ExtraModels
+[2024-06-28 12:53]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI_stable_fast
+[2024-06-28 12:53]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI_IPAdapter_plus
+[2024-06-28 12:53]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI-Manager
+[2024-06-28 12:53]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/comfyui_segment_anything
+[2024-06-28 12:53]    0.0 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI-Inspire-Pack
+[2024-06-28 12:53]    0.1 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI-Impact-Pack
+[2024-06-28 12:53]    0.3 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI-SUPIR
+[2024-06-28 12:53]    0.7 seconds: /home/justin/Workspace/ComfyUI/custom_nodes/eden_comfy_pipelines
+[2024-06-28 12:53] 
+[2024-06-28 12:53] [Impact Pack] Wildcards loading done.
+[2024-06-28 12:53] Starting server
+
+[2024-06-28 12:53] To see the GUI go to: http://127.0.0.1:8188
+[2024-06-28 12:53] got prompt
+[2024-06-28 12:53] returning response now before image is done
+[2024-06-28 12:53] model_type EPS
+[2024-06-28 12:53] got prompt
+[2024-06-28 12:53] returning response now before image is done
+[2024-06-28 12:53] got prompt
+[2024-06-28 12:53] returning response now before image is done
+[2024-06-28 12:53] got prompt
+[2024-06-28 12:53] returning response now before image is done
+[2024-06-28 12:53] Using xformers attention in VAE
+[2024-06-28 12:53] Using xformers attention in VAE
+[2024-06-28 12:53] got prompt
+[2024-06-28 12:53] returning response now before image is done
+[2024-06-28 12:53] got prompt
+[2024-06-28 12:53] returning response now before image is done
+[2024-06-28 12:53] got prompt
+[2024-06-28 12:53] returning response now before image is done
+[2024-06-28 12:53] got prompt
+[2024-06-28 12:53] returning response now before image is done
+[2024-06-28 12:53] got prompt
+[2024-06-28 12:53] returning response now before image is done
+[2024-06-28 12:53] Requested to load SDXLClipModel
+[2024-06-28 12:53] Loading 1 new model
+[2024-06-28 12:53] got prompt
+[2024-06-28 12:53] returning response now before image is done
+[2024-06-28 12:53] got prompt
+[2024-06-28 12:53] returning response now before image is done
+[2024-06-28 12:53] Requested to load SDXL
+[2024-06-28 12:53] Loading 1 new model
+[2024-06-28 12:53] got prompt
+[2024-06-28 12:53] returning response now before image is done
+[2024-06-28 12:53] got prompt
+[2024-06-28 12:53] returning response now before image is done
+[2024-06-28 12:53] got prompt
+[2024-06-28 12:53] returning response now before image is done
+[2024-06-28 12:53] got prompt
+[2024-06-28 12:53] returning response now before image is done
+[2024-06-28 12:53] got prompt
+[2024-06-28 12:53] returning response now before image is done
+[2024-06-28 12:53] got prompt
+[2024-06-28 12:53] returning response now before image is done
+[2024-06-28 12:53] got prompt
+[2024-06-28 12:53] returning response now before image is done
+[2024-06-28 12:53] got prompt
+[2024-06-28 12:53] returning response now before image is done
+[2024-06-28 12:53] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:05<00:00,  5.13it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:05<00:00,  4.92it/s]
+[2024-06-28 12:53] Requested to load AutoencoderKL
+[2024-06-28 12:53] Loading 1 new model
+[2024-06-28 12:53] Loads SAM model: /home/justin/Workspace/ComfyUI/models/sams/sam_vit_b_01ec64.pth (device:Prefer GPU)
+[2024-06-28 12:53] 
+[2024-06-28 12:53] 0: 640x640 1 face, 4.1ms
+[2024-06-28 12:53] Speed: 1.5ms preprocess, 4.1ms inference, 16.8ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 12:53] Detailer: force inpaint
+[2024-06-28 12:53] Detailer: segment upscale for ((297.2493, 419.33447)) | crop region (891, 1024) x 1.0 -> (891, 1024)
+[2024-06-28 12:53] Requested to load SDXL
+[2024-06-28 12:53] Loading 1 new model
+[2024-06-28 12:53] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:04<00:00,  6.28it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:04<00:00,  6.29it/s]
+[2024-06-28 12:53] 
+[2024-06-28 12:53] 0: 640x640 1 face, 4.2ms
+[2024-06-28 12:53] Speed: 1.3ms preprocess, 4.2ms inference, 0.6ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 12:53] Detailer: segment upscale for ((292.94153, 414.88528)) | crop region (878, 1024) x 1.000131882073359 -> (878, 1024)
+[2024-06-28 12:53] Requested to load SDXL
+[2024-06-28 12:53] Loading 1 new model
+[2024-06-28 12:53] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:04<00:00,  6.05it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:04<00:00,  6.14it/s]
+[2024-06-28 12:53] Prompt executed in 20.79 seconds
+[2024-06-28 12:53] model_type EPS
+[2024-06-28 12:53] Using xformers attention in VAE
+[2024-06-28 12:53] Using xformers attention in VAE
+[2024-06-28 12:53] Requested to load SDXLClipModel
+[2024-06-28 12:53] Loading 1 new model
+[2024-06-28 12:53] Requested to load SDXL
+[2024-06-28 12:53] Loading 1 new model
+[2024-06-28 12:53] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:04<00:00,  5.18it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:04<00:00,  5.17it/s]
+[2024-06-28 12:53] Requested to load AutoencoderKL
+[2024-06-28 12:53] Loading 1 new model
+[2024-06-28 12:53] 
+[2024-06-28 12:53] 0: 640x640 1 face, 4.2ms
+[2024-06-28 12:53] Speed: 1.4ms preprocess, 4.2ms inference, 0.5ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 12:53] Detailer: force inpaint
+[2024-06-28 12:53] Detailer: segment upscale for ((337.83875, 445.58557)) | crop region (1014, 1024) x 1.0 -> (1014, 1024)
+[2024-06-28 12:53] Requested to load SDXL
+[2024-06-28 12:53] Loading 1 new model
+[2024-06-28 12:54] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:05<00:00,  5.09it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:05<00:00,  5.06it/s]
+[2024-06-28 12:54] 
+[2024-06-28 12:54] 0: 640x640 1 face, 4.2ms
+[2024-06-28 12:54] Speed: 1.4ms preprocess, 4.2ms inference, 0.6ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 12:54] Detailer: segment upscale for ((340.69925, 444.8283)) | crop region (1023, 1024) x 1.0002331418856347 -> (1023, 1024)
+[2024-06-28 12:54] Requested to load SDXL
+[2024-06-28 12:54] Loading 1 new model
+[2024-06-28 12:54] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:05<00:00,  5.01it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:05<00:00,  5.00it/s]
+[2024-06-28 12:54] Prompt executed in 21.80 seconds
+[2024-06-28 12:54] Requested to load SDXLClipModel
+[2024-06-28 12:54] Loading 1 new model
+[2024-06-28 12:54] Requested to load SDXL
+[2024-06-28 12:54] Loading 1 new model
+[2024-06-28 12:54] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:04<00:00,  5.00it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:04<00:00,  5.15it/s]
+[2024-06-28 12:54] 
+[2024-06-28 12:54] 0: 640x640 1 face, 4.4ms
+[2024-06-28 12:54] Speed: 1.6ms preprocess, 4.4ms inference, 1.6ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 12:54] Detailer: segment upscale for ((109.73288, 134.05116)) | crop region (329, 402) x 1.9108030757514296 -> (628, 768)
+[2024-06-28 12:54] Requested to load SDXL
+[2024-06-28 12:54] Loading 1 new model
+[2024-06-28 12:54] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:02<00:00, 10.38it/s]
+[2024-06-28 12:54] 
+[2024-06-28 12:54] 0: 640x640 1 face, 4.4ms
+[2024-06-28 12:54] Speed: 1.5ms preprocess, 4.4ms inference, 0.9ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 12:54] Detailer: segment upscale for ((110.388214, 134.68741)) | crop region (331, 404) x 2.535090763385518 -> (839, 1024)
+[2024-06-28 12:54] Requested to load SDXL
+[2024-06-28 12:54] Loading 1 new model
+[2024-06-28 12:54] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:04<00:00,  6.69it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:04<00:00,  6.78it/s]
+[2024-06-28 12:54] Prompt executed in 14.84 seconds
+[2024-06-28 12:54] Requested to load SDXLClipModel
+[2024-06-28 12:54] Loading 1 new model
+[2024-06-28 12:54] Requested to load SDXL
+[2024-06-28 12:54] Loading 1 new model
+[2024-06-28 12:54] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:04<00:00,  5.26it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:04<00:00,  5.29it/s]
+[2024-06-28 12:54] 
+[2024-06-28 12:54] 0: 640x640 1 face, 4.2ms
+[2024-06-28 12:54] Speed: 1.7ms preprocess, 4.2ms inference, 0.7ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 12:54] Detailer: force inpaint
+[2024-06-28 12:54] Detailer: segment upscale for ((423.85767, 536.96606)) | crop region (1024, 1024) x 1.0 -> (1024, 1024)
+[2024-06-28 12:54] Requested to load SDXL
+[2024-06-28 12:54] Loading 1 new model
+[2024-06-28 12:54] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:05<00:00,  5.05it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:05<00:00,  5.33it/s]
+[2024-06-28 12:54] 
+[2024-06-28 12:54] 0: 640x640 1 face, 4.2ms
+[2024-06-28 12:54] Speed: 1.4ms preprocess, 4.2ms inference, 0.6ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 12:54] Detailer: segment upscale for ((422.41263, 540.1455)) | crop region (1024, 1024) x 1.0001410271877265 -> (1024, 1024)
+[2024-06-28 12:54] Requested to load SDXL
+[2024-06-28 12:54] Loading 1 new model
+[2024-06-28 12:54] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:05<00:00,  5.20it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:05<00:00,  5.15it/s]
+[2024-06-28 12:54] Prompt executed in 19.36 seconds
+[2024-06-28 12:54] model_type EPS
+[2024-06-28 12:54] Using xformers attention in VAE
+[2024-06-28 12:54] Using xformers attention in VAE
+[2024-06-28 12:54] Requested to load SDXLClipModel
+[2024-06-28 12:54] Loading 1 new model
+[2024-06-28 12:54] Requested to load SDXL
+[2024-06-28 12:54] Loading 1 new model
+[2024-06-28 12:54] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:05<00:00,  4.81it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:05<00:00,  4.93it/s]
+[2024-06-28 12:54] Requested to load AutoencoderKL
+[2024-06-28 12:54] Loading 1 new model
+[2024-06-28 12:54] FETCH DATA from: /home/justin/Workspace/ComfyUI/custom_nodes/ComfyUI-Manager/extension-node-map.json [DONE]
+[2024-06-28 12:54] 
+[2024-06-28 12:54] 0: 640x640 1 face, 5.4ms
+[2024-06-28 12:54] Speed: 2.1ms preprocess, 5.4ms inference, 0.9ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 12:54] Detailer: force inpaint
+[2024-06-28 12:54] Detailer: segment upscale for ((224.93869, 294.42157)) | crop region (674, 883) x 1.0 -> (674, 883)
+[2024-06-28 12:54] Requested to load SDXL
+[2024-06-28 12:54] Loading 1 new model
+[2024-06-28 12:54] 
+[2024-06-28 12:54] Processing interrupted
+[2024-06-28 12:54] Prompt executed in 11.73 seconds
+[2024-06-28 12:56] got prompt
+[2024-06-28 12:56] returning response now before image is done
+[2024-06-28 12:56] Requested to load SDXL
+[2024-06-28 12:56] Loading 1 new model
+[2024-06-28 12:56] got prompt
+[2024-06-28 12:56] returning response now before image is done
+[2024-06-28 12:56] got prompt
+[2024-06-28 12:56] returning response now before image is done
+[2024-06-28 12:56] got prompt
+[2024-06-28 12:56] returning response now before image is done
+[2024-06-28 12:56] got prompt
+[2024-06-28 12:56] returning response now before image is done
+[2024-06-28 12:56] got prompt
+[2024-06-28 12:56] returning response now before image is done
+[2024-06-28 12:56] got prompt
+[2024-06-28 12:56] returning response now before image is done
+[2024-06-28 12:56] got prompt
+[2024-06-28 12:56] returning response now before image is done
+[2024-06-28 12:56] got prompt
+[2024-06-28 12:56] returning response now before image is done
+[2024-06-28 12:56] got prompt
+[2024-06-28 12:56] returning response now before image is done
+[2024-06-28 12:56] got prompt
+[2024-06-28 12:56] returning response now before image is done
+[2024-06-28 12:56] got prompt
+[2024-06-28 12:56] returning response now before image is done
+[2024-06-28 12:56] got prompt
+[2024-06-28 12:56] returning response now before image is done
+[2024-06-28 12:56] got prompt
+[2024-06-28 12:56] returning response now before image is done
+[2024-06-28 12:56] got prompt
+[2024-06-28 12:56] returning response now before image is done
+[2024-06-28 12:56] got prompt
+[2024-06-28 12:56] returning response now before image is done
+[2024-06-28 12:56] got prompt
+[2024-06-28 12:56] returning response now before image is done
+[2024-06-28 12:56] got prompt
+[2024-06-28 12:56] returning response now before image is done
+[2024-06-28 12:56] got prompt
+[2024-06-28 12:56] returning response now before image is done
+[2024-06-28 12:56] got prompt
+[2024-06-28 12:56] returning response now before image is done
+[2024-06-28 12:56] got prompt
+[2024-06-28 12:56] returning response now before image is done
+[2024-06-28 12:56] got prompt
+[2024-06-28 12:56] returning response now before image is done
+[2024-06-28 12:56] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:04<00:00,  5.03it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:04<00:00,  5.03it/s]
+[2024-06-28 12:56] 
+[2024-06-28 12:56] 0: 640x640 1 face, 4.2ms
+[2024-06-28 12:56] Speed: 1.5ms preprocess, 4.2ms inference, 0.6ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 12:56] Detailer: segment upscale for ((149.91016, 198.14064)) | crop region (449, 594) x 1.2929729252422293 -> (580, 768)
+[2024-06-28 12:56] Requested to load SDXL
+[2024-06-28 12:56] Loading 1 new model
+[2024-06-28 12:56] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:02<00:00, 11.77it/s]
+[2024-06-28 12:56] 
+[2024-06-28 12:56] 0: 640x640 1 face, 4.2ms
+[2024-06-28 12:56] Speed: 1.4ms preprocess, 4.2ms inference, 0.6ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 12:56] Detailer: segment upscale for ((148.97864, 198.29161)) | crop region (446, 594) x 1.7242606386646686 -> (769, 1024)
+[2024-06-28 12:56] Requested to load SDXL
+[2024-06-28 12:56] Loading 1 new model
+[2024-06-28 12:56] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:04<00:00,  7.13it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:04<00:00,  7.08it/s]
+[2024-06-28 12:56] Prompt executed in 13.33 seconds
+[2024-06-28 12:56] model_type EPS
+[2024-06-28 12:56] Using xformers attention in VAE
+[2024-06-28 12:56] Using xformers attention in VAE
+[2024-06-28 12:56] Requested to load SDXLClipModel
+[2024-06-28 12:56] Loading 1 new model
+[2024-06-28 12:56] Requested to load SDXL
+[2024-06-28 12:56] Loading 1 new model
+[2024-06-28 12:57] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:08<00:00,  2.37it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:08<00:00,  2.86it/s]
+[2024-06-28 12:57] Requested to load AutoencoderKL
+[2024-06-28 12:57] Loading 1 new model
+[2024-06-28 12:57] 
+[2024-06-28 12:57] 0: 640x640 1 face, 5.7ms
+[2024-06-28 12:57] Speed: 2.0ms preprocess, 5.7ms inference, 1.0ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 12:57] Detailer: force inpaint
+[2024-06-28 12:57] Detailer: segment upscale for ((304.04214, 406.4951)) | crop region (912, 1024) x 1.0 -> (912, 1024)
+[2024-06-28 12:57] Requested to load SDXL
+[2024-06-28 12:57] Loading 1 new model
+[2024-06-28 12:57] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:04<00:00,  6.23it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:04<00:00,  6.19it/s]
+[2024-06-28 12:57] 
+[2024-06-28 12:57] 0: 640x640 1 face, 4.3ms
+[2024-06-28 12:57] Speed: 1.5ms preprocess, 4.3ms inference, 0.6ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 12:57] Detailer: segment upscale for ((304.87442, 410.23163)) | crop region (914, 1024) x 1.0001076519009018 -> (914, 1024)
+[2024-06-28 12:57] Requested to load SDXL
+[2024-06-28 12:57] Loading 1 new model
+[2024-06-28 12:57] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:04<00:00,  6.22it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:04<00:00,  6.21it/s]
+[2024-06-28 12:57] Prompt executed in 23.88 seconds
+[2024-06-28 12:57] model_type EPS
+[2024-06-28 12:57] Using xformers attention in VAE
+[2024-06-28 12:57] Using xformers attention in VAE
+[2024-06-28 12:57] Requested to load SDXLClipModel
+[2024-06-28 12:57] Loading 1 new model
+[2024-06-28 12:57] Requested to load SDXL
+[2024-06-28 12:57] Loading 1 new model
+[2024-06-28 12:57] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:04<00:00,  5.09it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:04<00:00,  5.20it/s]
+[2024-06-28 12:57] Requested to load AutoencoderKL
+[2024-06-28 12:57] Loading 1 new model
+[2024-06-28 12:57] 
+[2024-06-28 12:57] 0: 640x640 1 face, 4.5ms
+[2024-06-28 12:57] Speed: 1.7ms preprocess, 4.5ms inference, 1.2ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 12:57] Detailer: force inpaint
+[2024-06-28 12:57] Detailer: segment upscale for ((223.59653, 301.0363)) | crop region (670, 903) x 1.0 -> (670, 903)
+[2024-06-28 12:57] Requested to load SDXL
+[2024-06-28 12:57] Loading 1 new model
+[2024-06-28 12:57] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:05<00:00,  2.53it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:05<00:00,  5.32it/s]
+[2024-06-28 12:57] 
+[2024-06-28 12:57] 0: 640x640 1 face, 21.2ms
+[2024-06-28 12:57] Speed: 7.8ms preprocess, 21.2ms inference, 3.1ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 12:57] Detailer: segment upscale for ((224.86111, 301.49698)) | crop region (674, 904) x 1.1329485510306045 -> (763, 1024)
+[2024-06-28 12:57] Requested to load SDXL
+[2024-06-28 12:57] Loading 1 new model
+[2024-06-28 12:57] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:05<00:00,  6.95it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:05<00:00,  5.13it/s]
+[2024-06-28 12:57] Prompt executed in 21.74 seconds
+[2024-06-28 12:57] model_type EPS
+[2024-06-28 12:57] Using xformers attention in VAE
+[2024-06-28 12:57] Using xformers attention in VAE
+[2024-06-28 12:57] Requested to load SDXLClipModel
+[2024-06-28 12:57] Loading 1 new model
+[2024-06-28 12:57] Requested to load SDXL
+[2024-06-28 12:57] Loading 1 new model
+[2024-06-28 12:57] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:04<00:00,  5.24it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:04<00:00,  5.29it/s]
+[2024-06-28 12:57] Requested to load AutoencoderKL
+[2024-06-28 12:57] Loading 1 new model
+[2024-06-28 12:57] 
+[2024-06-28 12:57] 0: 640x640 1 face, 4.8ms
+[2024-06-28 12:57] Speed: 1.6ms preprocess, 4.8ms inference, 0.9ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 12:57] Detailer: force inpaint
+[2024-06-28 12:57] Detailer: segment upscale for ((287.68848, 428.11136)) | crop region (863, 1024) x 1.0 -> (863, 1024)
+[2024-06-28 12:57] Requested to load SDXL
+[2024-06-28 12:57] Loading 1 new model
+[2024-06-28 12:57] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:04<00:00,  6.50it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:04<00:00,  6.47it/s]
+[2024-06-28 12:57] 
+[2024-06-28 12:57] 0: 640x640 1 face, 4.3ms
+[2024-06-28 12:57] Speed: 1.5ms preprocess, 4.3ms inference, 0.6ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 12:57] Detailer: segment upscale for ((288.58286, 426.3014)) | crop region (865, 1024) x 1.0001473519639514 -> (865, 1024)
+[2024-06-28 12:57] Requested to load SDXL
+[2024-06-28 12:57] Loading 1 new model
+[2024-06-28 12:58] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:04<00:00,  6.48it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:04<00:00,  6.42it/s]
+[2024-06-28 12:58] Prompt executed in 20.48 seconds
+[2024-06-28 12:58] model_type EPS
+[2024-06-28 12:58] Using xformers attention in VAE
+[2024-06-28 12:58] Using xformers attention in VAE
+[2024-06-28 12:58] Requested to load SDXLClipModel
+[2024-06-28 12:58] Loading 1 new model
+[2024-06-28 12:58] Requested to load SDXL
+[2024-06-28 12:58] Loading 1 new model
+[2024-06-28 12:58] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:04<00:00,  5.21it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:04<00:00,  5.23it/s]
+[2024-06-28 12:58] Requested to load AutoencoderKL
+[2024-06-28 12:58] Loading 1 new model
+[2024-06-28 12:58] 
+[2024-06-28 12:58] 0: 640x640 1 face, 4.6ms
+[2024-06-28 12:58] Speed: 1.6ms preprocess, 4.6ms inference, 0.6ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 12:58] Detailer: segment upscale for ((131.5122, 182.01338)) | crop region (394, 546) x 1.4068184690461787 -> (554, 768)
+[2024-06-28 12:58] Requested to load SDXL
+[2024-06-28 12:58] Loading 1 new model
+[2024-06-28 12:58] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:02<00:00, 11.94it/s]
+[2024-06-28 12:58] 
+[2024-06-28 12:58] 0: 640x640 1 face, 4.3ms
+[2024-06-28 12:58] Speed: 1.4ms preprocess, 4.3ms inference, 0.6ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 12:58] Detailer: segment upscale for ((130.94647, 181.454)) | crop region (392, 544) x 1.8823857441021956 -> (737, 1024)
+[2024-06-28 12:58] Requested to load SDXL
+[2024-06-28 12:58] Loading 1 new model
+[2024-06-28 12:58] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:04<00:00,  7.24it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:04<00:00,  7.22it/s]
+[2024-06-28 12:58] Prompt executed in 15.71 seconds
+[2024-06-28 12:58] model_type EPS
+[2024-06-28 12:58] Using xformers attention in VAE
+[2024-06-28 12:58] Using xformers attention in VAE
+[2024-06-28 12:58] Requested to load SDXLClipModel
+[2024-06-28 12:58] Loading 1 new model
+[2024-06-28 12:58] Requested to load SDXL
+[2024-06-28 12:58] Loading 1 new model
+[2024-06-28 12:58] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:04<00:00,  5.30it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:04<00:00,  5.28it/s]
+[2024-06-28 12:58] Requested to load AutoencoderKL
+[2024-06-28 12:58] Loading 1 new model
+[2024-06-28 12:58] 
+[2024-06-28 12:58] 0: 640x640 1 face, 4.6ms
+[2024-06-28 12:58] Speed: 1.4ms preprocess, 4.6ms inference, 0.8ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 12:58] Detailer: force inpaint
+[2024-06-28 12:58] Detailer: segment upscale for ((363.5181, 499.0713)) | crop region (1024, 1024) x 1.0 -> (1024, 1024)
+[2024-06-28 12:58] Requested to load SDXL
+[2024-06-28 12:58] Loading 1 new model
+[2024-06-28 12:58] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:05<00:00,  5.30it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:05<00:00,  5.30it/s]
+[2024-06-28 12:58] 
+[2024-06-28 12:58] 0: 640x640 1 face, 4.6ms
+[2024-06-28 12:58] Speed: 1.5ms preprocess, 4.6ms inference, 0.6ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 12:58] Detailer: segment upscale for ((361.73965, 499.68677)) | crop region (1024, 1024) x 1.000242751041125 -> (1024, 1024)
+[2024-06-28 12:58] Requested to load SDXL
+[2024-06-28 12:58] Loading 1 new model
+[2024-06-28 12:58] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:05<00:00,  5.30it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:05<00:00,  5.29it/s]
+[2024-06-28 12:58] Prompt executed in 21.00 seconds
+[2024-06-28 12:58] model_type EPS
+[2024-06-28 12:58] Using xformers attention in VAE
+[2024-06-28 12:58] Using xformers attention in VAE
+[2024-06-28 12:58] Requested to load SDXLClipModel
+[2024-06-28 12:58] Loading 1 new model
+[2024-06-28 12:58] Requested to load SDXL
+[2024-06-28 12:58] Loading 1 new model
+[2024-06-28 12:58] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:04<00:00,  5.28it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:04<00:00,  5.30it/s]
+[2024-06-28 12:58] Requested to load AutoencoderKL
+[2024-06-28 12:58] Loading 1 new model
+[2024-06-28 12:58] 
+[2024-06-28 12:58] 0: 640x640 1 face, 4.7ms
+[2024-06-28 12:58] Speed: 1.5ms preprocess, 4.7ms inference, 0.6ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 12:58] Detailer: force inpaint
+[2024-06-28 12:58] Detailer: segment upscale for ((238.45334, 303.63654)) | crop region (715, 910) x 1.0 -> (715, 910)
+[2024-06-28 12:58] Requested to load SDXL
+[2024-06-28 12:58] Loading 1 new model
+[2024-06-28 12:58] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:03<00:00,  7.83it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:03<00:00,  7.79it/s]
+[2024-06-28 12:58] 
+[2024-06-28 12:58] 0: 640x640 1 face, 4.6ms
+[2024-06-28 12:58] Speed: 1.6ms preprocess, 4.6ms inference, 0.6ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 12:58] Detailer: segment upscale for ((239.25165, 305.3551)) | crop region (717, 916) x 1.1180440337355424 -> (801, 1024)
+[2024-06-28 12:58] Requested to load SDXL
+[2024-06-28 12:58] Loading 1 new model
+[2024-06-28 12:58] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:04<00:00,  6.82it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:04<00:00,  6.82it/s]
+[2024-06-28 12:58] Prompt executed in 17.54 seconds
+[2024-06-28 12:58] model_type EPS
+[2024-06-28 12:58] Using xformers attention in VAE
+[2024-06-28 12:58] Using xformers attention in VAE
+[2024-06-28 12:59] Requested to load SDXLClipModel
+[2024-06-28 12:59] Loading 1 new model
+[2024-06-28 12:59] Requested to load SDXL
+[2024-06-28 12:59] Loading 1 new model
+[2024-06-28 12:59] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:04<00:00,  5.31it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:04<00:00,  5.31it/s]
+[2024-06-28 12:59] Requested to load AutoencoderKL
+[2024-06-28 12:59] Loading 1 new model
+[2024-06-28 12:59] 
+[2024-06-28 12:59] 0: 640x640 1 face, 4.8ms
+[2024-06-28 12:59] Speed: 1.5ms preprocess, 4.8ms inference, 0.6ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 12:59] Detailer: force inpaint
+[2024-06-28 12:59] Detailer: segment upscale for ((225.65485, 318.4174)) | crop region (676, 955) x 1.0 -> (676, 955)
+[2024-06-28 12:59] Requested to load SDXL
+[2024-06-28 12:59] Loading 1 new model
+[2024-06-28 12:59] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:03<00:00,  8.54it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:03<00:00,  8.43it/s]
+[2024-06-28 12:59] 
+[2024-06-28 12:59] 0: 640x640 1 face, 5.0ms
+[2024-06-28 12:59] Speed: 1.4ms preprocess, 5.0ms inference, 0.6ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 12:59] Detailer: segment upscale for ((227.44717, 320.53)) | crop region (682, 961) x 1.0656948152684074 -> (726, 1024)
+[2024-06-28 12:59] Requested to load SDXL
+[2024-06-28 12:59] Loading 1 new model
+[2024-06-28 12:59] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:04<00:00,  7.39it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:04<00:00,  7.35it/s]
+[2024-06-28 12:59] Prompt executed in 16.87 seconds
+[2024-06-28 12:59] model_type EPS
+[2024-06-28 12:59] Using xformers attention in VAE
+[2024-06-28 12:59] Using xformers attention in VAE
+[2024-06-28 12:59] Requested to load SDXLClipModel
+[2024-06-28 12:59] Loading 1 new model
+[2024-06-28 12:59] Requested to load SDXL
+[2024-06-28 12:59] Loading 1 new model
+[2024-06-28 12:59] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:04<00:00,  5.30it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:04<00:00,  5.31it/s]
+[2024-06-28 12:59] Requested to load AutoencoderKL
+[2024-06-28 12:59] Loading 1 new model
+[2024-06-28 12:59] 
+[2024-06-28 12:59] 0: 640x640 1 face, 5.2ms
+[2024-06-28 12:59] Speed: 1.4ms preprocess, 5.2ms inference, 0.6ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 12:59] Detailer: segment upscale for ((152.26132, 217.444)) | crop region (456, 652) x 1.1781512135337742 -> (537, 768)
+[2024-06-28 12:59] Requested to load SDXL
+[2024-06-28 12:59] Loading 1 new model
+[2024-06-28 12:59] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:02<00:00, 11.58it/s]
+[2024-06-28 12:59] 
+[2024-06-28 12:59] 0: 640x640 1 face, 6.0ms
+[2024-06-28 12:59] Speed: 1.6ms preprocess, 6.0ms inference, 0.9ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 12:59] Detailer: segment upscale for ((148.53809, 217.72559)) | crop region (445, 653) x 1.5683864336349345 -> (697, 1024)
+[2024-06-28 12:59] Requested to load SDXL
+[2024-06-28 12:59] Loading 1 new model
+[2024-06-28 12:59] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:03<00:00,  7.72it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:03<00:00,  7.66it/s]
+[2024-06-28 12:59] Prompt executed in 15.78 seconds
+[2024-06-28 12:59] model_type EPS
+[2024-06-28 12:59] Using xformers attention in VAE
+[2024-06-28 12:59] Using xformers attention in VAE
+[2024-06-28 12:59] Requested to load SDXLClipModel
+[2024-06-28 12:59] Loading 1 new model
+[2024-06-28 12:59] Requested to load SDXL
+[2024-06-28 12:59] Loading 1 new model
+[2024-06-28 12:59] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:04<00:00,  5.30it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:04<00:00,  5.31it/s]
+[2024-06-28 12:59] Requested to load AutoencoderKL
+[2024-06-28 12:59] Loading 1 new model
+[2024-06-28 12:59] 
+[2024-06-28 12:59] 0: 640x640 1 face, 5.7ms
+[2024-06-28 12:59] Speed: 1.5ms preprocess, 5.7ms inference, 1.1ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 12:59] Detailer: force inpaint
+[2024-06-28 12:59] Detailer: segment upscale for ((263.6443, 357.63666)) | crop region (790, 1024) x 1.0 -> (790, 1024)
+[2024-06-28 12:59] Requested to load SDXL
+[2024-06-28 12:59] Loading 1 new model
+[2024-06-28 12:59] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:04<00:00,  6.85it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:04<00:00,  6.84it/s]
+[2024-06-28 12:59] 
+[2024-06-28 12:59] 0: 640x640 1 face, 6.6ms
+[2024-06-28 12:59] Speed: 1.8ms preprocess, 6.6ms inference, 0.6ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 12:59] Detailer: segment upscale for ((265.77597, 357.12726)) | crop region (797, 1024) x 1.0000856439875032 -> (797, 1024)
+[2024-06-28 12:59] Requested to load SDXL
+[2024-06-28 12:59] Loading 1 new model
+[2024-06-28 12:59] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:04<00:00,  6.85it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:04<00:00,  6.83it/s]
+[2024-06-28 12:59] Prompt executed in 18.36 seconds
+[2024-06-28 12:59] model_type EPS
+[2024-06-28 12:59] Using xformers attention in VAE
+[2024-06-28 12:59] Using xformers attention in VAE
+[2024-06-28 12:59] Requested to load SDXLClipModel
+[2024-06-28 12:59] Loading 1 new model
+[2024-06-28 12:59] Requested to load SDXL
+[2024-06-28 12:59] Loading 1 new model
+[2024-06-28 12:59] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:04<00:00,  5.30it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:04<00:00,  5.31it/s]
+[2024-06-28 12:59] Requested to load AutoencoderKL
+[2024-06-28 12:59] Loading 1 new model
+[2024-06-28 12:59] 
+[2024-06-28 12:59] 0: 640x640 1 face, 6.2ms
+[2024-06-28 12:59] Speed: 1.7ms preprocess, 6.2ms inference, 0.9ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 12:59] Detailer: force inpaint
+[2024-06-28 12:59] Detailer: segment upscale for ((243.6026, 333.72964)) | crop region (730, 1001) x 1.0 -> (730, 1001)
+[2024-06-28 12:59] Requested to load SDXL
+[2024-06-28 12:59] Loading 1 new model
+[2024-06-28 13:00] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:04<00:00,  7.20it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:04<00:00,  7.19it/s]
+[2024-06-28 13:00] 
+[2024-06-28 13:00] 0: 640x640 1 face, 5.8ms
+[2024-06-28 13:00] Speed: 1.4ms preprocess, 5.8ms inference, 1.1ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 13:00] Detailer: segment upscale for ((242.9378, 335.05063)) | crop region (728, 1005) x 1.0189405791906903 -> (741, 1024)
+[2024-06-28 13:00] Requested to load SDXL
+[2024-06-28 13:00] Loading 1 new model
+[2024-06-28 13:00] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:04<00:00,  7.21it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 30/30 [00:04<00:00,  7.20it/s]
+[2024-06-28 13:00] Prompt executed in 17.78 seconds
+[2024-06-28 13:00] model_type EPS
+[2024-06-28 13:00] Using xformers attention in VAE
+[2024-06-28 13:00] Using xformers attention in VAE
+[2024-06-28 13:00] Requested to load SDXLClipModel
+[2024-06-28 13:00] Loading 1 new model
+[2024-06-28 13:00] Requested to load SDXL
+[2024-06-28 13:00] Loading 1 new model
+[2024-06-28 13:00] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:03<00:00,  5.38it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:03<00:00,  5.38it/s]
+[2024-06-28 13:00] Requested to load AutoencoderKL
+[2024-06-28 13:00] Loading 1 new model
+[2024-06-28 13:00] 
+[2024-06-28 13:00] 0: 640x640 1 face, 5.8ms
+[2024-06-28 13:00] Speed: 1.4ms preprocess, 5.8ms inference, 1.0ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 13:00] Detailer: segment upscale for ((60.322357, 79.382904)) | crop region (180, 238) x 3.227018890609027 -> (580, 768)
+[2024-06-28 13:00] Requested to load SDXL
+[2024-06-28 13:00] Loading 1 new model
+[2024-06-28 13:00] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:02<00:00, 11.86it/s]
+[2024-06-28 13:00] 
+[2024-06-28 13:00] 0: 640x640 1 face, 6.4ms
+[2024-06-28 13:00] Speed: 1.5ms preprocess, 6.4ms inference, 0.8ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 13:00] Detailer: segment upscale for ((62.01776, 79.19125)) | crop region (186, 237) x 4.320897665065625 -> (803, 1024)
+[2024-06-28 13:00] Requested to load SDXL
+[2024-06-28 13:00] Loading 1 new model
+[2024-06-28 13:00] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 35/35 [00:05<00:00,  6.94it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 35/35 [00:05<00:00,  6.95it/s]
+[2024-06-28 13:00] Prompt executed in 15.25 seconds
+[2024-06-28 13:00] model_type EPS
+[2024-06-28 13:00] Using xformers attention in VAE
+[2024-06-28 13:00] Using xformers attention in VAE
+[2024-06-28 13:00] Requested to load SDXLClipModel
+[2024-06-28 13:00] Loading 1 new model
+[2024-06-28 13:00] Requested to load SDXL
+[2024-06-28 13:00] Loading 1 new model
+[2024-06-28 13:00] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:03<00:00,  5.22it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:03<00:00,  5.19it/s]
+[2024-06-28 13:00] Requested to load AutoencoderKL
+[2024-06-28 13:00] Loading 1 new model
+[2024-06-28 13:00] 
+[2024-06-28 13:00] 0: 640x640 1 face, 6.3ms
+[2024-06-28 13:00] Speed: 1.5ms preprocess, 6.3ms inference, 0.6ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 13:00] Detailer: segment upscale for ((61.200775, 82.433044)) | crop region (183, 247) x 3.1098822174683405 -> (569, 768)
+[2024-06-28 13:00] Requested to load SDXL
+[2024-06-28 13:00] Loading 1 new model
+[2024-06-28 13:00] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:02<00:00, 11.22it/s]
+[2024-06-28 13:00] 
+[2024-06-28 13:00] 0: 640x640 1 face, 5.8ms
+[2024-06-28 13:00] Speed: 1.4ms preprocess, 5.8ms inference, 1.1ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 13:00] Detailer: segment upscale for ((61.98166, 82.88663)) | crop region (185, 248) x 4.129245968088842 -> (763, 1024)
+[2024-06-28 13:00] Requested to load SDXL
+[2024-06-28 13:00] Loading 1 new model
+[2024-06-28 13:00] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 35/35 [00:04<00:00,  7.12it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 35/35 [00:04<00:00,  7.21it/s]
+[2024-06-28 13:00] Prompt executed in 15.38 seconds
+[2024-06-28 13:00] model_type EPS
+[2024-06-28 13:00] Using xformers attention in VAE
+[2024-06-28 13:00] Using xformers attention in VAE
+[2024-06-28 13:00] Requested to load SDXLClipModel
+[2024-06-28 13:00] Loading 1 new model
+[2024-06-28 13:00] Requested to load SDXL
+[2024-06-28 13:00] Loading 1 new model
+[2024-06-28 13:00] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:03<00:00,  5.40it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:03<00:00,  5.40it/s]
+[2024-06-28 13:00] Requested to load AutoencoderKL
+[2024-06-28 13:00] Loading 1 new model
+[2024-06-28 13:00] 
+[2024-06-28 13:00] 0: 640x640 1 face, 6.4ms
+[2024-06-28 13:00] Speed: 1.5ms preprocess, 6.4ms inference, 0.6ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 13:00] Detailer: segment upscale for ((139.94785, 183.45636)) | crop region (419, 550) x 1.3964872916263225 -> (585, 768)
+[2024-06-28 13:00] Requested to load SDXL
+[2024-06-28 13:00] Loading 1 new model
+[2024-06-28 13:00] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:02<00:00, 11.09it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:02<00:00, 10.92it/s]
+[2024-06-28 13:00] 
+[2024-06-28 13:00] 0: 640x640 1 face, 6.5ms
+[2024-06-28 13:00] Speed: 1.4ms preprocess, 6.5ms inference, 0.6ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 13:00] Detailer: segment upscale for ((143.14694, 188.54187)) | crop region (429, 565) x 1.8127127425218255 -> (777, 1024)
+[2024-06-28 13:00] Requested to load SDXL
+[2024-06-28 13:00] Loading 1 new model
+[2024-06-28 13:00] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 35/35 [00:05<00:00,  6.99it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 35/35 [00:05<00:00,  6.97it/s]
+[2024-06-28 13:00] Prompt executed in 15.36 seconds
+[2024-06-28 13:00] model_type EPS
+[2024-06-28 13:00] Using xformers attention in VAE
+[2024-06-28 13:00] Using xformers attention in VAE
+[2024-06-28 13:00] Requested to load SDXLClipModel
+[2024-06-28 13:00] Loading 1 new model
+[2024-06-28 13:00] Requested to load SDXL
+[2024-06-28 13:00] Loading 1 new model
+[2024-06-28 13:01] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:03<00:00,  5.39it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:03<00:00,  5.38it/s]
+[2024-06-28 13:01] Requested to load AutoencoderKL
+[2024-06-28 13:01] Loading 1 new model
+[2024-06-28 13:01] 
+[2024-06-28 13:01] 0: 640x640 1 face, 6.5ms
+[2024-06-28 13:01] Speed: 1.6ms preprocess, 6.5ms inference, 0.6ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 13:01] Detailer: segment upscale for ((123.361115, 167.91808)) | crop region (370, 503) x 1.527077534491412 -> (565, 768)
+[2024-06-28 13:01] Requested to load SDXL
+[2024-06-28 13:01] Loading 1 new model
+[2024-06-28 13:01] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:02<00:00, 10.28it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:02<00:00, 11.26it/s]
+[2024-06-28 13:01] 
+[2024-06-28 13:01] 0: 640x640 1 face, 7.5ms
+[2024-06-28 13:01] Speed: 1.7ms preprocess, 7.5ms inference, 0.7ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 13:01] Detailer: segment upscale for ((128.14551, 172.0069)) | crop region (384, 516) x 1.9846466345479423 -> (762, 1024)
+[2024-06-28 13:01] Requested to load SDXL
+[2024-06-28 13:01] Loading 1 new model
+[2024-06-28 13:01] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 35/35 [00:04<00:00,  7.23it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 35/35 [00:04<00:00,  7.03it/s]
+[2024-06-28 13:01] Prompt executed in 15.39 seconds
+[2024-06-28 13:01] model_type EPS
+[2024-06-28 13:01] Using xformers attention in VAE
+[2024-06-28 13:01] Using xformers attention in VAE
+[2024-06-28 13:01] Requested to load SDXLClipModel
+[2024-06-28 13:01] Loading 1 new model
+[2024-06-28 13:01] Requested to load SDXL
+[2024-06-28 13:01] Loading 1 new model
+[2024-06-28 13:01] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:03<00:00,  5.41it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:03<00:00,  5.40it/s]
+[2024-06-28 13:01] Requested to load AutoencoderKL
+[2024-06-28 13:01] Loading 1 new model
+[2024-06-28 13:01] 
+[2024-06-28 13:01] 0: 640x640 1 face, 6.6ms
+[2024-06-28 13:01] Speed: 1.5ms preprocess, 6.6ms inference, 0.6ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 13:01] Detailer: segment upscale for ((51.126434, 68.446594)) | crop region (153, 205) x 3.74685810121233 -> (573, 768)
+[2024-06-28 13:01] Requested to load SDXL
+[2024-06-28 13:01] Loading 1 new model
+[2024-06-28 13:01] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:02<00:00, 11.49it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:02<00:00, 11.32it/s]
+[2024-06-28 13:01] 
+[2024-06-28 13:01] 0: 640x640 1 face, 6.8ms
+[2024-06-28 13:01] Speed: 1.4ms preprocess, 6.8ms inference, 0.6ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 13:01] Detailer: segment upscale for ((50.967407, 67.71445)) | crop region (152, 203) x 5.0449881534377585 -> (766, 1024)
+[2024-06-28 13:01] Requested to load SDXL
+[2024-06-28 13:01] Loading 1 new model
+[2024-06-28 13:01] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 35/35 [00:04<00:00,  6.78it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 35/35 [00:04<00:00,  7.07it/s]
+[2024-06-28 13:01] Prompt executed in 15.34 seconds
+[2024-06-28 13:01] model_type EPS
+[2024-06-28 13:01] Using xformers attention in VAE
+[2024-06-28 13:01] Using xformers attention in VAE
+[2024-06-28 13:01] Requested to load SDXLClipModel
+[2024-06-28 13:01] Loading 1 new model
+[2024-06-28 13:01] Requested to load SDXL
+[2024-06-28 13:01] Loading 1 new model
+[2024-06-28 13:01] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:03<00:00,  5.39it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:03<00:00,  5.31it/s]
+[2024-06-28 13:01] Requested to load AutoencoderKL
+[2024-06-28 13:01] Loading 1 new model
+[2024-06-28 13:01] 
+[2024-06-28 13:01] 0: 640x640 1 face, 6.6ms
+[2024-06-28 13:01] Speed: 1.4ms preprocess, 6.6ms inference, 0.6ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 13:01] Detailer: segment upscale for ((174.14398, 217.78772)) | crop region (522, 653) x 1.1764468317324277 -> (614, 768)
+[2024-06-28 13:01] Requested to load SDXL
+[2024-06-28 13:01] Loading 1 new model
+[2024-06-28 13:01] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:02<00:00, 11.03it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:02<00:00, 10.92it/s]
+[2024-06-28 13:01] 
+[2024-06-28 13:01] 0: 640x640 1 face, 8.0ms
+[2024-06-28 13:01] Speed: 1.9ms preprocess, 8.0ms inference, 0.7ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 13:01] Detailer: segment upscale for ((173.78876, 224.69794)) | crop region (521, 674) x 1.5194217832990422 -> (791, 1024)
+[2024-06-28 13:01] Requested to load SDXL
+[2024-06-28 13:01] Loading 1 new model
+[2024-06-28 13:01] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 35/35 [00:04<00:00,  7.00it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 35/35 [00:04<00:00,  7.00it/s]
+[2024-06-28 13:01] Prompt executed in 15.59 seconds
+[2024-06-28 13:01] model_type EPS
+[2024-06-28 13:01] Using xformers attention in VAE
+[2024-06-28 13:01] Using xformers attention in VAE
+[2024-06-28 13:01] Requested to load SDXLClipModel
+[2024-06-28 13:01] Loading 1 new model
+[2024-06-28 13:01] Requested to load SDXL
+[2024-06-28 13:01] Loading 1 new model
+[2024-06-28 13:01] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:03<00:00,  5.21it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:03<00:00,  5.36it/s]
+[2024-06-28 13:01] Requested to load AutoencoderKL
+[2024-06-28 13:01] Loading 1 new model
+[2024-06-28 13:01] 
+[2024-06-28 13:01] 0: 640x640 1 face, 8.0ms
+[2024-06-28 13:01] Speed: 1.7ms preprocess, 8.0ms inference, 0.7ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 13:01] Detailer: segment upscale for ((101.232025, 135.25742)) | crop region (303, 405) x 1.8966330044486703 -> (574, 768)
+[2024-06-28 13:01] Requested to load SDXL
+[2024-06-28 13:01] Loading 1 new model
+[2024-06-28 13:01] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:02<00:00, 11.45it/s]
+[2024-06-28 13:01] 
+[2024-06-28 13:01] 0: 640x640 1 face, 6.9ms
+[2024-06-28 13:01] Speed: 1.4ms preprocess, 6.9ms inference, 0.6ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 13:01] Detailer: segment upscale for ((101.74835, 136.3469)) | crop region (305, 409) x 2.503785749089767 -> (763, 1024)
+[2024-06-28 13:01] Requested to load SDXL
+[2024-06-28 13:01] Loading 1 new model
+[2024-06-28 13:01] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 35/35 [00:05<00:00,  7.21it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 35/35 [00:05<00:00,  6.99it/s]
+[2024-06-28 13:01] Prompt executed in 15.48 seconds
+[2024-06-28 13:01] model_type EPS
+[2024-06-28 13:01] Using xformers attention in VAE
+[2024-06-28 13:01] Using xformers attention in VAE
+[2024-06-28 13:01] Requested to load SDXLClipModel
+[2024-06-28 13:01] Loading 1 new model
+[2024-06-28 13:01] Requested to load SDXL
+[2024-06-28 13:01] Loading 1 new model
+[2024-06-28 13:02] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:03<00:00,  5.13it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:03<00:00,  5.25it/s]
+[2024-06-28 13:02] Requested to load AutoencoderKL
+[2024-06-28 13:02] Loading 1 new model
+[2024-06-28 13:02] 
+[2024-06-28 13:02] 0: 640x640 1 face, 9.4ms
+[2024-06-28 13:02] Speed: 2.2ms preprocess, 9.4ms inference, 0.8ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 13:02] Detailer: segment upscale for ((101.79968, 138.64157)) | crop region (305, 415) x 1.8511076624137308 -> (564, 768)
+[2024-06-28 13:02] Requested to load SDXL
+[2024-06-28 13:02] Loading 1 new model
+[2024-06-28 13:02] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:02<00:00, 10.94it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:02<00:00, 10.69it/s]
+[2024-06-28 13:02] 
+[2024-06-28 13:02] 0: 640x640 1 face, 8.4ms
+[2024-06-28 13:02] Speed: 1.8ms preprocess, 8.4ms inference, 0.7ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 13:02] Detailer: segment upscale for ((103.50998, 138.87149)) | crop region (310, 416) x 2.4617721386884788 -> (763, 1024)
+[2024-06-28 13:02] Requested to load SDXL
+[2024-06-28 13:02] Loading 1 new model
+[2024-06-28 13:02] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 35/35 [00:04<00:00,  7.26it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 35/35 [00:04<00:00,  7.19it/s]
+[2024-06-28 13:02] Prompt executed in 15.68 seconds
+[2024-06-28 13:02] model_type EPS
+[2024-06-28 13:02] Using xformers attention in VAE
+[2024-06-28 13:02] Using xformers attention in VAE
+[2024-06-28 13:02] Requested to load SDXLClipModel
+[2024-06-28 13:02] Loading 1 new model
+[2024-06-28 13:02] Requested to load SDXL
+[2024-06-28 13:02] Loading 1 new model
+[2024-06-28 13:02] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:03<00:00,  5.15it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:03<00:00,  5.26it/s]
+[2024-06-28 13:02] Requested to load AutoencoderKL
+[2024-06-28 13:02] Loading 1 new model
+[2024-06-28 13:02] 
+[2024-06-28 13:02] 0: 640x640 1 face, 9.8ms
+[2024-06-28 13:02] Speed: 2.2ms preprocess, 9.8ms inference, 0.9ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 13:02] Detailer: segment upscale for ((131.70218, 180.16515)) | crop region (395, 540) x 1.4226391504779874 -> (561, 768)
+[2024-06-28 13:02] Requested to load SDXL
+[2024-06-28 13:02] Loading 1 new model
+[2024-06-28 13:02] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:02<00:00,  7.47it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:02<00:00,  9.16it/s]
+[2024-06-28 13:02] 
+[2024-06-28 13:02] 0: 640x640 1 face, 9.4ms
+[2024-06-28 13:02] Speed: 2.1ms preprocess, 9.4ms inference, 0.8ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 13:02] Detailer: segment upscale for ((134.2135, 183.1054)) | crop region (402, 549) x 1.8655076535090875 -> (749, 1024)
+[2024-06-28 13:02] Requested to load SDXL
+[2024-06-28 13:02] Loading 1 new model
+[2024-06-28 13:02] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 35/35 [00:05<00:00,  7.10it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 35/35 [00:05<00:00,  6.99it/s]
+[2024-06-28 13:02] Prompt executed in 16.36 seconds
+[2024-06-28 13:02] model_type EPS
+[2024-06-28 13:02] Using xformers attention in VAE
+[2024-06-28 13:02] Using xformers attention in VAE
+[2024-06-28 13:02] Requested to load SDXLClipModel
+[2024-06-28 13:02] Loading 1 new model
+[2024-06-28 13:02] Requested to load SDXL
+[2024-06-28 13:02] Loading 1 new model
+[2024-06-28 13:02] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:03<00:00,  5.38it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:03<00:00,  5.33it/s]
+[2024-06-28 13:02] Requested to load AutoencoderKL
+[2024-06-28 13:02] Loading 1 new model
+[2024-06-28 13:02] 
+[2024-06-28 13:02] 0: 640x640 2 faces, 6.8ms
+[2024-06-28 13:02] Speed: 1.5ms preprocess, 6.8ms inference, 0.7ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 13:02] Detailer: segment upscale for ((99.15344, 132.02979)) | crop region (297, 396) x 1.9395494985742416 -> (576, 768)
+[2024-06-28 13:02] Requested to load SDXL
+[2024-06-28 13:02] Loading 1 new model
+[2024-06-28 13:02] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:02<00:00, 11.34it/s]
+[2024-06-28 13:02] 
+[2024-06-28 13:02] 0: 640x640 2 faces, 6.9ms
+[2024-06-28 13:02] Speed: 1.5ms preprocess, 6.9ms inference, 0.6ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 13:02] Detailer: segment upscale for ((98.97894, 134.30771)) | crop region (296, 402) x 2.547842731672868 -> (754, 1024)
+[2024-06-28 13:02] Requested to load SDXL
+[2024-06-28 13:02] Loading 1 new model
+[2024-06-28 13:02] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 35/35 [00:04<00:00,  7.22it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 35/35 [00:04<00:00,  7.07it/s]
+[2024-06-28 13:02] Prompt executed in 15.44 seconds
+[2024-06-28 13:02] model_type EPS
+[2024-06-28 13:02] Using xformers attention in VAE
+[2024-06-28 13:02] Using xformers attention in VAE
+[2024-06-28 13:02] Requested to load SDXLClipModel
+[2024-06-28 13:02] Loading 1 new model
+[2024-06-28 13:02] Requested to load SDXL
+[2024-06-28 13:02] Loading 1 new model
+[2024-06-28 13:02] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:03<00:00,  5.26it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:03<00:00,  5.25it/s]
+[2024-06-28 13:02] Requested to load AutoencoderKL
+[2024-06-28 13:02] Loading 1 new model
+[2024-06-28 13:02] 
+[2024-06-28 13:02] 0: 640x640 1 face, 7.3ms
+[2024-06-28 13:02] Speed: 1.5ms preprocess, 7.3ms inference, 0.6ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 13:02] Detailer: segment upscale for ((61.595123, 91.400406)) | crop region (184, 274) x 2.80322688162558 -> (515, 768)
+[2024-06-28 13:02] Requested to load SDXL
+[2024-06-28 13:02] Loading 1 new model
+[2024-06-28 13:02] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 25/25 [00:02<00:00, 10.35it/s]
+[2024-06-28 13:02] 
+[2024-06-28 13:02] 0: 640x640 1 face, 11.7ms
+[2024-06-28 13:02] Speed: 2.5ms preprocess, 11.7ms inference, 0.9ms postprocess per image at shape (1, 3, 640, 640)
+[2024-06-28 13:02] Detailer: segment upscale for ((63.53125, 95.04071)) | crop region (190, 285) x 3.5934869129213394 -> (682, 1024)
+[2024-06-28 13:02] Requested to load SDXL
+[2024-06-28 13:02] Loading 1 new model
+[2024-06-28 13:03] 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 35/35 [00:04<00:00,  7.90it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████| 35/35 [00:04<00:00,  7.86it/s]
+[2024-06-28 13:03] Prompt executed in 15.47 seconds
+[2024-06-28 13:46] 
 Stopped server
