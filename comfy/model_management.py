@@ -274,7 +274,7 @@ class LoadedModel:
         return self.model.model_size()
 
     def model_memory_required(self, device):
-        if device == self.model.current_device:
+        if device == self.model.current_loaded_device():
             return 0
         else:
             return self.model_memory()
@@ -352,6 +352,7 @@ def unload_model_clones(model, unload_weights_only=True, force_unload=True):
 def free_memory(memory_required, device, keep_loaded=[]):
     unloaded_model = []
     can_unload = []
+    unloaded_models = []
 
     for i in range(len(current_loaded_models) -1, -1, -1):
         shift_model = current_loaded_models[i]
@@ -369,7 +370,7 @@ def free_memory(memory_required, device, keep_loaded=[]):
         unloaded_model.append(i)
 
     for i in sorted(unloaded_model, reverse=True):
-        current_loaded_models.pop(i)
+        unloaded_models.append(current_loaded_models.pop(i))
 
     if len(unloaded_model) > 0:
         soft_empty_cache()
@@ -378,6 +379,7 @@ def free_memory(memory_required, device, keep_loaded=[]):
             mem_free_total, mem_free_torch = get_free_memory(device, torch_free_too=True)
             if mem_free_torch > mem_free_total * 0.25:
                 soft_empty_cache()
+    return unloaded_models
 
 def load_models_gpu(models, memory_required=0, force_patch_weights=False, minimum_memory_required=None):
     global vram_state
@@ -421,7 +423,13 @@ def load_models_gpu(models, memory_required=0, force_patch_weights=False, minimu
         for d in devs:
             if d != torch.device("cpu"):
                 free_memory(extra_mem, d, models_already_loaded)
-        return
+                free_mem = get_free_memory(d)
+                if free_mem < minimum_memory_required:
+                    logging.info("Unloading models for lowram load.") #TODO: partial model unloading when this case happens, also handle the opposite case where models can be unlowvramed.
+                    models_to_load = free_memory(minimum_memory_required, d)
+                    logging.info("{} models unloaded.".format(len(models_to_load)))
+        if len(models_to_load) == 0:
+            return
 
     logging.info(f"Loading {len(models_to_load)} new model{'s' if len(models_to_load) > 1 else ''}")
 
@@ -554,12 +562,22 @@ def unet_dtype(device=None, model_params=0, supported_dtypes=[torch.float16, tor
         if model_params * 2 > free_model_memory:
             return fp8_dtype
 
-    if should_use_fp16(device=device, model_params=model_params, manual_cast=True):
-        if torch.float16 in supported_dtypes:
-            return torch.float16
-    if should_use_bf16(device, model_params=model_params, manual_cast=True):
-        if torch.bfloat16 in supported_dtypes:
-            return torch.bfloat16
+    for dt in supported_dtypes:
+        if dt == torch.float16 and should_use_fp16(device=device, model_params=model_params):
+            if torch.float16 in supported_dtypes:
+                return torch.float16
+        if dt == torch.bfloat16 and should_use_bf16(device, model_params=model_params):
+            if torch.bfloat16 in supported_dtypes:
+                return torch.bfloat16
+
+    for dt in supported_dtypes:
+        if dt == torch.float16 and should_use_fp16(device=device, model_params=model_params, manual_cast=True):
+            if torch.float16 in supported_dtypes:
+                return torch.float16
+        if dt == torch.bfloat16 and should_use_bf16(device, model_params=model_params, manual_cast=True):
+            if torch.bfloat16 in supported_dtypes:
+                return torch.bfloat16
+
     return torch.float32
 
 # None means no manual cast
@@ -575,13 +593,13 @@ def unet_manual_cast(weight_dtype, inference_device, supported_dtypes=[torch.flo
     if bf16_supported and weight_dtype == torch.bfloat16:
         return None
 
-    if fp16_supported and torch.float16 in supported_dtypes:
-        return torch.float16
+    for dt in supported_dtypes:
+        if dt == torch.float16 and fp16_supported:
+            return torch.float16
+        if dt == torch.bfloat16 and bf16_supported:
+            return torch.bfloat16
 
-    elif bf16_supported and torch.bfloat16 in supported_dtypes:
-        return torch.bfloat16
-    else:
-        return torch.float32
+    return torch.float32
 
 def text_encoder_offload_device():
     if args.gpu_only:
