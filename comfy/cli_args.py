@@ -51,8 +51,8 @@ parser.add_argument("--auto-launch", action="store_true", help="Automatically la
 parser.add_argument("--disable-auto-launch", action="store_true", help="Disable auto launching the browser.")
 parser.add_argument("--cuda-device", type=int, default=None, metavar="DEVICE_ID", help="Set the id of the cuda device this instance will use.")
 cm_group = parser.add_mutually_exclusive_group()
-cm_group.add_argument("--cuda-malloc", action="store_true", help="Enable cudaMallocAsync.")
-cm_group.add_argument("--disable-cuda-malloc", action="store_true", help="Disable cudaMallocAsync (The current default).")
+cm_group.add_argument("--cuda-malloc", action="store_true", help="Enable cudaMallocAsync (enabled by default for torch 2.0 and up).")
+cm_group.add_argument("--disable-cuda-malloc", action="store_true", help="Disable cudaMallocAsync.")
 
 
 fp_group = parser.add_mutually_exclusive_group()
@@ -92,6 +92,10 @@ class LatentPreviewMethod(enum.Enum):
 
 parser.add_argument("--preview-method", type=LatentPreviewMethod, default=LatentPreviewMethod.NoPreviews, help="Default preview method for sampler nodes.", action=EnumAction)
 
+cache_group = parser.add_mutually_exclusive_group()
+cache_group.add_argument("--cache-classic", action="store_true", help="Use the old style (aggressive) caching.")
+cache_group.add_argument("--cache-lru", type=int, default=0, help="Use LRU caching with a maximum of N node results cached. May use more RAM/VRAM.")
+
 attn_group = parser.add_mutually_exclusive_group()
 attn_group.add_argument("--use-split-cross-attention", action="store_true", help="Use the split cross attention optimization. Ignored when xformers is used.")
 attn_group.add_argument("--use-quad-cross-attention", action="store_true", help="Use the sub-quadratic cross attention optimization . Ignored when xformers is used.")
@@ -111,6 +115,9 @@ vram_group.add_argument("--normalvram", action="store_true", help="Used to force
 vram_group.add_argument("--lowvram", action="store_true", help="Split the unet in parts to use less vram.")
 vram_group.add_argument("--novram", action="store_true", help="When lowvram isn't enough.")
 vram_group.add_argument("--cpu", action="store_true", help="To use the CPU for everything (slow).")
+
+parser.add_argument("--reserve-vram", type=float, default=None, help="Set the amount of vram in GB you want to reserve for use by your OS/other software. By default some amount is reverved depending on your OS.")
+
 
 parser.add_argument("--default-hashing-function", type=str, choices=['md5', 'sha1', 'sha256', 'sha512'], default='sha256', help="Allows you to choose the hash function to use for duplicate filename / contents comparison. Default is sha256.")
 
