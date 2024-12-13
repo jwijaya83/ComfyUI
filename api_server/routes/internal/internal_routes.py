@@ -10,7 +10,6 @@ class InternalRoutes:
     The top level web router for internal routes: /internal/*
     The endpoints here should NOT be depended upon. It is for ComfyUI frontend use only.
     Check README.md for more information.
-    
     '''
 
     def __init__(self, prompt_server):
@@ -41,7 +40,7 @@ class InternalRoutes:
             return web.json_response("".join([(l["t"] + " - " + l["m"]) for l in app.logger.get_logs()]))
 
         @self.routes.get('/logs/raw')
-        async def get_logs(request):
+        async def get_raw_logs(request):
             self.terminal_service.update_size()
             return web.json_response({
                 "entries": list(app.logger.get_logs()),

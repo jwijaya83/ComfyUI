@@ -1,10 +1,9 @@
 #code taken from: https://github.com/wl-zhao/UniPC and modified
 
 import torch
-import torch.nn.functional as F
 import math
 
-from tqdm.auto import trange, tqdm
+from tqdm.auto import trange
 
 
 class NoiseScheduleVP:
@@ -704,7 +703,6 @@ class UniPC:
     ):
         # t_0 = 1. / self.noise_schedule.total_N if t_end is None else t_end
         # t_T = self.noise_schedule.T if t_start is None else t_start
-        device = x.device
         steps = len(timesteps) - 1
         if method == 'multistep':
             assert steps >= order
