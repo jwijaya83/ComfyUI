@@ -37,6 +37,8 @@ class IO(StrEnum):
     CONTROL_NET = "CONTROL_NET"
     VAE = "VAE"
     MODEL = "MODEL"
+    LORA_MODEL = "LORA_MODEL"
+    LOSS_MAP = "LOSS_MAP"
     CLIP_VISION = "CLIP_VISION"
     CLIP_VISION_OUTPUT = "CLIP_VISION_OUTPUT"
     STYLE_MODEL = "STYLE_MODEL"
@@ -48,6 +50,7 @@ class IO(StrEnum):
     FACE_ANALYSIS = "FACE_ANALYSIS"
     BBOX = "BBOX"
     SEGS = "SEGS"
+    VIDEO = "VIDEO"
 
     ANY = "*"
     """Always matches any type, but at a price.
@@ -234,7 +237,7 @@ class ComfyNodeABC(ABC):
     DEPRECATED: bool
     """Flags a node as deprecated, indicating to users that they should find alternatives to this node."""
     API_NODE: Optional[bool]
-    """Flags a node as an API node."""
+    """Flags a node as an API node. See: https://docs.comfy.org/tutorials/api-nodes/overview."""
 
     @classmethod
     @abstractmethod
@@ -273,7 +276,7 @@ class ComfyNodeABC(ABC):
 
     Comfy Docs: https://docs.comfy.org/custom-nodes/backend/lists#list-processing
     """
-    OUTPUT_IS_LIST: tuple[bool]
+    OUTPUT_IS_LIST: tuple[bool, ...]
     """A tuple indicating which node outputs are lists, but will be connected to nodes that expect individual items.
 
     Connected nodes that do not implement `INPUT_IS_LIST` will be executed once for every item in the list.
@@ -292,7 +295,7 @@ class ComfyNodeABC(ABC):
     Comfy Docs: https://docs.comfy.org/custom-nodes/backend/lists#list-processing
     """
 
-    RETURN_TYPES: tuple[IO]
+    RETURN_TYPES: tuple[IO, ...]
     """A tuple representing the outputs of this node.
 
     Usage::
@@ -301,12 +304,12 @@ class ComfyNodeABC(ABC):
 
     Comfy Docs: https://docs.comfy.org/custom-nodes/backend/server_overview#return-types
     """
-    RETURN_NAMES: tuple[str]
+    RETURN_NAMES: tuple[str, ...]
     """The output slot names for each item in `RETURN_TYPES`, e.g. ``RETURN_NAMES = ("count", "filter_string")``
 
     Comfy Docs: https://docs.comfy.org/custom-nodes/backend/server_overview#return-names
     """
-    OUTPUT_TOOLTIPS: tuple[str]
+    OUTPUT_TOOLTIPS: tuple[str, ...]
     """A tuple of strings to use as tooltips for node outputs, one for each item in `RETURN_TYPES`."""
     FUNCTION: str
     """The name of the function to execute as a literal string, e.g. `FUNCTION = "execute"`
