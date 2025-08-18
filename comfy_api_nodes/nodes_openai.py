@@ -163,7 +163,7 @@ class OpenAIDalle2(ComfyNodeABC):
     DESCRIPTION = cleandoc(__doc__ or "")
     API_NODE = True
 
-    def api_call(
+    async def api_call(
         self,
         prompt,
         seed=0,
@@ -233,9 +233,9 @@ class OpenAIDalle2(ComfyNodeABC):
             auth_kwargs=kwargs,
         )
 
-        response = operation.execute()
+        response = await operation.execute()
 
-        img_tensor = validate_and_cast_response(response, node_id=unique_id)
+        img_tensor = await validate_and_cast_response(response, node_id=unique_id)
         return (img_tensor,)
 
 
@@ -311,7 +311,7 @@ class OpenAIDalle3(ComfyNodeABC):
     DESCRIPTION = cleandoc(__doc__ or "")
     API_NODE = True
 
-    def api_call(
+    async def api_call(
         self,
         prompt,
         seed=0,
@@ -343,9 +343,9 @@ class OpenAIDalle3(ComfyNodeABC):
             auth_kwargs=kwargs,
         )
 
-        response = operation.execute()
+        response = await operation.execute()
 
-        img_tensor = validate_and_cast_response(response, node_id=unique_id)
+        img_tensor = await validate_and_cast_response(response, node_id=unique_id)
         return (img_tensor,)
 
 
@@ -446,7 +446,7 @@ class OpenAIGPTImage1(ComfyNodeABC):
     DESCRIPTION = cleandoc(__doc__ or "")
     API_NODE = True
 
-    def api_call(
+    async def api_call(
         self,
         prompt,
         seed=0,
@@ -464,8 +464,6 @@ class OpenAIGPTImage1(ComfyNodeABC):
         path = "/proxy/openai/images/generations"
         content_type = "application/json"
         request_class = OpenAIImageGenerationRequest
-        img_binaries = []
-        mask_binary = None
         files = []
 
         if image is not None:
@@ -484,14 +482,11 @@ class OpenAIGPTImage1(ComfyNodeABC):
                 img_byte_arr = io.BytesIO()
                 img.save(img_byte_arr, format="PNG")
                 img_byte_arr.seek(0)
-                img_binary = img_byte_arr
-                img_binary.name = f"image_{i}.png"
 
-                img_binaries.append(img_binary)
                 if batch_size == 1:
-                    files.append(("image", img_binary))
+                    files.append(("image", (f"image_{i}.png", img_byte_arr, "image/png")))
                 else:
-                    files.append(("image[]", img_binary))
+                    files.append(("image[]", (f"image_{i}.png", img_byte_arr, "image/png")))
 
         if mask is not None:
             if image is None:
@@ -511,9 +506,7 @@ class OpenAIGPTImage1(ComfyNodeABC):
             mask_img_byte_arr = io.BytesIO()
             mask_img.save(mask_img_byte_arr, format="PNG")
             mask_img_byte_arr.seek(0)
-            mask_binary = mask_img_byte_arr
-            mask_binary.name = "mask.png"
-            files.append(("mask", mask_binary))
+            files.append(("mask", ("mask.png", mask_img_byte_arr, "image/png")))
 
         # Build the operation
         operation = SynchronousOperation(
@@ -537,9 +530,9 @@ class OpenAIGPTImage1(ComfyNodeABC):
             auth_kwargs=kwargs,
         )
 
-        response = operation.execute()
+        response = await operation.execute()
 
-        img_tensor = validate_and_cast_response(response, node_id=unique_id)
+        img_tensor = await validate_and_cast_response(response, node_id=unique_id)
         return (img_tensor,)
 
 
@@ -623,7 +616,7 @@ class OpenAIChatNode(OpenAITextNode):
 
     DESCRIPTION = "Generate text responses from an OpenAI model."
 
-    def get_result_response(
+    async def get_result_response(
         self,
         response_id: str,
         include: Optional[list[Includable]] = None,
@@ -639,7 +632,7 @@ class OpenAIChatNode(OpenAITextNode):
                 creation above for more information.
 
         """
-        return PollingOperation(
+        return await PollingOperation(
             poll_endpoint=ApiEndpoint(
                 path=f"{RESPONSES_ENDPOINT}/{response_id}",
                 method=HttpMethod.GET,
@@ -784,7 +777,7 @@ class OpenAIChatNode(OpenAITextNode):
 
         self.history[session_id] = new_history
 
-    def api_call(
+    async def api_call(
         self,
         prompt: str,
         persist_context: bool,
@@ -815,7 +808,7 @@ class OpenAIChatNode(OpenAITextNode):
             previous_response_id = None
 
         # Create response
-        create_response = SynchronousOperation(
+        create_response = await SynchronousOperation(
             endpoint=ApiEndpoint(
                 path=RESPONSES_ENDPOINT,
                 method=HttpMethod.POST,
@@ -848,7 +841,7 @@ class OpenAIChatNode(OpenAITextNode):
         response_id = create_response.id
 
         # Get result output
-        result_response = self.get_result_response(response_id, auth_kwargs=kwargs)
+        result_response = await self.get_result_response(response_id, auth_kwargs=kwargs)
         output_text = self.parse_output_text_from_response(result_response)
 
         # Update history
