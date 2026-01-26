@@ -70,6 +70,7 @@ class CLIPTextEncode(ComfyNodeABC):
 
     CATEGORY = "conditioning"
     DESCRIPTION = "Encodes a text prompt using a CLIP model into an embedding that can be used to guide the diffusion model towards generating specific images."
+    SEARCH_ALIASES = ["text", "prompt", "text prompt", "positive prompt", "negative prompt", "encode text", "text encoder", "encode prompt"]
 
     def encode(self, clip, text):
         if clip is None:
@@ -86,11 +87,14 @@ class ConditioningCombine:
     FUNCTION = "combine"
 
     CATEGORY = "conditioning"
+    SEARCH_ALIASES = ["combine", "merge conditioning", "combine prompts", "merge prompts", "mix prompts", "add prompt"]
 
     def combine(self, conditioning_1, conditioning_2):
         return (conditioning_1 + conditioning_2, )
 
 class ConditioningAverage :
+    SEARCH_ALIASES = ["blend prompts", "interpolate conditioning", "mix prompts", "style fusion", "weighted blend"]
+
     @classmethod
     def INPUT_TYPES(s):
         return {"required": {"conditioning_to": ("CONDITIONING", ), "conditioning_from": ("CONDITIONING", ),
@@ -157,6 +161,8 @@ class ConditioningConcat:
         return (out, )
 
 class ConditioningSetArea:
+    SEARCH_ALIASES = ["regional prompt", "area prompt", "spatial conditioning", "localized prompt"]
+
     @classmethod
     def INPUT_TYPES(s):
         return {"required": {"conditioning": ("CONDITIONING", ),
@@ -215,6 +221,8 @@ class ConditioningSetAreaStrength:
 
 
 class ConditioningSetMask:
+    SEARCH_ALIASES = ["masked prompt", "regional inpaint conditioning", "mask conditioning"]
+
     @classmethod
     def INPUT_TYPES(s):
         return {"required": {"conditioning": ("CONDITIONING", ),
@@ -240,6 +248,8 @@ class ConditioningSetMask:
         return (c, )
 
 class ConditioningZeroOut:
+    SEARCH_ALIASES = ["null conditioning", "clear conditioning"]
+
     @classmethod
     def INPUT_TYPES(s):
         return {"required": {"conditioning": ("CONDITIONING", )}}
@@ -294,6 +304,7 @@ class VAEDecode:
 
     CATEGORY = "latent"
     DESCRIPTION = "Decodes latent images back into pixel space images."
+    SEARCH_ALIASES = ["decode", "decode latent", "latent to image", "render latent"]
 
     def decode(self, vae, samples):
         latent = samples["samples"]
@@ -346,6 +357,7 @@ class VAEEncode:
     FUNCTION = "encode"
 
     CATEGORY = "latent"
+    SEARCH_ALIASES = ["encode", "encode image", "image to latent"]
 
     def encode(self, vae, pixels):
         t = vae.encode(pixels)
@@ -463,6 +475,8 @@ class InpaintModelConditioning:
 
 
 class SaveLatent:
+    SEARCH_ALIASES = ["export latent"]
+
     def __init__(self):
         self.output_dir = folder_paths.get_output_directory()
 
@@ -514,6 +528,8 @@ class SaveLatent:
 
 
 class LoadLatent:
+    SEARCH_ALIASES = ["import latent", "open latent"]
+
     @classmethod
     def INPUT_TYPES(s):
         input_dir = folder_paths.get_input_directory()
@@ -550,6 +566,8 @@ class LoadLatent:
 
 
 class CheckpointLoader:
+    SEARCH_ALIASES = ["load model", "model loader"]
+
     @classmethod
     def INPUT_TYPES(s):
         return {"required": { "config_name": (folder_paths.get_filename_list("configs"), ),
@@ -580,6 +598,7 @@ class CheckpointLoaderSimple:
 
     CATEGORY = "loaders"
     DESCRIPTION = "Loads a diffusion model checkpoint, diffusion models are used to denoise latents."
+    SEARCH_ALIASES = ["load model", "checkpoint", "model loader", "load checkpoint", "ckpt", "model"]
 
     def load_checkpoint(self, ckpt_name):
         ckpt_path = folder_paths.get_full_path_or_raise("checkpoints", ckpt_name)
@@ -587,6 +606,8 @@ class CheckpointLoaderSimple:
         return out[:3]
 
 class DiffusersLoader:
+    SEARCH_ALIASES = ["load diffusers model"]
+
     @classmethod
     def INPUT_TYPES(cls):
         paths = []
@@ -724,6 +745,7 @@ class LoraLoader:
 
     CATEGORY = "loaders"
     DESCRIPTION = "LoRAs are used to modify diffusion and CLIP models, altering the way in which latents are denoised such as applying styles. Multiple LoRA nodes can be linked together."
+    SEARCH_ALIASES = ["lora", "load lora", "apply lora", "lora loader", "lora model"]
 
     def load_lora(self, model, clip, lora_name, strength_model, strength_clip):
         if strength_model == 0 and strength_clip == 0:
@@ -758,7 +780,7 @@ class LoraLoaderModelOnly(LoraLoader):
         return (self.load_lora(model, None, lora_name, strength_model, 0)[0],)
 
 class VAELoader:
-    video_taes = ["taehv", "lighttaew2_2", "lighttaew2_1", "lighttaehy1_5"]
+    video_taes = ["taehv", "lighttaew2_2", "lighttaew2_1", "lighttaehy1_5", "taeltx_2"]
     image_taes = ["taesd", "taesdxl", "taesd3", "taef1"]
     @staticmethod
     def vae_list(s):
@@ -871,6 +893,7 @@ class ControlNetLoader:
     FUNCTION = "load_controlnet"
 
     CATEGORY = "loaders"
+    SEARCH_ALIASES = ["controlnet", "control net", "cn", "load controlnet", "controlnet loader"]
 
     def load_controlnet(self, control_net_name):
         controlnet_path = folder_paths.get_full_path_or_raise("controlnet", control_net_name)
@@ -947,6 +970,7 @@ class ControlNetApplyAdvanced:
     FUNCTION = "apply_controlnet"
 
     CATEGORY = "conditioning/controlnet"
+    SEARCH_ALIASES = ["controlnet", "apply controlnet", "use controlnet", "control net"]
 
     def apply_controlnet(self, positive, negative, control_net, image, strength, start_percent, end_percent, vae=None, extra_concat=[]):
         if strength == 0:
@@ -1112,6 +1136,8 @@ class StyleModelLoader:
 
 
 class StyleModelApply:
+    SEARCH_ALIASES = ["style transfer"]
+
     @classmethod
     def INPUT_TYPES(s):
         return {"required": {"conditioning": ("CONDITIONING", ),
@@ -1257,13 +1283,16 @@ class EmptyLatentImage:
 
     CATEGORY = "latent"
     DESCRIPTION = "Create a new batch of empty latent images to be denoised via sampling."
+    SEARCH_ALIASES = ["empty", "empty latent", "new latent", "create latent", "blank latent", "blank"]
 
     def generate(self, width, height, batch_size=1):
         latent = torch.zeros([batch_size, 4, height // 8, width // 8], device=self.device)
-        return ({"samples":latent}, )
+        return ({"samples": latent, "downscale_ratio_spacial": 8}, )
 
 
 class LatentFromBatch:
+    SEARCH_ALIASES = ["select from batch", "pick latent", "batch subset"]
+
     @classmethod
     def INPUT_TYPES(s):
         return {"required": { "samples": ("LATENT",),
@@ -1296,6 +1325,8 @@ class LatentFromBatch:
         return (s,)
 
 class RepeatLatentBatch:
+    SEARCH_ALIASES = ["duplicate latent", "clone latent"]
+
     @classmethod
     def INPUT_TYPES(s):
         return {"required": { "samples": ("LATENT",),
@@ -1322,6 +1353,8 @@ class RepeatLatentBatch:
         return (s,)
 
 class LatentUpscale:
+    SEARCH_ALIASES = ["enlarge latent", "resize latent"]
+
     upscale_methods = ["nearest-exact", "bilinear", "area", "bicubic", "bislerp"]
     crop_methods = ["disabled", "center"]
 
@@ -1356,6 +1389,8 @@ class LatentUpscale:
         return (s,)
 
 class LatentUpscaleBy:
+    SEARCH_ALIASES = ["enlarge latent", "resize latent", "scale latent"]
+
     upscale_methods = ["nearest-exact", "bilinear", "area", "bicubic", "bislerp"]
 
     @classmethod
@@ -1399,6 +1434,8 @@ class LatentRotate:
         return (s,)
 
 class LatentFlip:
+    SEARCH_ALIASES = ["mirror latent"]
+
     @classmethod
     def INPUT_TYPES(s):
         return {"required": { "samples": ("LATENT",),
@@ -1419,6 +1456,8 @@ class LatentFlip:
         return (s,)
 
 class LatentComposite:
+    SEARCH_ALIASES = ["overlay latent", "layer latent", "paste latent"]
+
     @classmethod
     def INPUT_TYPES(s):
         return {"required": { "samples_to": ("LATENT",),
@@ -1461,6 +1500,8 @@ class LatentComposite:
         return (samples_out,)
 
 class LatentBlend:
+    SEARCH_ALIASES = ["mix latents", "interpolate latents"]
+
     @classmethod
     def INPUT_TYPES(s):
         return {"required": {
@@ -1502,6 +1543,8 @@ class LatentBlend:
             raise ValueError(f"Unsupported blend mode: {mode}")
 
 class LatentCrop:
+    SEARCH_ALIASES = ["trim latent", "cut latent"]
+
     @classmethod
     def INPUT_TYPES(s):
         return {"required": { "samples": ("LATENT",),
@@ -1552,7 +1595,7 @@ class SetLatentNoiseMask:
 
 def common_ksampler(model, seed, steps, cfg, sampler_name, scheduler, positive, negative, latent, denoise=1.0, disable_noise=False, start_step=None, last_step=None, force_full_denoise=False):
     latent_image = latent["samples"]
-    latent_image = comfy.sample.fix_empty_latent_channels(model, latent_image)
+    latent_image = comfy.sample.fix_empty_latent_channels(model, latent_image, latent.get("downscale_ratio_spacial", None))
 
     if disable_noise:
         noise = torch.zeros(latent_image.size(), dtype=latent_image.dtype, layout=latent_image.layout, device="cpu")
@@ -1570,6 +1613,7 @@ def common_ksampler(model, seed, steps, cfg, sampler_name, scheduler, positive, 
                                   denoise=denoise, disable_noise=disable_noise, start_step=start_step, last_step=last_step,
                                   force_full_denoise=force_full_denoise, noise_mask=noise_mask, callback=callback, disable_pbar=disable_pbar, seed=seed)
     out = latent.copy()
+    out.pop("downscale_ratio_spacial", None)
     out["samples"] = samples
     return (out, )
 
@@ -1597,6 +1641,7 @@ class KSampler:
 
     CATEGORY = "sampling"
     DESCRIPTION = "Uses the provided model, positive and negative conditioning to denoise the latent image."
+    SEARCH_ALIASES = ["sampler", "sample", "generate", "denoise", "diffuse", "txt2img", "img2img"]
 
     def sample(self, model, seed, steps, cfg, sampler_name, scheduler, positive, negative, latent_image, denoise=1.0):
         return common_ksampler(model, seed, steps, cfg, sampler_name, scheduler, positive, negative, latent_image, denoise=denoise)
@@ -1661,6 +1706,7 @@ class SaveImage:
 
     CATEGORY = "image"
     DESCRIPTION = "Saves the input images to your ComfyUI output directory."
+    SEARCH_ALIASES = ["save", "save image", "export image", "output image", "write image", "download"]
 
     def save_images(self, images, filename_prefix="ComfyUI", prompt=None, extra_pnginfo=None):
         filename_prefix += self.prefix_append
@@ -1697,6 +1743,8 @@ class PreviewImage(SaveImage):
         self.prefix_append = "_temp_" + ''.join(random.choice("abcdefghijklmnopqrstupvxyz") for x in range(5))
         self.compress_level = 1
 
+    SEARCH_ALIASES = ["preview", "preview image", "show image", "view image", "display image", "image viewer"]
+
     @classmethod
     def INPUT_TYPES(s):
         return {"required":
@@ -1715,6 +1763,7 @@ class LoadImage:
                 }
 
     CATEGORY = "image"
+    SEARCH_ALIASES = ["load image", "open image", "import image", "image input", "upload image", "read image", "image loader"]
 
     RETURN_TYPES = ("IMAGE", "MASK")
     FUNCTION = "load_image"
@@ -1782,6 +1831,8 @@ class LoadImage:
         return True
 
 class LoadImageMask:
+    SEARCH_ALIASES = ["import mask", "alpha mask", "channel mask"]
+
     _color_channels = ["alpha", "red", "green", "blue"]
     @classmethod
     def INPUT_TYPES(s):
@@ -1832,6 +1883,8 @@ class LoadImageMask:
 
 
 class LoadImageOutput(LoadImage):
+    SEARCH_ALIASES = ["output image", "previous generation"]
+
     @classmethod
     def INPUT_TYPES(s):
         return {
@@ -1867,6 +1920,7 @@ class ImageScale:
     FUNCTION = "upscale"
 
     CATEGORY = "image/upscaling"
+    SEARCH_ALIASES = ["resize", "resize image", "scale image", "image resize", "zoom", "zoom in", "change size"]
 
     def upscale(self, image, upscale_method, width, height, crop):
         if width == 0 and height == 0:
@@ -1904,6 +1958,7 @@ class ImageScaleBy:
         return (s,)
 
 class ImageInvert:
+    SEARCH_ALIASES = ["reverse colors"]
 
     @classmethod
     def INPUT_TYPES(s):
@@ -1919,6 +1974,7 @@ class ImageInvert:
         return (s,)
 
 class ImageBatch:
+    SEARCH_ALIASES = ["combine images", "merge images", "stack images"]
 
     @classmethod
     def INPUT_TYPES(s):
@@ -1964,6 +2020,7 @@ class EmptyImage:
         return (torch.cat((r, g, b), dim=-1), )
 
 class ImagePadForOutpaint:
+    SEARCH_ALIASES = ["extend canvas", "expand image"]
 
     @classmethod
     def INPUT_TYPES(s):
@@ -2107,7 +2164,8 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "CheckpointLoader": "Load Checkpoint With Config (DEPRECATED)",
     "CheckpointLoaderSimple": "Load Checkpoint",
     "VAELoader": "Load VAE",
-    "LoraLoader": "Load LoRA",
+    "LoraLoader": "Load LoRA (Model and CLIP)",
+    "LoraLoaderModelOnly": "Load LoRA",
     "CLIPLoader": "Load CLIP",
     "ControlNetLoader": "Load ControlNet Model",
     "DiffControlNetLoader": "Load ControlNet Model (diff)",
@@ -2432,6 +2490,8 @@ async def init_builtin_extra_nodes():
         "nodes_kandinsky5.py",
         "nodes_wanmove.py",
         "nodes_image_compare.py",
+        "nodes_zimage.py",
+        "nodes_lora_debug.py"
     ]
 
     import_failed = []
