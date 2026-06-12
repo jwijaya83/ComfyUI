@@ -133,7 +133,7 @@ upcast.add_argument("--dont-upcast-attention", action="store_true", help="Disabl
 parser.add_argument("--enable-manager", action="store_true", help="Enable the ComfyUI-Manager feature.")
 manager_group = parser.add_mutually_exclusive_group()
 manager_group.add_argument("--disable-manager-ui", action="store_true", help="Disables only the ComfyUI-Manager UI and endpoints. Scheduled installations and similar background tasks will still operate.")
-manager_group.add_argument("--enable-manager-legacy-ui", action="store_true", help="Enables the legacy UI of ComfyUI-Manager")
+manager_group.add_argument("--enable-manager-legacy-ui", action="store_true", help="Enables the legacy UI of ComfyUI-Manager. Implies --enable-manager.")
 
 
 vram_group = parser.add_mutually_exclusive_group()
@@ -149,6 +149,7 @@ parser.add_argument("--async-offload", nargs='?', const=2, type=int, default=Non
 parser.add_argument("--disable-async-offload", action="store_true", help="Disable async weight offloading.")
 parser.add_argument("--disable-dynamic-vram", action="store_true", help="Disable dynamic VRAM and use estimate based model loading.")
 parser.add_argument("--enable-dynamic-vram", action="store_true", help="Enable dynamic VRAM on systems where it's not enabled by default.")
+parser.add_argument("--fast-disk", action="store_true", help="Prefer disk-backed dynamic loading and offload over unpinned RAM. Can be faster for users with fast NVME disks.")
 
 parser.add_argument("--force-non-blocking", action="store_true", help="Force ComfyUI to use non-blocking operations for all applicable tensors. This may improve performance on some non-Nvidia systems but can cause issues with some workflows.")
 
@@ -164,6 +165,8 @@ class PerformanceFeature(enum.Enum):
     AutoTune = "autotune"
 
 parser.add_argument("--fast", nargs="*", type=PerformanceFeature, help="Enable some untested and potentially quality deteriorating optimizations. This is used to test new features so using it might crash your comfyui. --fast with no arguments enables everything. You can pass a list specific optimizations if you only want to enable specific ones. Current valid optimizations: {}".format(" ".join(map(lambda c: c.value, PerformanceFeature))))
+
+parser.add_argument("--debug-hang", action="store_true", help="Enable stack trace dumps on Ctrl-C for debugging hangs.")
 
 parser.add_argument("--disable-pinned-memory", action="store_true", help="Disable pinned memory use.")
 
@@ -254,6 +257,10 @@ if args.disable_auto_launch:
 
 if args.force_fp16:
     args.fp16_unet = True
+
+# '--enable-manager-legacy-ui' is meaningless unless the manager is enabled, so imply '--enable-manager'.
+if args.enable_manager_legacy_ui:
+    args.enable_manager = True
 
 
 # '--fast' is not provided, use an empty set
