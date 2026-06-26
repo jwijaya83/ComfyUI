@@ -1,0 +1,14 @@
+[
+  {
+    "repo_id": "Lightricks/LTX-2.3-fp8",
+    "filename": "ltx-2.3-22b-dev-fp8.safetensors",
+    "target": "checkpoints/ltx23/ltx-2.3-22b-dev-fp8.safetensors",
+    "note": "LTX 2.3 22B dev fp8 base checkpoint (~28GB). VAE is bundled in it."
+  },
+  {
+    "repo_id": "Comfy-Org/ltx-2",
+    "filename": "split_files/text_encoders/gemma_3_12B_it_fp8_scaled.safetensors",
+    "target": "text_encoders/ltx23/gemma_3_12B_it_fp8_scaled.safetensors",
+    "note": "Gemma 3 12B fp8-scaled text encoder LTX 2.3 uses (~13GB)."
+  }
+]

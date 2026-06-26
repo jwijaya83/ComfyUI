@@ -1,0 +1,14 @@
+# Trim the build context (the ComfyUI dir is ~70 GB). Keep venv/ and models/loras/
+# (the persona + LTX LoRAs are baked in). The base checkpoint + text encoder come from
+# RunPod's HF model cache at boot (fetch_models.py), so exclude them from the image.
+.git
+SageAttention
+**/__pycache__
+**/*.pyc
+tests
+tests-unit
+*.log
+
+# Foundation models — pulled from the HF cache at runtime, NOT baked (~40 GB saved).
+models/checkpoints
+models/text_encoders

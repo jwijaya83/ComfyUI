@@ -1,0 +1,10 @@
+# Handler-only deps (NO torch — the handler talks to ComfyUI over HTTP/WS, it does
+# not import any ML libs). Installed into a dedicated /opt/handler-venv so they cache
+# independently of ComfyUI's prebuilt venv.
+runpod>=1.6.0
+google-cloud-storage>=2.16.0
+websocket-client>=1.7.0
+requests>=2.31.0
+# Resolve the base checkpoint + text encoder from RunPod's HF model cache at boot
+# (fetch_models.py) — keeps the 40GB of foundation models out of the image.
+huggingface_hub>=0.23.0

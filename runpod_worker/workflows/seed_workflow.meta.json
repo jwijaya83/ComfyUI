@@ -1,0 +1,11 @@
+{
+  "positivePromptNode": "2483",
+  "negativePromptNode": "2612",
+  "framesNode": "5072",
+  "fpsNode": "5098",
+  "loraNode": "5109",
+  "referenceImageNode": "5106",
+  "defaultReferenceImage": "person.jpg",
+  "saveVideoNode": "4852",
+  "seedNodes": ["4832"]
+}

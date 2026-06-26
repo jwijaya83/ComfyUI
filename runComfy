@@ -1,0 +1,2 @@
+python3 main.py --reserve-vram 1 --enable-manager --use-sage-attention --disable-pinned-memory
+

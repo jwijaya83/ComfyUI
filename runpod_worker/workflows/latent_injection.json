@@ -1,0 +1,328 @@
+{
+  "1241": {
+    "inputs": {
+      "frame_rate": [
+        "4978",
+        0
+      ],
+      "positive": [
+        "2483",
+        0
+      ],
+      "negative": [
+        "2612",
+        0
+      ]
+    },
+    "class_type": "LTXVConditioning",
+    "_meta": {
+      "title": "LTXVConditioning"
+    }
+  },
+  "2483": {
+    "inputs": {
+      "text": "ohwx woman, medium-close shot at eye level, seated at a small wrought-iron café table inside a glass-walled greenhouse café, lush potted ferns and trailing vines crowding the shelves behind her, terracotta pots stacked along the far bench, the glass panels fogged at the corners with warmth and condensation — she wears a soft sage-green linen blouse with a loose collar, a warm caramel-toned knit vest layered over it, her small pendant necklace catching the diffuse light, dark slim trousers disappearing below the frame; she cradles a wide ceramic mug of tea in both hands, elbows resting on the iron table, the mug paused just below her chin as she looks directly into the camera — the entire space is lit by the flat, warm-white overcast daylight filtering through the greenhouse glass panels above and to her left, wrapping evenly across her face and shoulders with soft diffuse shadows pooling gently beneath her jaw and along the side of her neck, the same pale light catching the condensation on the glass behind her; she draws a slow breath, the mug still cradled close, and says \"Ha, okay, fair enough,\" then takes a quiet sip, sets the mug down with a gentle clink against the iron tabletop, her fingers still curled around it, and continues, \"I'll admit there's a reason roses have lasted this long.\" a small pause, her gaze settling steadier into camera, \"Maybe I was being a little unfair to them.\" she tilts her head just slightly, voice quieter, \"You clearly have strong feelings, and honestly?\" another breath, a glance away and back, \"That kind of passion is hard to argue with.\"; the camera holds its lock, never drifting, as the ambient sound of the greenhouse surrounds her — the faint tick of a watering pipe, the muffled patter of light rain beginning on the glass roof — and her voice carries the quality of someone who has thought about this for a long time, warm and unhurried, with a trace of something unresolved still alive in it.",
+      "clip": [
+        "4960",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Positive Prompt)"
+    }
+  },
+  "2612": {
+    "inputs": {
+      "text": "pc game, console game, video game, cartoon, childish, ugly, subtitle, anime",
+      "clip": [
+        "4960",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Negative Prompt)"
+    }
+  },
+  "3940": {
+    "inputs": {
+      "ckpt_name": "ltx23/ltx-2.3-22b-dev-fp8.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Load Checkpoint"
+    }
+  },
+  "3980": {
+    "inputs": {
+      "frames_number": [
+        "4979",
+        0
+      ],
+      "frame_rate": 24,
+      "batch_size": 1,
+      "audio_vae": [
+        "4010",
+        0
+      ]
+    },
+    "class_type": "LTXVEmptyLatentAudio",
+    "_meta": {
+      "title": "LTXV Empty Latent Audio"
+    }
+  },
+  "4010": {
+    "inputs": {
+      "ckpt_name": "ltx23/ltx-2.3-22b-dev-fp8.safetensors"
+    },
+    "class_type": "LTXVAudioVAELoader",
+    "_meta": {
+      "title": "Load LTXV Audio VAE"
+    }
+  },
+  "4528": {
+    "inputs": {
+      "video_latent": [
+        "5009",
+        0
+      ],
+      "audio_latent": [
+        "3980",
+        0
+      ]
+    },
+    "class_type": "LTXVConcatAVLatent",
+    "_meta": {
+      "title": "LTXVConcatAVLatent"
+    }
+  },
+  "4828": {
+    "inputs": {
+      "cfg": 1,
+      "model": [
+        "4990",
+        0
+      ],
+      "positive": [
+        "1241",
+        0
+      ],
+      "negative": [
+        "1241",
+        1
+      ]
+    },
+    "class_type": "CFGGuider",
+    "_meta": {
+      "title": "CFG Guider"
+    }
+  },
+  "4845": {
+    "inputs": {
+      "av_latent": [
+        "5008",
+        0
+      ]
+    },
+    "class_type": "LTXVSeparateAVLatent",
+    "_meta": {
+      "title": "LTXVSeparateAVLatent"
+    }
+  },
+  "4848": {
+    "inputs": {
+      "samples": [
+        "4845",
+        1
+      ],
+      "audio_vae": [
+        "4010",
+        0
+      ]
+    },
+    "class_type": "LTXVAudioVAEDecode",
+    "_meta": {
+      "title": "LTXV Audio VAE Decode"
+    }
+  },
+  "4849": {
+    "inputs": {
+      "fps": [
+        "4978",
+        0
+      ],
+      "bit_depth": 8,
+      "images": [
+        "5003",
+        0
+      ],
+      "audio": [
+        "4848",
+        0
+      ]
+    },
+    "class_type": "CreateVideo",
+    "_meta": {
+      "title": "Create Video"
+    }
+  },
+  "4852": {
+    "inputs": {
+      "filename_prefix": "ltx23/chat_5cc2b22f-a87d-4f5f-80f0-50ebd1565da0",
+      "format": "auto",
+      "codec": "auto",
+      "video": [
+        "4849",
+        0
+      ]
+    },
+    "class_type": "SaveVideo",
+    "_meta": {
+      "title": "Save Video"
+    }
+  },
+  "4922": {
+    "inputs": {
+      "lora_name": "ltx23/ltx-2.3-22b-distilled-lora-dynamic_fro09_avg_rank_105_bf16.safetensors",
+      "strength_model": 0.6,
+      "model": [
+        "3940",
+        0
+      ]
+    },
+    "class_type": "LoraLoaderModelOnly",
+    "_meta": {
+      "title": "Load LoRA"
+    }
+  },
+  "4960": {
+    "inputs": {
+      "text_encoder": "ltx23/gemma_3_12B_it_fp8_scaled.safetensors",
+      "ckpt_name": "ltx23/ltx-2.3-22b-dev-fp8.safetensors",
+      "device": "default"
+    },
+    "class_type": "LTXAVTextEncoderLoader",
+    "_meta": {
+      "title": "LTXV Audio Text Encoder Loader"
+    }
+  },
+  "4978": {
+    "inputs": {
+      "value": 24
+    },
+    "class_type": "PrimitiveFloat",
+    "_meta": {
+      "title": "fps"
+    }
+  },
+  "4979": {
+    "inputs": {
+      "value": 377
+    },
+    "class_type": "PrimitiveInt",
+    "_meta": {
+      "title": "number of frames"
+    }
+  },
+  "4990": {
+    "inputs": {
+      "lora_name": "kristin_ohwx_woman_no_audio.safetensors",
+      "strength_model": 1,
+      "strength_clip": 1,
+      "model": [
+        "4922",
+        0
+      ],
+      "clip": [
+        "4960",
+        0
+      ]
+    },
+    "class_type": "LoraLoader",
+    "_meta": {
+      "title": "Load LoRA (Model and CLIP)"
+    }
+  },
+  "5003": {
+    "inputs": {
+      "samples": [
+        "4845",
+        0
+      ],
+      "vae": [
+        "3940",
+        2
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "5007": {
+    "inputs": {
+      "video": "8d9905ef-0d55-40c7-a620-789d62ff42b1.mp4",
+      "force_rate": 0,
+      "custom_width": 0,
+      "custom_height": 0,
+      "frame_load_cap": 377,
+      "skip_first_frames": 0,
+      "select_every_nth": 1,
+      "format": "AnimateDiff"
+    },
+    "class_type": "VHS_LoadVideo",
+    "_meta": {
+      "title": "Load Video (Upload) 🎥🅥🅗🅢"
+    }
+  },
+  "5008": {
+    "inputs": {
+      "add_noise": "enable",
+      "noise_seed": 42,
+      "steps": 8,
+      "cfg": 1,
+      "sampler_name": "euler_ancestral_cfg_pp",
+      "scheduler": "simple",
+      "start_at_step": 3,
+      "end_at_step": 10000,
+      "return_with_leftover_noise": "disable",
+      "model": [
+        "4990",
+        0
+      ],
+      "positive": [
+        "1241",
+        0
+      ],
+      "negative": [
+        "1241",
+        1
+      ],
+      "latent_image": [
+        "4528",
+        0
+      ]
+    },
+    "class_type": "KSamplerAdvanced",
+    "_meta": {
+      "title": "KSampler (Advanced)"
+    }
+  },
+  "5009": {
+    "inputs": {
+      "pixels": [
+        "5007",
+        0
+      ],
+      "vae": [
+        "3940",
+        2
+      ]
+    },
+    "class_type": "VAEEncode",
+    "_meta": {
+      "title": "VAE Encode"
+    }
+  }
+}
