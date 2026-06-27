@@ -41,10 +41,10 @@ COPY runpod_worker/requirements.txt /opt/runpod_worker/requirements.txt
 RUN python3 -m venv /opt/handler-venv \
     && /opt/handler-venv/bin/pip install --no-cache-dir -r /opt/runpod_worker/requirements.txt
 
-# The working ComfyUI tree (venv + models/loras + custom nodes + code + the handler
-# under runpod_worker/) copied to its original absolute path. The base checkpoint +
-# text encoder (~40 GB) are excluded via .dockerignore and fetched from the HF cache at
-# boot, so this layer is ~25 GB instead of ~65 GB.
+# The working ComfyUI tree (venv + persona LoRAs + custom nodes + code + the handler
+# under runpod_worker/) copied to its original absolute path. The base checkpoint, text
+# encoder, and the two LTX distilled LoRAs (~50 GB) are excluded via .dockerignore and
+# fetched from the HF cache at boot, so this layer is ~16 GB instead of ~65 GB.
 COPY . ${COMFY_DIR}
 
 RUN cp "${COMFY_DIR}/runpod_worker/entrypoint.sh" /entrypoint.sh && chmod +x /entrypoint.sh

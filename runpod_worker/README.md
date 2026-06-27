@@ -65,17 +65,20 @@ Returns `{ jobId, status, outputUrl }`; also reports the same to the webhook.
 
 ## Model caching (foundation models are NOT baked in)
 
-Only `models/loras/` (persona + LTX LoRAs) is baked into the image. The big base
-checkpoint + text encoder come from **RunPod's Model Caching** at boot, keeping the
-image ~25 GB instead of ~65 GB.
+Only the **persona** LoRAs (`models/loras/*.safetensors`) are baked into the image. The
+big base checkpoint, text encoder, and the dynamic distilled LoRA come from **RunPod's
+Model Caching** at boot, keeping the image ~16 GB instead of ~65 GB. (The image runs the
+**per-turn** render path — `basic_workflow` / `latent_injection`. The admin seed-video
+workflow runs on the host, so its 384 LoRA + IC-LoRA are intentionally not fetched here.)
 
-**1. Enable Model Caching on the endpoint** and add these two HF models (RunPod
+**1. Enable Model Caching on the endpoint** and add these **3** HF models (RunPod
 pre-downloads them to `/runpod-volume/huggingface-cache/hub` before the worker starts):
 
 | HF model path | file used | → linked into |
 |---|---|---|
 | `Lightricks/LTX-2.3-fp8` | `ltx-2.3-22b-dev-fp8.safetensors` | `models/checkpoints/ltx23/` |
 | `Comfy-Org/ltx-2` | `split_files/text_encoders/gemma_3_12B_it_fp8_scaled.safetensors` | `models/text_encoders/ltx23/` |
+| `Kijai/LTX2.3_comfy` | `loras/ltx-2.3-22b-distilled-lora-dynamic_fro09_avg_rank_105_bf16.safetensors` | `models/loras/ltx23/` |
 
 **2. At boot**, `fetch_models.py` reads `models_manifest.json`, resolves each file from
 the HF cache (`HF_HOME=/runpod-volume/huggingface-cache`, a cache HIT when RunPod
@@ -86,7 +89,8 @@ Notes: caching `Lightricks/LTX-2.3-fp8` pulls the whole repo (~59 GB) to the vol
 only the one file is linked. The VAE is bundled in the LTX checkpoint (no separate fetch).
 If a repo is gated (Lightricks/Gemma) and not pre-cached, set `HF_TOKEN`. Without managed
 caching, attach a network volume at `/runpod-volume` and the first boot downloads there
-and persists. Increase the endpoint **Container Disk to ≥ 20 GB**.
+and persists (`fetch_models.py`'s `hf_hub_download` pulls only the listed files, not whole
+repos). Increase the endpoint **Container Disk to ≥ 20 GB**.
 
 ## Local smoke test (handler logic, against a running ComfyUI)
 
@@ -101,10 +105,11 @@ and persists. Increase the endpoint **Container Disk to ≥ 20 GB**.
    compiled kernels may not load. Other archs (A100 sm_80, H100 sm_90) need SageAttention
    rebuilt for them.
 2. **Driver / CUDA 13.** torch is `cu130`; the RunPod host driver must support CUDA 13.
-3. **Image size (~25 GB).** The base checkpoint + text encoder (~40 GB) are fetched from
-   the HF cache at boot (see Model caching); only code + venv + LoRAs are baked in.
+3. **Image size (~16 GB).** The base checkpoint + text encoder + the dynamic distilled
+   LoRA (~45 GB) are fetched from the HF cache at boot (see Model caching); only code +
+   venv + the persona LoRAs are baked in.
 4. **Cold start.** First job after scale-to-zero pays ComfyUI boot + loading the models
-   from the cache volume (network-volume read latency for ~40 GB). Use RunPod FlashBoot
+   from the cache volume (network-volume read latency for ~50 GB). Use RunPod FlashBoot
    and/or 1 active worker for latency-sensitive traffic.
 5. **chat-api side is not wired yet.** This image expects the signed-URL contract above;
    the `runpod` queue driver + signed-URL asset resolution in chat-api is the next pass.

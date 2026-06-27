@@ -1,6 +1,7 @@
-# Trim the build context (the ComfyUI dir is ~70 GB). Keep venv/ and models/loras/
-# (the persona + LTX LoRAs are baked in). The base checkpoint + text encoder come from
-# RunPod's HF model cache at boot (fetch_models.py), so exclude them from the image.
+# Trim the build context (the ComfyUI dir is ~70 GB). Keep venv/ and the persona LoRAs
+# (models/loras/*.safetensors are baked in). The base checkpoint, text encoder, and the
+# dynamic distilled LoRA come from RunPod's HF model cache at boot (fetch_models.py),
+# so exclude them from the image.
 .git
 SageAttention
 **/__pycache__
@@ -11,4 +12,17 @@ tests-unit
 
 # Foundation models — pulled from the HF cache at runtime, NOT baked (~40 GB saved).
 models/checkpoints
+# https://huggingface.co/Lightricks/LTX-2.3-fp8/blob/main/ltx-2.3-22b-dev-fp8.safetensors
 models/text_encoders
+# https://huggingface.co/Comfy-Org/ltx-2/blob/main/split_files/text_encoders/gemma_3_12B_it_fp8_scaled.safetensors
+
+# LTX distilled LoRAs. Persona LoRAs in models/loras/ stay baked; the ltx23 ones are
+# externalized. The DYNAMIC LoRA (used by the per-turn basic/latent_injection path) is
+# fetched from HF at boot (fetch_models.py); excluded here, ~2.6 GB saved.
+models/loras/ltx23/ltx-2.3-22b-distilled-lora-dynamic_fro09_avg_rank_105_bf16.safetensors
+# https://huggingface.co/Kijai/LTX2.3_comfy/blob/main/loras/ltx-2.3-22b-distilled-lora-dynamic_fro09_avg_rank_105_bf16.safetensors
+# The 384 distilled LoRA is used ONLY by seed_workflow.json (admin seed-video), which runs
+# on the HOST, not RunPod — so it's excluded here AND not in models_manifest.json (not
+# fetched). Re-add it to both if you ever move seed generation onto the RunPod worker.
+models/loras/ltx23/ltx-2.3-22b-distilled-lora-384-1.1.safetensors
+# https://huggingface.co/Lightricks/LTX-2.3/blob/main/ltx-2.3-22b-distilled-lora-384-1.1.safetensors

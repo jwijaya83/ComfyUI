@@ -10,5 +10,11 @@
     "filename": "split_files/text_encoders/gemma_3_12B_it_fp8_scaled.safetensors",
     "target": "text_encoders/ltx23/gemma_3_12B_it_fp8_scaled.safetensors",
     "note": "Gemma 3 12B fp8-scaled text encoder LTX 2.3 uses (~13GB)."
+  },
+  {
+    "repo_id": "Kijai/LTX2.3_comfy",
+    "filename": "loras/ltx-2.3-22b-distilled-lora-dynamic_fro09_avg_rank_105_bf16.safetensors",
+    "target": "loras/ltx23/ltx-2.3-22b-distilled-lora-dynamic_fro09_avg_rank_105_bf16.safetensors",
+    "note": "LTX 2.3 22B distilled dynamic LoRA, avg rank 105 bf16 (~2.6GB). Kijai's ComfyUI repo, under loras/."
   }
 ]
