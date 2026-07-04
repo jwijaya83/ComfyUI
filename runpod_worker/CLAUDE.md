@@ -23,7 +23,10 @@ report flow, reimplemented in Python). Human-facing deploy docs live in
 1. `fetch_models.py` resolves the foundation models from the HF cache and symlinks them
    into `models/` (**fatal** on failure — no models, no renders → let RunPod recycle).
 2. ComfyUI boots in the background (`source runComfy`, its own venv).
-3. `handler.py` (handler-venv) waits for `127.0.0.1:8188`, then `runpod.serverless.start`.
+3. `handler.py` (handler-venv) logs config and runs `gcs.log_config()` — **fatal** if GCS
+   is misconfigured (no bucket, or signing on with no SA key) so a broken worker recycles
+   instead of failing at upload after a GPU render — then waits for `127.0.0.1:8188` and
+   calls `runpod.serverless.start`.
 
 ## Module map
 
@@ -33,7 +36,12 @@ report flow, reimplemented in Python). Human-facing deploy docs live in
   the nodes its `<name>.meta.json` sidecar names (prompt, lora, frames/fps, reference,
   save). Deliberately does NOT touch seed nodes.
 - `comfy_client.py` — submit + poll ComfyUI over `127.0.0.1:8188`.
-- `gcs.py` — upload the MP4; returns a signed (or public) URL.
+- `gcs.py` — upload the MP4; returns the **durable `gs://` ref** (never expires — chat-api signs a fresh short-lived read url from it on every read, mirroring render-worker/storage.js; `GCS_SIGN` now gates only the local `selftest` round-trip). Two buckets:
+  `GCS_BUCKET` (`video-response`, per-turn) and `GCS_SEED_BUCKET` (`video-seed`, seed
+  clips). Creds resolve `GOOGLE_APPLICATION_CREDENTIALS`/`GCS_KEY_FILE` (paths) →
+  inline JSON in `GCS_SA_KEY_JSON`/`RUNPOD_SECRET_gcs_api_key` (RunPod injects the
+  `gcs_api_key` secret under the latter). Run it directly to wire/verify locally:
+  `python gcs.py selftest --bucket <b>` / `python gcs.py upload <file> --bucket <b>`.
 - `reporter.py` — `POST {CHAT_API_INTERNAL_URL}/internal/render-events` (x-internal-token).
 - `fetch_models.py` + `models_manifest.json` — the boot-time model resolver (below).
 
@@ -58,9 +66,8 @@ report flow, reimplemented in Python). Human-facing deploy docs live in
 A manifest entry's `target` is the path **under `models/`** where the file is symlinked,
 and it **MUST equal the path the workflows load it by** (`ckpt_name` / `text_encoder` /
 `lora_name`). ComfyUI resolves a subfolder literally: a workflow value like
-`ltx23/ltx-2.3-22b-dev-fp8.safetensors` is found ONLY at
-`models/checkpoints/ltx23/ltx-2.3-22b-dev-fp8.safetensors` — so the target must carry the
-same `ltx23/` segment (or the workflows must be flattened to match). The `.dockerignore`
+`ltx-2.3-22b-dev-fp8.safetensors` is found ONLY at
+`models/checkpoints/ltx-2.3-22b-dev-fp8.safetensors`. The `.dockerignore`
 exclude pattern for a fetched file must likewise match its real on-disk path, or the file
 isn't actually excluded and gets baked. When you change any one of these three, change all
 three together.
@@ -83,7 +90,17 @@ tree must land back at exactly that path. Run the build from the ComfyUI root, n
   baked. Harmless **only** while every job sends `loraName` (the handler overrides the lora
   node, `workflow_builder.py`). A job that omits it would fail at LoRA load — either always
   send `loraName` or change the templates' default to a baked LoRA.
-- **chat-api side not wired yet.** No `runpod` queue driver / signed-URL job contract in
-  chat-api, so nothing sends this endpoint jobs until that pass (see README contract).
+- **chat-api side is wired (push).** chat-api's `runpod` queue driver
+  (`renderQueue.js` `submitRunpod`) POSTs each render job to this endpoint's `/run`
+  when `QUEUE_DRIVER=runpod` + `RUNPOD_ENDPOINT_ID` + `RUNPOD_API_KEY` are set. Assets
+  arrive as download URLs the handler GETs (`_download` in `handler.py`), split by type:
+  - **Seed clips (latent injection) ride as GCS SIGNED URLs** when GCS is on — chat-api
+    resolves `sourceSeedId` → the seed's `gs://` (video-seed for approved, video-response
+    for a candidate) → a signed read url (`renderQueue.js` `seedGcsUrl`), so the clip
+    downloads straight from the bucket. If GCS is off / the seed isn't mirrored, it falls
+    back to the chat-api url (`PUBLIC_BASE/internal/seed-media/…?t=INTERNAL_TOKEN`).
+  - **Persona reference / img2video images still ride as chat-api URLs**
+    (`PUBLIC_BASE/internal/persona-reference/…?t=INTERNAL_TOKEN`) — so `PUBLIC_BASE` must
+    stay internet-reachable and `INTERNAL_TOKEN` must match chat-api's.
 - **GPU arch.** SageAttention is compiled for Ada (sm_89) → run on Ada GPUs
   (RTX 4090/4080, L4, L40/L40S); other archs need it rebuilt.

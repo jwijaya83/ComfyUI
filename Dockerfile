@@ -28,10 +28,10 @@ ENV COMFY_DIR=${COMFY_DIR} \
     HF_HOME=/runpod-volume/huggingface-cache
 
 # python3.12 = the venv's base interpreter (pyvenv.cfg -> /usr/bin/python3.12);
-# ffmpeg for VideoHelperSuite; git for comfyui-manager; libgl/glib for cv2-style nodes.
+# ffmpeg for video encode/decode; libgl/glib for cv2-style nodes.
 RUN apt-get update && apt-get install -y --no-install-recommends \
       python3 python3-venv python3-pip \
-      ffmpeg git curl ca-certificates \
+      ffmpeg curl ca-certificates \
       libgl1 libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 

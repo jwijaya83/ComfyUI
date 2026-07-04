@@ -84,7 +84,7 @@
   },
   "3940": {
     "inputs": {
-      "ckpt_name": "ltx23/ltx-2.3-22b-dev-fp8.safetensors"
+      "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors"
     },
     "class_type": "CheckpointLoaderSimple",
     "_meta": {
@@ -114,7 +114,7 @@
   },
   "4010": {
     "inputs": {
-      "ckpt_name": "ltx23/ltx-2.3-22b-dev-fp8.safetensors"
+      "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors"
     },
     "class_type": "LTXVAudioVAELoader",
     "_meta": {
@@ -270,7 +270,7 @@
   },
   "4922": {
     "inputs": {
-      "lora_name": "ltx23/ltx-2.3-22b-distilled-lora-dynamic_fro09_avg_rank_105_bf16.safetensors",
+      "lora_name": "ltx-2.3-22b-distilled-lora-dynamic_fro09_avg_rank_105_bf16.safetensors",
       "strength_model": 0.6,
       "model": [
         "3940",
@@ -284,8 +284,8 @@
   },
   "4960": {
     "inputs": {
-      "text_encoder": "ltx23/gemma_3_12B_it_fp8_scaled.safetensors",
-      "ckpt_name": "ltx23/ltx-2.3-22b-dev-fp8.safetensors",
+      "text_encoder": "gemma_3_12B_it_fp8_scaled.safetensors",
+      "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors",
       "device": "default"
     },
     "class_type": "LTXAVTextEncoderLoader",
@@ -295,7 +295,7 @@
   },
   "4971": {
     "inputs": {
-      "sigmas": "1.0, 0.99375, 0.9875, 0.98125, 0.975, 0.909375, 0.725, 0.421875, 0.0"
+      "sigmas": "1.0, 0.995, 0.99, 0.9875, 0.975, 0.65, 0.28, 0.07, 0.0"
     },
     "class_type": "ManualSigmas",
     "_meta": {
@@ -346,11 +346,11 @@
   },
   "4990": {
     "inputs": {
-      "lora_name": "kristin_ohwx_woman_no_audio.safetensors",
+      "lora_name": "kristin_ohwx_woman.safetensors",
       "strength_model": 1,
       "strength_clip": 1,
       "model": [
-        "4922",
+        "5011",
         0
       ],
       "clip": [
@@ -414,6 +414,20 @@
     "class_type": "LTXFloatToInt",
     "_meta": {
       "title": "🅛🅣🅧 Float To Int"
+    }
+  },
+  "5011": {
+    "inputs": {
+      "lora_name": "LTX2.3_Crisp_Enhance.safetensors",
+      "strength_model": 1,
+      "model": [
+        "4922",
+        0
+      ]
+    },
+    "class_type": "LoraLoaderModelOnly",
+    "_meta": {
+      "title": "Load LoRA"
     }
   }
 }

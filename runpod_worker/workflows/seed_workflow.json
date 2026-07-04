@@ -87,7 +87,7 @@
   },
   "3940": {
     "inputs": {
-      "ckpt_name": "ltx23/ltx-2.3-22b-dev-fp8.safetensors"
+      "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors"
     },
     "class_type": "CheckpointLoaderSimple",
     "_meta": {
@@ -117,7 +117,7 @@
   },
   "4010": {
     "inputs": {
-      "ckpt_name": "ltx23/ltx-2.3-22b-dev-fp8.safetensors"
+      "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors"
     },
     "class_type": "LTXVAudioVAELoader",
     "_meta": {
@@ -273,7 +273,7 @@
   },
   "4922": {
     "inputs": {
-      "lora_name": "ltx23/ltx-2.3-22b-distilled-lora-384-1.1.safetensors",
+      "lora_name": "ltx-2.3-22b-distilled-lora-384-1.1.safetensors",
       "strength_model": 0.6,
       "model": [
         "3940",
@@ -287,7 +287,7 @@
   },
   "5011": {
     "inputs": {
-      "lora_name": "ltx23/ltx-2.3-22b-ic-lora-ingredients-0.9.safetensors",
+      "lora_name": "ltx-2.3-22b-ic-lora-ingredients-0.9.safetensors",
       "strength_model": 1.2,
       "model": [
         "5109",
@@ -368,8 +368,8 @@
   },
   "5023": {
     "inputs": {
-      "text_encoder": "ltx23/gemma_3_12B_it_fp8_scaled.safetensors",
-      "ckpt_name": "ltx23/ltx-2.3-22b-dev-fp8.safetensors",
+      "text_encoder": "gemma_3_12B_it_fp8_scaled.safetensors",
+      "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors",
       "device": "default"
     },
     "class_type": "LTXAVTextEncoderLoader",

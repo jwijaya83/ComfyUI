@@ -5,7 +5,7 @@
   "fpsNode": "4978",
   "loraNode": "4990",
   "saveVideoNode": "4852",
-  "seedNodes": ["5008"],
+  "seedNodes": ["5014"],
   "sourceVideoNode": "5007",
   "frameLoadCapNode": "5007"
 }

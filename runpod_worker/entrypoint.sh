@@ -5,6 +5,9 @@
 set -uo pipefail
 : "${COMFY_DIR:?COMFY_DIR not set}"
 
+echo "[entrypoint] boot: worker=${WORKER_ID:-runpod-worker} report-target=${CHAT_API_INTERNAL_URL:-https://api.justinwijaya.com}"
+echo "[entrypoint] gcs: response=${GCS_BUCKET:-video-response} seed=${GCS_SEED_BUCKET:-video-seed} sign=${GCS_SIGN:-1} creds=$( [ -n "${RUNPOD_SECRET_gcs_api_key:-}${GCS_SA_KEY_JSON:-}${GCS_KEY_FILE:-}${GOOGLE_APPLICATION_CREDENTIALS:-}" ] && echo present || echo MISSING )"
+
 # Resolve the base checkpoint + text encoder from the HF cache (RunPod Model Caching
 # pre-warms it) and symlink them into models/ BEFORE ComfyUI boots, so ComfyUI sees
 # them when it scans model dirs at startup. Fatal on failure — no models, no renders.
@@ -21,7 +24,7 @@ echo "[entrypoint] booting ComfyUI from $COMFY_DIR"
   # The venv lives at its original absolute path, so activate/shebangs are all valid.
   # shellcheck disable=SC1091
   source venv/bin/activate
-  # runComfy = python3 main.py --reserve-vram 1 --enable-manager --use-sage-attention --disable-pinned-memory
+  # runComfy = python3 main.py --reserve-vram 1 --use-sage-attention --disable-pinned-memory
   # shellcheck disable=SC1091
   source runComfy
 ) &

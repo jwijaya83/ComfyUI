@@ -32,7 +32,7 @@ from comfy_client import (  # noqa: E402
     wait_for_ready,
     watch_prompt,
 )
-from reporter import report  # noqa: E402
+from reporter import log_config, report  # noqa: E402
 from workflow_builder import build_workflow  # noqa: E402
 
 MAX_ATTEMPTS = int(os.environ.get("JOB_MAX_ATTEMPTS", "3"))
@@ -123,7 +123,12 @@ def process_job(job, rp_event):
     for attempt in range(1, MAX_ATTEMPTS + 1):
         try:
             buffer = _render(job, rp_event)
-            output_url = gcs.upload_video(buffer, f"chat_{job_id}.mp4")
+            # Seed clips land in the seed-video bucket; per-turn renders in the
+            # response bucket. GCS_SEED_BUCKET unset -> falls back to GCS_BUCKET.
+            is_seed = job.get("workflow") == "seed_workflow"
+            bucket = gcs.GCS_SEED_BUCKET if is_seed else None
+            filename = f"{'seed' if is_seed else 'chat'}_{job_id}.mp4"
+            output_url = gcs.upload_video(buffer, filename, bucket=bucket)
             report({"jobId": job_id, "status": "completed", "outputUrl": output_url})
             print(f"✓ job {job_id} completed -> {output_url}", flush=True)
             return {"jobId": job_id, "status": "completed", "outputUrl": output_url}
@@ -146,7 +151,11 @@ def handler(event):
 
 
 if __name__ == "__main__":
+    log_config()
+    # Fail fast if GCS is misconfigured — better to recycle now than to render on the
+    # GPU and only discover we can't deliver the output at upload time.
+    gcs.log_config()
     print("[handler] waiting for ComfyUI to be ready ...", flush=True)
     wait_for_ready(timeout=COMFY_READY_TIMEOUT)
-    print("[handler] ComfyUI ready — starting RunPod serverless worker", flush=True)
+    print("[handler] ComfyUI ready — starting RunPod job listener (serverless)", flush=True)
     runpod.serverless.start({"handler": handler})

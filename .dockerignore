@@ -6,6 +6,10 @@
 SageAttention
 **/__pycache__
 **/*.pyc
+# Local handler venv used to test the handler/gcs upload off-RunPod (mirrors the
+# container's /opt/handler-venv). Never bake it — the image builds its own. Does NOT
+# match the root venv/ (the prebuilt ComfyUI venv), which is kept intentionally.
+**/.venv/
 tests
 tests-unit
 *.log

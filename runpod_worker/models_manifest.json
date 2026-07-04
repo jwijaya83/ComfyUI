@@ -3,7 +3,7 @@
     "repo_id": "jwijaya17/aichat",
     "filename": "ltx-2.3-22b-dev-fp8.safetensors",
     "target": "checkpoints/ltx-2.3-22b-dev-fp8.safetensors",
-    "note": "LTX 2.3 22B dev fp8 base checkpoint (~28GB). VAE is bundled in it."
+    "note": "LTX 2.3 22B dev fp8 base checkpoint (~28GB). VAE is bundled in it"
   },
   {
     "repo_id": "jwijaya17/aichat",
@@ -15,6 +15,6 @@
     "repo_id": "jwijaya17/aichat",
     "filename": "ltx-2.3-22b-distilled-lora-dynamic_fro09_avg_rank_105_bf16.safetensors",
     "target": "loras/ltx-2.3-22b-distilled-lora-dynamic_fro09_avg_rank_105_bf16.safetensors",
-    "note": "LTX 2.3 22B distilled dynamic LoRA, avg rank 105 bf16 (~2.6GB). Kijai's ComfyUI repo, under loras/."
+    "note": "LTX 2.3 22B distilled dynamic LoRA, avg rank 105 bf16 (~2.6GB)."
   }
 ]

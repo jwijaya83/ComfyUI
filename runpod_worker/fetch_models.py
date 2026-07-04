@@ -33,9 +33,13 @@ def main():
     with open(MANIFEST) as f:
         entries = json.load(f)
 
-    # Gated repos (Lightricks / Gemma) may need a token when NOT pre-cached by RunPod.
+    # Private/gated repos (jwijaya17/aichat, Lightricks/Gemma) need a token when NOT
+    # pre-cached by RunPod. Without it a private-repo pull fails with 401.
     token = os.environ.get("HF_TOKEN") or os.environ.get("HUGGING_FACE_HUB_TOKEN")
     from huggingface_hub import hf_hub_download
+
+    print(f"[fetch-models] {len(entries)} model(s) to resolve; HF_HOME={os.environ.get('HF_HOME', '(default)')} "
+          f"token={'set' if token else 'MISSING'}", flush=True)
 
     for e in entries:
         target = os.path.join(models_dir, e["target"])
@@ -45,7 +49,11 @@ def main():
             continue
 
         os.makedirs(os.path.dirname(target), exist_ok=True)
-        print(f"[fetch-models] resolving {e['repo_id']} :: {e['filename']}", flush=True)
+        # A cache miss here DOWNLOADS a multi-GB file (checkpoint ~28GB). Say so loudly:
+        # HF's own tqdm progress goes to stderr, but this line makes a long pull legible
+        # in RunPod stdout instead of looking like a hang.
+        print(f"[fetch-models] resolving {e['repo_id']} :: {e['filename']} "
+              f"(downloads if not cached — can take several minutes)", flush=True)
         src = hf_hub_download(
             repo_id=e["repo_id"],
             filename=e["filename"],
@@ -56,7 +64,11 @@ def main():
         if os.path.islink(target) or os.path.exists(target):
             os.remove(target)
         os.symlink(src, target)
-        print(f"[fetch-models] linked {e['target']} -> {src}", flush=True)
+        try:
+            gb = os.path.getsize(os.path.realpath(src)) / (1024 ** 3)
+            print(f"[fetch-models] linked {e['target']} -> {src} ({gb:.1f} GB)", flush=True)
+        except OSError:
+            print(f"[fetch-models] linked {e['target']} -> {src}", flush=True)
 
     print("[fetch-models] all foundation models resolved", flush=True)
 

@@ -47,7 +47,7 @@
   },
   "3940": {
     "inputs": {
-      "ckpt_name": "ltx23/ltx-2.3-22b-dev-fp8.safetensors"
+      "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors"
     },
     "class_type": "CheckpointLoaderSimple",
     "_meta": {
@@ -74,7 +74,7 @@
   },
   "4010": {
     "inputs": {
-      "ckpt_name": "ltx23/ltx-2.3-22b-dev-fp8.safetensors"
+      "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors"
     },
     "class_type": "LTXVAudioVAELoader",
     "_meta": {
@@ -121,7 +121,7 @@
   "4845": {
     "inputs": {
       "av_latent": [
-        "5008",
+        "5011",
         0
       ]
     },
@@ -184,7 +184,7 @@
   },
   "4922": {
     "inputs": {
-      "lora_name": "ltx23/ltx-2.3-22b-distilled-lora-dynamic_fro09_avg_rank_105_bf16.safetensors",
+      "lora_name": "ltx-2.3-22b-distilled-lora-dynamic_fro09_avg_rank_105_bf16.safetensors",
       "strength_model": 0.6,
       "model": [
         "3940",
@@ -198,8 +198,8 @@
   },
   "4960": {
     "inputs": {
-      "text_encoder": "ltx23/gemma_3_12B_it_fp8_scaled.safetensors",
-      "ckpt_name": "ltx23/ltx-2.3-22b-dev-fp8.safetensors",
+      "text_encoder": "gemma_3_12B_it_fp8_scaled.safetensors",
+      "ckpt_name": "ltx-2.3-22b-dev-fp8.safetensors",
       "device": "default"
     },
     "class_type": "LTXAVTextEncoderLoader",
@@ -227,11 +227,11 @@
   },
   "4990": {
     "inputs": {
-      "lora_name": "kristin_ohwx_woman_no_audio.safetensors",
+      "lora_name": "kristin_ohwx_woman.safetensors",
       "strength_model": 1,
       "strength_clip": 1,
       "model": [
-        "4922",
+        "5010",
         0
       ],
       "clip": [
@@ -276,39 +276,6 @@
       "title": "Load Video (Upload) 🎥🅥🅗🅢"
     }
   },
-  "5008": {
-    "inputs": {
-      "add_noise": "enable",
-      "noise_seed": 42,
-      "steps": 8,
-      "cfg": 1,
-      "sampler_name": "euler_ancestral_cfg_pp",
-      "scheduler": "simple",
-      "start_at_step": 3,
-      "end_at_step": 10000,
-      "return_with_leftover_noise": "disable",
-      "model": [
-        "4990",
-        0
-      ],
-      "positive": [
-        "1241",
-        0
-      ],
-      "negative": [
-        "1241",
-        1
-      ],
-      "latent_image": [
-        "4528",
-        0
-      ]
-    },
-    "class_type": "KSamplerAdvanced",
-    "_meta": {
-      "title": "KSampler (Advanced)"
-    }
-  },
   "5009": {
     "inputs": {
       "pixels": [
@@ -323,6 +290,75 @@
     "class_type": "VAEEncode",
     "_meta": {
       "title": "VAE Encode"
+    }
+  },
+  "5010": {
+    "inputs": {
+      "lora_name": "LTX2.3_Crisp_Enhance.safetensors",
+      "strength_model": 1,
+      "model": [
+        "4922",
+        0
+      ]
+    },
+    "class_type": "LoraLoaderModelOnly",
+    "_meta": {
+      "title": "Load LoRA"
+    }
+  },
+  "5011": {
+    "inputs": {
+      "noise": [
+        "5014",
+        0
+      ],
+      "guider": [
+        "4828",
+        0
+      ],
+      "sampler": [
+        "5015",
+        0
+      ],
+      "sigmas": [
+        "5013",
+        0
+      ],
+      "latent_image": [
+        "4528",
+        0
+      ]
+    },
+    "class_type": "SamplerCustomAdvanced",
+    "_meta": {
+      "title": "SamplerCustomAdvanced"
+    }
+  },
+  "5013": {
+    "inputs": {
+      "sigmas": "0.975, 0.85, 0.48, 0.17, 0.0"
+    },
+    "class_type": "ManualSigmas",
+    "_meta": {
+      "title": "ManualSigmas"
+    }
+  },
+  "5014": {
+    "inputs": {
+      "noise_seed": 42
+    },
+    "class_type": "RandomNoise",
+    "_meta": {
+      "title": "RandomNoise"
+    }
+  },
+  "5015": {
+    "inputs": {
+      "sampler_name": "euler_ancestral_cfg_pp"
+    },
+    "class_type": "KSamplerSelect",
+    "_meta": {
+      "title": "KSamplerSelect"
     }
   }
 }
