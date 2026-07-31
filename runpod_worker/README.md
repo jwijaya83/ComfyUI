@@ -1,7 +1,8 @@
 # runpod_worker — ComfyUI + render handler, one RunPod Serverless image
 
-Bundles this ComfyUI install (prebuilt venv w/ compiled SageAttention, models, custom
-nodes) **and** a Python RunPod handler into a single container. The handler is the
+Bundles this ComfyUI install (prebuilt venv w/ compiled SageAttention, custom nodes)
+**and** a Python RunPod handler into a single container; models are fetched at boot, not
+baked (see [Model caching](#model-caching-models-are-not-baked-in)). The handler is the
 serverless port of `ai-chat/services/render-worker` (render.js / comfyui.js /
 workflowLoader.js / storage.js / callback.js).
 
@@ -82,33 +83,45 @@ render fails at upload. Creds are checked offline only (no `bucket.exists()` pro
 | `HF_TOKEN` | optional — the manifest repo (`jwijaya17/aichat`) is PUBLIC, so unset is fine; set only for a gated repo |
 | `MODELS_MANIFEST` | override the model manifest path (e.g. point at one on the volume) |
 
-## Model caching (foundation models are NOT baked in)
+## Model caching (models are NOT baked in)
 
-Only the **persona** LoRAs (`models/loras/*.safetensors`) are baked into the image. The
-big base checkpoint, text encoder, and the dynamic distilled LoRA come from **RunPod's
-Model Caching** at boot, keeping the image ~16 GB instead of ~65 GB. (The image runs the
-**per-turn** render path — `basic_workflow` / `latent_injection`. The admin seed-video
-workflow runs on the host, so its 384 LoRA + IC-LoRA are intentionally not fetched here.)
+**Nothing under `models/` is baked into the image** — every file, including the persona
+LoRAs, comes from **RunPod's Model Caching** at boot (~42 GB), keeping the image ~16 GB
+instead of ~65 GB. (The image runs the **per-turn** render path — `basic_workflow` /
+`latent_injection`. The admin seed-video workflow runs on the host, so its 384 LoRA +
+IC-LoRA are intentionally not fetched here.)
 
 **1. Enable Model Caching on the endpoint** and add the **one** PUBLIC repo
-`jwijaya17/aichat` (all three files live under it, so a single cache entry covers them;
+`jwijaya17/aichat` (every file lives under it, so a single cache entry covers them all;
 RunPod pre-downloads it to `/runpod-volume/huggingface-cache/hub` before the worker starts):
 
-| HF repo | file (flat in repo) | → linked into (`target`) |
+| file (flat in repo) | → linked into (`target`) | size |
 |---|---|---|
-| `jwijaya17/aichat` | `ltx-2.3-22b-dev-fp8.safetensors` | `models/checkpoints/` |
-| `jwijaya17/aichat` | `gemma_3_12B_it_fp8_scaled.safetensors` | `models/text_encoders/` |
-| `jwijaya17/aichat` | `ltx-2.3-22b-distilled-lora-dynamic_fro09_avg_rank_105_bf16.safetensors` | `models/loras/` |
+| `ltx-2.3-22b-distilled-1.1_transformer_only_int8_convrot.safetensors` | `models/diffusion_models/` | 21.5 GB |
+| `gemma_3_12B_it_fp8_scaled.safetensors` | `models/text_encoders/` | 13.2 GB |
+| `ltx-2.3_text_projection_bf16.safetensors` | `models/text_encoders/` | 2.3 GB |
+| `LTX23_video_vae_bf16.safetensors` | `models/vae/` | 1.5 GB |
+| `LTX23_audio_vae_bf16.safetensors` | `models/vae/` | 0.4 GB |
+| `LTX2.3_Crisp_Enhance.safetensors` | `models/loras/` | 0.7 GB |
+| persona LoRAs (3×) | `models/loras/` | 2.0 GB |
+
+The repo is **flat** but the targets are not, so a manifest `filename` never has a subdir
+while its `target` usually does — that is expected, not a typo.
+
+The diffusion model is **transformer-only**, so unlike the old `ltx-2.3-22b-dev-fp8`
+checkpoint it bundles no VAE and no text-encoder projection — hence the separate VAE ×2 and
+text-projection entries (mirrored into this repo from `Kijai/LTX2.3_comfy`). It is also
+already the **distilled 1.1** weights, so the dynamic distilled LoRA the old templates
+stacked on top is gone from the manifest.
 
 **2. At boot**, `fetch_models.py` reads `models_manifest.json`, resolves each file from
 the HF cache (`HF_HOME=/runpod-volume/huggingface-cache`, a cache HIT when RunPod
 pre-cached it), and symlinks it to the exact path the workflows reference. To add/change
 a model, edit `models_manifest.json` (`repo_id` + `filename` + `target`).
 
-Notes: `jwijaya17/aichat` is PUBLIC, so **no `HF_TOKEN` is needed**. The VAE is bundled
-in the LTX checkpoint (no separate fetch). Without managed
-caching, attach a network volume at `/runpod-volume` and the first boot downloads there
-and persists (`fetch_models.py`'s `hf_hub_download` pulls only the listed files, not whole
+Notes: `jwijaya17/aichat` is PUBLIC, so **no `HF_TOKEN` is needed**. Without managed caching,
+attach a network volume at `/runpod-volume` and the first boot downloads there and
+persists (`fetch_models.py`'s `hf_hub_download` pulls only the listed files, not whole
 repos). Increase the endpoint **Container Disk to ≥ 20 GB**.
 
 ## Wire / verify GCS upload locally (before deploying)
@@ -146,18 +159,18 @@ To rehearse the RunPod path (secret injected as an env var, no key file), set
    compiled kernels may not load. Other archs (A100 sm_80, H100 sm_90) need SageAttention
    rebuilt for them.
 2. **Driver / CUDA 13.** torch is `cu130`; the RunPod host driver must support CUDA 13.
-3. **Image size (~16 GB).** The base checkpoint + text encoder + the dynamic distilled
-   LoRA (~45 GB) are fetched from the HF cache at boot (see Model caching); only code +
-   venv + the persona LoRAs are baked in.
+3. **Image size (~16 GB).** All ~42 GB of models (diffusion model, text encoders, VAEs,
+   LoRAs) are fetched from the HF cache at boot (see Model caching); only code + venv are
+   baked in.
 4. **Cold start.** First job after scale-to-zero pays ComfyUI boot + loading the models
-   from the cache volume (network-volume read latency for ~50 GB). Use RunPod FlashBoot
+   from the cache volume (network-volume read latency for ~42 GB). Use RunPod FlashBoot
    and/or 1 active worker for latency-sensitive traffic.
 5. **chat-api side is wired (push).** Set `QUEUE_DRIVER=runpod` + `RUNPOD_ENDPOINT_ID` +
    `RUNPOD_API_KEY` on chat-api and it POSTs each job to this endpoint's `/run`. Asset
    URLs are PUBLIC chat-api URLs (`PUBLIC_BASE/internal/…?t=INTERNAL_TOKEN`), so
    `PUBLIC_BASE` must be reachable from RunPod and `INTERNAL_TOKEN` must match.
-6. **Two workflow-referenced LoRAs are missing on disk** (so they aren't baked, same as
-   on the host): `ltx-2.3-22b-ic-lora-ingredients-0.9.safetensors` and
-   `kristin_ohwx_woman_no_audio.safetensors`. If a workflow path actually needs them,
-   either drop the files into `models/loras/` before building or add the official LTX
-   IC-LoRA to `models_manifest.json`.
+6. **`seed_workflow.json` is not runnable in this image.** It still loads the old
+   `ltx-2.3-22b-dev-fp8` checkpoint plus the 384 distilled LoRA and
+   `ltx-2.3-22b-ic-lora-ingredients-0.9.safetensors`, none of which are in the manifest —
+   by design, since the admin seed-video path runs on the host. Only `basic_workflow` and
+   `latent_injection` are served here.

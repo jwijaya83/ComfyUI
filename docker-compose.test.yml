@@ -1,0 +1,87 @@
+# Local viability testing for the two-stage image. Models are bind-mounted from
+# this checkout rather than baked, so rebuilds are ~1 GB of context instead of
+# ~35 GB and you can iterate on the image in minutes.
+#
+#   docker compose -f docker-compose.test.yml build
+#   docker compose -f docker-compose.test.yml up comfy      # UI on :8188
+#   docker compose -f docker-compose.test.yml --profile worker up worker
+#
+# Requires the NVIDIA Container Toolkit (`docker run --rm --gpus all \
+# nvidia/cuda:13.0.1-base-ubuntu24.04 nvidia-smi` must work first).
+
+services:
+  # Pass 1: ComfyUI alone. Proves the rebuilt venv imports SageAttention, that
+  # all four custom nodes load, and that a render completes — without dragging
+  # the RunPod handler or fetch_models.py into the picture.
+  comfy: &base
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # Ada only (RTX 4080). Matching just the local GPU keeps the
+        # SageAttention compile to a few minutes for test builds.
+        TORCH_CUDA_ARCH_LIST: "8.9"
+    image: comfy-runpod:test
+    # Same two steps as entrypoint.sh (resolve models -> boot ComfyUI) but without
+    # the RunPod handler, so local runs exercise the real model-fetch path.
+    # fetch_models.py is idempotent: anything already in models/ is skipped, so it
+    # only pulls what your tree is actually missing. Set FETCH_MODELS=0 to skip.
+    # A tree that already has the models locally (diffusion_models/, text_encoders/,
+    # vae/, loras/ per models_manifest.json) downloads nothing.
+    entrypoint: ["bash", "-c"]
+    command:
+      - |
+        set -e
+        if [ "${FETCH_MODELS:-1}" != "0" ]; then
+          /opt/handler-venv/bin/python "$$COMFY_DIR/runpod_worker/fetch_models.py"
+        fi
+        exec python3 main.py --listen 0.0.0.0 --reserve-vram 1 \
+             --use-sage-attention --disable-pinned-memory
+    ports:
+      - "8188:8188"
+    volumes:
+      # Writable: fetch_models.py symlinks resolved models into models/<subdir>/.
+      - ./models:/opt/ComfyUI/models
+      - ./input:/opt/ComfyUI/input:ro
+      - ./output:/opt/ComfyUI/output
+      - ./user:/opt/ComfyUI/user
+      # Mounted at the SAME absolute path it has on the host, deliberately.
+      # fetch_models.py symlinks models/<target> -> $HF_HOME/hub/..., so if the
+      # cache were only reachable at a container path (e.g. /runpod-volume/...)
+      # every fetched entry would be a DANGLING symlink from the host's side —
+      # silently corrupting your working models/ tree, which is bind-mounted here.
+      # Matching the paths keeps the links valid in both places.
+      - ./.hf-cache:${PWD}/.hf-cache
+    environment:
+      HF_HOME: "${PWD}/.hf-cache"
+      HF_TOKEN: "${HF_TOKEN:-}"
+    # torch's allocator and dataloaders need more than the 64 MB default.
+    shm_size: "8gb"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+  # Pass 2: the real production path — entrypoint.sh boots ComfyUI, runs
+  # fetch_models.py, then execs the RunPod handler. Needs credentials, and
+  # fetch_models.py will pull the ~42 GB of manifest models unless HF_HOME
+  # already holds them. Only run this once pass 1 is green.
+  worker:
+    <<: *base
+    profiles: ["worker"]
+    entrypoint: ["/entrypoint.sh"]
+    command: []
+    ports: []
+    volumes:
+      - ./models:/opt/ComfyUI/models
+      - ./output:/opt/ComfyUI/output
+      - ./user:/opt/ComfyUI/user
+      # Persist the HF cache across runs so the big fetch happens only once.
+      - ./.hf-cache:/runpod-volume/huggingface-cache
+    environment:
+      RUNPOD_API_KEY: "${RUNPOD_API_KEY:-}"
+      HF_TOKEN: "${HF_TOKEN:-}"
+      GCS_SIGN: "0"

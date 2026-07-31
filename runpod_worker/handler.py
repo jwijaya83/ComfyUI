@@ -134,8 +134,14 @@ def process_job(job, rp_event):
             return {"jobId": job_id, "status": "completed", "outputUrl": output_url}
         except Exception as e:  # noqa: BLE001 - retry then report failed
             last_err = e
-            print(f"↻ job {job_id} attempt {attempt}/{MAX_ATTEMPTS} failed: {e}", flush=True)
+            kind = f" ({e.kind})" if getattr(e, "kind", None) else ""
+            print(f"↻ job {job_id} attempt {attempt}/{MAX_ATTEMPTS} failed{kind}: {e}", flush=True)
             traceback.print_exc()
+            # A deliberate cancel (manual interrupt / cleared queue) must NOT be
+            # re-rendered — the operator stopped it on purpose. Fail fast.
+            if getattr(e, "retriable", True) is False:
+                print(f"⃠ job {job_id} not retriable{kind} — reporting failed without retry", flush=True)
+                break
 
     msg = str(last_err)
     report({"jobId": job_id, "status": "failed", "error": msg})

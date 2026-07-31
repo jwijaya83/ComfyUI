@@ -1,28 +1,58 @@
-# Trim the build context (the ComfyUI dir is ~70 GB). Keep venv/ and the persona LoRAs
-# (models/loras/*.safetensors are baked in). The base checkpoint, text encoder, and the
-# dynamic distilled LoRA come from RunPod's HF model cache at boot (fetch_models.py),
-# so exclude them from the image.
+# Build context trimming. The ComfyUI dir is ~70 GB; this gets it under ~1 GB.
+#
+# NOTE: .dockerignore applies to the whole context, i.e. to BOTH stages. The
+# builder stage needs requirements.txt, install.sh, custom_nodes/ and the
+# SageAttention *source*, so none of those may be excluded here.
+
 .git
-SageAttention
+.github
 **/__pycache__
 **/*.pyc
-# Local handler venv used to test the handler/gcs upload off-RunPod (mirrors the
-# container's /opt/handler-venv). Never bake it — the image builds its own. Does NOT
-# match the root venv/ (the prebuilt ComfyUI venv), which is kept intentionally.
-**/.venv/
-tests
-tests-unit
 *.log
 
-# Foundation models — pulled from the HF cache at runtime, NOT baked (~40 GB saved).
-models/checkpoints
-# https://huggingface.co/Lightricks/LTX-2.3-fp8/blob/main/ltx-2.3-22b-dev-fp8.safetensors
-models/text_encoders
-# https://huggingface.co/Comfy-Org/ltx-2/blob/main/split_files/text_encoders/gemma_3_12B_it_fp8_scaled.safetensors
+# Never bake credentials into a layer. HF_TOKEN / GCS keys are passed at RUN
+# time (compose environment, RunPod secrets), never at build time.
+.env
+.env.*
+*.pem
+*-key.json
 
-# LTX distilled LoRAs. Persona LoRAs in models/loras/ stay baked; the ltx23 ones are
-# externalized. The DYNAMIC LoRA (used by the per-turn basic/latent_injection path) is
-# fetched from HF at boot (fetch_models.py); excluded here, ~2.6 GB saved.
-models/loras/ltx-2.3-22b-distilled-lora-dynamic_fro09_avg_rank_105_bf16.safetensors
-# https://huggingface.co/Kijai/LTX2.3_comfy/blob/main/loras/ltx-2.3-22b-distilled-lora-dynamic_fro09_avg_rank_105_bf16.safetensors
+# ---------------------------------------------------------------- models ----
+# Nothing under models/ is baked any more. Locally they are bind-mounted from
+# the host (see docker-compose.test.yml); in production they come from the
+# network volume / HF cache via runpod_worker/fetch_models.py.
+models/
+# Local HF cache created by docker-compose.test.yml (tens of GB).
+.hf-cache/
 
+# ------------------------------------------------------------------ venv ----
+# The image builds its own venv at /opt/venv via install.sh. The host venv is
+# 6.2 GB and hardcodes a stale absolute path in bin/activate — never ship it.
+venv/
+# Local handler venv used to test the handler/GCS upload off-RunPod (mirrors the
+# container's /opt/handler-venv). The image builds its own.
+**/.venv/
+
+# --------------------------------------------------------- SageAttention ----
+# Keep the source (the builder compiles it), drop the bulk. build/ in particular
+# is a stale HOST artifact tree — shipping it into the builder risks reusing
+# objects compiled against the host's arch/torch instead of a clean rebuild.
+SageAttention/build/
+SageAttention/assets/
+SageAttention/example/
+SageAttention/bench/
+SageAttention/*.egg-info/
+
+# -------------------------------------------------------------- runtime I/O --
+# Bind-mounted at run time, not baked. input/ alone is ~300 MB.
+input/
+output/
+training_output/
+
+# --------------------------------------------------------------- dev only ----
+tests/
+tests-unit/
+.ci/
+Dockerfile
+.dockerignore
+docker-compose.test.yml
