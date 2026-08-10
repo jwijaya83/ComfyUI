@@ -1,22 +1,68 @@
-# runpod_worker — ComfyUI + render handler, one RunPod Serverless image
+# runpod_worker — ComfyUI + render handler, one portable image
 
 Bundles this ComfyUI install (prebuilt venv w/ compiled SageAttention, custom nodes)
-**and** a Python RunPod handler into a single container; models are fetched at boot, not
-baked (see [Model caching](#model-caching-models-are-not-baked-in)). The handler is the
-serverless port of `ai-chat/services/render-worker` (render.js / comfyui.js /
-workflowLoader.js / storage.js / callback.js).
+**and** a Python render handler into a single container; models are fetched at boot, not
+baked (see [Model caching](#model-caching-models-are-not-baked-in)). It is the Python
+port of `ai-chat/services/render-worker` (render.js / comfyui.js / workflowLoader.js /
+storage.js / callback.js / consumer.js), and it **replaces** that service — see
+`ai-chat/services/render-worker/CLAUDE.md`.
+
+**This is ai-chat's render pool.** Because ComfyUI ships inside the image and the worker
+*pulls* its jobs, adding render capacity is just "run another copy pointed at
+production" — on this box, a second GPU machine, RunPod, any cloud. No inbound port, no
+separately-deployed ComfyUI to wire up, nothing to register with chat-api.
+
+## Three ways it takes work (`QUEUE_DRIVER`)
+
+| value | intake |
+|---|---|
+| `redis` | Drains ai-chat's main render queue: the `render:high` / `render:low` Redis Streams, as one member of the shared `renderers` consumer group. Priority high→low, at-least-once, crash recovery, dead-letter. |
+| `runpod` | RunPod Serverless — `runpod.serverless.start` polls RunPod's queue outbound. |
+| `http` | chat-api POSTs a single job to `:RENDER_PORT/render` (guarded by `INTERNAL_TOKEN`). |
+
+All three run the same render path and report to the same chat-api webhook.
+`GET :RENDER_PORT/health` is always up. `MOCK_COMFY=1` renders with ffmpeg instead of the
+GPU (ComfyUI isn't even booted) — the way to smoke-test wiring without a GPU.
 
 ## How it runs
 
 `entrypoint.sh` boots ComfyUI in the background via `source runComfy` (its own venv),
 then starts `handler.py` on a **separate** `/opt/handler-venv` (no torch). The handler
-waits for ComfyUI on `127.0.0.1:8188`, then calls `runpod.serverless.start`. RunPod
-pushes jobs to it; per job it renders, uploads the MP4 to GCS, and reports status to
-chat-api's `/internal/render-events` webhook (the same one the current worker uses).
+waits for ComfyUI on `127.0.0.1:8188`, then starts whichever intake `QUEUE_DRIVER`
+selects. Per job it renders, delivers the MP4 (GCS and/or a shared media dir), and
+reports status to chat-api's `/internal/render-events` webhook.
 
-## Build
+## Run it
 
-Build context is THIS directory (so the venv lands at its original absolute path):
+**As part of the ai-chat stack** (the normal path — builds from this checkout and wires
+it to Postgres/Redis/chat-api automatically):
+
+```bash
+cd ../ai-chat
+sudo ./scripts/setup-nvidia-docker.sh    # once: give docker GPU access
+docker compose up -d --build comfy-worker
+docker compose up --scale comfy-worker=2  # more GPUs = more workers
+```
+
+**As an extra worker anywhere else**, against a running deployment:
+
+```bash
+docker run --gpus all \
+  -e QUEUE_DRIVER=redis -e REDIS_URL=redis://<prod-redis>:6379 \
+  -e CHAT_API_INTERNAL_URL=https://api.example.com -e INTERNAL_TOKEN=<chat-api's> \
+  -e GCS_BUCKET_RESPONSE=video-response -e GCS_KEY_FILE=/secrets/gcs-key.json \
+  -e WORKER_ID=gpu-box-2 \
+  -v /path/to/models:/opt/ComfyUI/models -v /path/to/key.json:/secrets/gcs-key.json:ro \
+  <registry>/comfy-runpod:latest
+```
+
+It dials out, joins the group, and starts claiming jobs. Since it shares no volume with
+chat-api, **GCS is what makes its output reachable** — the worker refuses to boot with
+neither a GCS bucket nor a `MEDIA_DIR`, rather than failing after a GPU render.
+
+## Build (for pushing to a registry / RunPod)
+
+Build context is the ComfyUI checkout root:
 
 ```bash
 cd /media/justin-wijaya/7d3e3892-cb10-43b8-83b4-a35e3cdf9ab0/justin/Workspace/ComfyUI
@@ -24,8 +70,9 @@ DOCKER_BUILDKIT=1 docker build -t <registry>/comfy-runpod:latest .
 docker push <registry>/comfy-runpod:latest
 ```
 
-Then create a RunPod **Serverless** endpoint from that image (GPU filter = Ada, see
-caveats), and POST jobs to `https://api.runpod.ai/v2/<endpoint>/run`.
+Then either pull it on another GPU box (above) or create a RunPod **Serverless** endpoint
+from it (GPU filter = Ada, see caveats) and POST jobs to
+`https://api.runpod.ai/v2/<endpoint>/run`.
 
 ## Job input contract (`event["input"]`)
 
@@ -54,17 +101,38 @@ Returns `{ jobId, status, outputUrl }`; also reports the same to the webhook. `o
 is the **durable `gs://bucket/object` ref** (never expires); chat-api stores it and mints a
 fresh short-lived signed read url from it on every read.
 
-## Required env (set on the RunPod endpoint)
+## Required env
+
+Every name below matches what `ai-chat/services/render-worker` used, so this image is a
+drop-in replacement for that service's compose environment block.
+
+### Intake + delivery
 
 | var | purpose |
 |---|---|
-| `CHAT_API_INTERNAL_URL` | chat-api base (publicly reachable) for status webhooks |
+| `QUEUE_DRIVER` | `redis` (join the shared render pool) \| `runpod` (default) \| `http` |
+| `REDIS_URL` | `redis` driver: where the `render:<lane>` streams live |
+| `QUEUE_STREAM_PREFIX` / `RENDER_LANES` / `RENDER_GROUP` | must match chat-api's (`render` / `high,low` / `renderers`) or you drain the wrong queue |
+| `RENDER_CONCURRENCY` | jobs at a time (**1 per GPU**). Global ceiling = instances × this |
+| `RENDER_VISIBILITY_MS` | reclaim window for a dead worker's job — **must exceed** `JOB_MAX_ATTEMPTS` × a full render, or a live render gets rendered twice |
+| `RENDER_MAX_DELIVERIES` | re-deliveries before a poison job is dead-lettered to `render:dead` |
+| `MEDIA_DIR` | shared volume with chat-api (it re-serves `/media`). A REMOTE worker leaves this unset and delivers via GCS |
+| `PUBLIC_BASE` | url base for the `MEDIA_DIR` path — the **chat-api the client reaches**, not this worker |
+| `MOCK_COMFY` | `1` = ffmpeg render, no GPU, ComfyUI never boots |
+| `RENDER_PORT` | `/health` + the `http` intake (default 8080) |
+| `GPU_LEASE`, `GPU_LEASE_KEY`, `OLLAMA_HOST` | single-GPU box only: serialize against ai-chat's llm-worker. Leave off on a dedicated GPU |
+
+### Reporting + storage
+
+| var | purpose |
+|---|---|
+| `CHAT_API_INTERNAL_URL` | chat-api base — status webhooks **and** the fallback fetch for assets that didn't arrive as urls |
 | `INTERNAL_TOKEN` | must match chat-api's `INTERNAL_TOKEN` |
 | `RUNPOD_SECRET_gcs_api_key` *or* `GCS_SA_KEY_JSON` | **the only GCS var you must set.** SA key JSON pasted inline (V4 signing needs the SA key). RunPod exposes the `gcs_api_key` secret to the worker under `RUNPOD_SECRET_gcs_api_key` automatically. |
 | `GCS_KEY_FILE` *or* `GOOGLE_APPLICATION_CREDENTIALS` | alternative to the above: path to an SA key file (used for local testing) |
-| `GCS_BUCKET` | response bucket — per-turn renders (**default `video-response`**) |
-| `GCS_SEED_BUCKET` | seed-video bucket (**default `video-seed`**); unset → falls back to `GCS_BUCKET` |
-| `GCS_PREFIX` | object prefix (default `renders`) |
+| `GCS_BUCKET` (or `GCS_BUCKET_RESPONSE`) | response bucket — per-turn renders (**default `video-response`**) |
+| `GCS_SEED_BUCKET` (or `GCS_BUCKET_SEED`) | seed-video bucket (**default `video-seed`**); unset → falls back to `GCS_BUCKET` |
+| `GCS_PREFIX` | object prefix (default `renders`). **Set it EMPTY when replacing render-worker** — that service wrote at the bucket root, and a prefix would split one bucket across two layouts |
 | `GCS_SIGN` | `1` (default) — signs the local `selftest` probe url; does **not** affect delivery (renders always return a durable `gs://` ref chat-api signs on read) |
 
 The two bucket names are **baked as defaults** (this deployment's canonical buckets in
@@ -74,11 +142,12 @@ Creds resolve in order: `GOOGLE_APPLICATION_CREDENTIALS` → `GCS_KEY_FILE` (bot
 we sign from). The SA `gcs-api-user@aichat-500601.iam.gserviceaccount.com` needs
 `roles/storage.objectAdmin`.
 
-**Boot fail-fast:** the handler calls `gcs.log_config()` at startup and refuses to serve
-(process exits → RunPod recycles) if no bucket is configured or, with signing on, no SA
-private key resolves — so a creds misconfig is caught immediately instead of after a GPU
-render fails at upload. Creds are checked offline only (no `bucket.exists()` probe, since
-`objectAdmin` lacks `storage.buckets.get`).
+**Boot fail-fast:** the handler validates delivery at startup and refuses to serve (the
+process exits → the orchestrator recycles it) — so a misconfig is caught immediately
+instead of after a GPU render fails at upload. With a GCS bucket set it runs
+`gcs.log_config()`, which requires a resolvable SA private key; with no GCS it accepts a
+shared `MEDIA_DIR` instead; with **neither** it exits. Creds are checked offline only (no
+`bucket.exists()` probe, since `objectAdmin` lacks `storage.buckets.get`).
 | `WORKER_ID`, `JOB_MAX_ATTEMPTS`, `COMFY_READY_TIMEOUT` | optional |
 | `HF_TOKEN` | optional — the manifest repo (`jwijaya17/aichat`) is PUBLIC, so unset is fine; set only for a gated repo |
 | `MODELS_MANIFEST` | override the model manifest path (e.g. point at one on the volume) |

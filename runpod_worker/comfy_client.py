@@ -116,6 +116,24 @@ def interrupt(prompt_id=None):
         pass
 
 
+def free_comfy_vram():
+    """Ask ComfyUI to unload its models and release VRAM (port of comfyui.js
+    freeComfyVram). The REVERSE of evicting Ollama: on a single-GPU box, hand the card
+    back clean after a render so the next text turn's LLM reloads into an empty GPU
+    instead of contending with ComfyUI's cached models (which spills it to CPU). Called
+    only in lease mode — best-effort, a failure must never spoil a completed render."""
+    try:
+        r = requests.post(
+            f"{HTTP_BASE}/free",
+            json={"unload_models": True, "free_memory": True},
+            timeout=_POLL_TIMEOUT_S,
+        )
+        if r.ok:
+            print("[gpu] freed ComfyUI VRAM (unload_models + free_memory)", flush=True)
+    except Exception:  # noqa: BLE001
+        pass
+
+
 def _summarize_status_messages(messages):
     """Pull an exception/interrupt note out of a history entry's status.messages (a list
     of [event, data] tuples) for a human-readable failure reason."""

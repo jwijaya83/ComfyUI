@@ -35,8 +35,16 @@ from datetime import timedelta
 
 # Canonical buckets for this deployment (project aichat-500601) are baked as defaults
 # so the RunPod endpoint only needs creds set, not bucket names. Override per env.
-GCS_BUCKET = os.environ.get("GCS_BUCKET", "video-response")
-GCS_SEED_BUCKET = os.environ.get("GCS_SEED_BUCKET", "video-seed")
+#
+# GCS_BUCKET_RESPONSE / GCS_BUCKET_SEED are the names ai-chat's docker-compose and
+# .env already use for render-worker + chat-api; GCS_BUCKET / GCS_SEED_BUCKET are this
+# worker's original ones. Accept BOTH so one env vocabulary drives every service, and
+# an operator can't half-configure a bucket by picking the other spelling.
+GCS_BUCKET = os.environ.get("GCS_BUCKET_RESPONSE") or os.environ.get("GCS_BUCKET", "video-response")
+GCS_SEED_BUCKET = os.environ.get("GCS_BUCKET_SEED") or os.environ.get("GCS_SEED_BUCKET", "video-seed")
+# Object-name prefix. Set it EMPTY to write at the bucket root, which is what
+# render-worker/storage.js does — keep it empty when this worker replaces that service
+# so one bucket doesn't end up with two layouts.
 GCS_PREFIX = os.environ.get("GCS_PREFIX", "renders").strip("/")
 # GCS_SIGN gates ONLY the local `selftest` signing round-trip — delivery always returns a
 # durable gs:// ref that chat-api signs on read (the read-side TTL lives on chat-api's
@@ -101,6 +109,26 @@ def _get_client():
 
         _client = storage.Client()
     return _client
+
+
+def creds_available():
+    """True when a service-account key can be resolved WITHOUT touching the network —
+    a key-file path or inline JSON. Mirrors render-worker/gcs.js `gcsEnabled`, which
+    gates purely on a key file being present."""
+    if os.environ.get("GOOGLE_APPLICATION_CREDENTIALS") or os.environ.get("GCS_KEY_FILE"):
+        return True
+    return any((os.environ.get(name) or "").strip() for name in _KEY_JSON_ENVS)
+
+
+def enabled(bucket=None):
+    """Is GCS usable for this bucket? Callers gate uploads on it and fall back to local
+    disk when false, so a box with no credentials keeps working."""
+    return bool((bucket or GCS_BUCKET) and creds_available())
+
+
+def response_bucket():
+    """The per-turn render bucket (video-response)."""
+    return GCS_BUCKET
 
 
 def upload_video(data, filename, content_type="video/mp4", bucket=None, prefix=None):

@@ -1,37 +1,80 @@
-# CLAUDE.md — runpod_worker
+# CLAUDE.md — runpod_worker (THE render worker)
 
-One **RunPod Serverless** image = this ComfyUI install + a Python render handler. It is
-the serverless port of `ai-chat/services/render-worker` (the same render → upload →
-report flow, reimplemented in Python). Human-facing deploy docs live in
-[README.md](README.md); this file is the orientation for working on the code.
+One image = this ComfyUI install + a Python render handler. It **is** ai-chat's render
+pool: it replaced `ai-chat/services/render-worker` (now deprecated), of which it is a
+faithful Python port — same job descriptor, same status webhook, same queue semantics.
+Human-facing deploy docs live in [README.md](README.md); this file is the orientation for
+working on the code.
+
+*(The directory name is historical — RunPod is now just one of three intakes. Renaming it
+would break the Dockerfile/entrypoint paths and any deployed endpoint, so it stays.)*
 
 ## What it is
 
 - A single container bundling the ComfyUI install (code, custom nodes, and a venv **built
   from source in the image** by `../install.sh`, including a compiled SageAttention)
   **plus** the handler on a separate, torch-free `/opt/handler-venv`.
-- **Serverless, not a Pod.** `handler.py` calls `runpod.serverless.start` and polls
-  RunPod's queue **outbound**. ComfyUI binds `127.0.0.1:8188` (loopback only) — **no
-  inbound HTTP port is exposed.** Jobs arrive via `POST
-  https://api.runpod.ai/v2/<endpoint>/run`, not a port on the container.
+- **THE POINT: ComfyUI and the worker ship together, and the intake is OUTBOUND.** The
+  old split (a Node worker pointed at a `COMFYUI_HTTP` someone else deployed) meant new
+  render capacity was a two-part manual setup. Here, capacity is "run this container
+  somewhere with a GPU, with `REDIS_URL` + `CHAT_API_INTERNAL_URL` + `INTERNAL_TOKEN`
+  pointed at production" — it joins the shared consumer group and starts claiming jobs.
+  Nothing to register; **no inbound port required**; stop it and its work goes back to
+  the queue. Local box, RunPod, any GPU cloud — same image, same behaviour.
 - Per job: `build_workflow` patches the workflow template → submit to ComfyUI
-  (`comfy_client.py`) → upload the MP4 to GCS (`gcs.py`) → report status to chat-api's
-  `/internal/render-events` webhook (`reporter.py`).
+  (`comfy_client.py`) → deliver the MP4 (`storage.py`: GCS and/or a shared media dir) →
+  report status to chat-api's `/internal/render-events` webhook (`reporter.py`).
+
+## The three intakes (`QUEUE_DRIVER`, see `config.py`)
+
+| | what it does | used by |
+|---|---|---|
+| `redis` | Drain ai-chat's **main render queue** — the per-lane Redis Streams (`render:high`, `render:low`) as a member of the shared `renderers` consumer group. Priority high→low, at-least-once with `XACK`, `XAUTOCLAIM` crash recovery, dead-letter. | the in-compose `comfy-worker`, and any extra GPU box you point at the same Redis |
+| `runpod` | `runpod.serverless.start` polls RunPod's own queue outbound; jobs arrive as `{"input": <job>}`. | a RunPod Serverless endpoint |
+| `http` | chat-api POSTs one job to `:RENDER_PORT/render` (token-guarded). | the no-broker local profile |
+
+All three call the **same `process_job()`** and report to the same webhook, so behaviour
+is identical whichever way work arrives. `MOCK_COMFY=1` swaps the GPU render for an
+ffmpeg one (`mock.py`) and the entrypoint then skips booting ComfyUI entirely — that's
+how the queue path is smoke-tested on a box with no GPU.
 
 ## Boot sequence (`entrypoint.sh`)
 
-1. `fetch_models.py` resolves the foundation models from the HF cache and symlinks them
-   into `models/` (**fatal** on failure — no models, no renders → let RunPod recycle).
+1. Unless `MOCK_COMFY=1`: `fetch_models.py` resolves the foundation models from the HF
+   cache and symlinks them into `models/` (**fatal** on failure — no models, no renders).
+   `FETCH_MODELS=0` skips it when `models/` is bind-mounted from a tree that has them.
 2. ComfyUI boots in the background (`source runComfy`, its own venv).
-3. `handler.py` (handler-venv) logs config and runs `gcs.log_config()` — **fatal** if GCS
-   is misconfigured (no bucket, or signing on with no SA key) so a broken worker recycles
-   instead of failing at upload after a GPU render — then waits for `127.0.0.1:8188` and
-   calls `runpod.serverless.start`.
+3. `handler.py` (handler-venv) logs config, validates that a **delivery path exists**
+   (`_check_delivery`: GCS credentials hard-validated when a bucket is set, else a shared
+   `MEDIA_DIR`; neither → exit) — better to recycle now than to burn a GPU render and
+   discover it at upload time — then waits for `127.0.0.1:8188` and starts the intake
+   its `QUEUE_DRIVER` selects.
 
 ## Module map
 
-- `handler.py` — `runpod.serverless.start`; per-job entry. Reads `event["input"]` (job
-  descriptor: `jobId`, `workflow`, `positive`, `loraName`, reference/seed URLs, …).
+- `handler.py` — the shared render path: `_resolve_assets` → `build_workflow` → submit →
+  `storage.save_video` → report, with `JOB_MAX_ATTEMPTS` retries. **Never raises**: on
+  exhaustion it reports `failed` and returns, so an intake can ACK unconditionally.
+  `main()` dispatches on `QUEUE_DRIVER`; `handler(event)` is the RunPod entry point.
+- `config.py` — every knob, with **the same env names render-worker used**, so this image
+  is a drop-in replacement for that service's docker-compose environment block.
+- `queue_consumer.py` — the Redis Streams consumer (port of `consumer.js`). One group
+  across all instances; `RENDER_CONCURRENCY` jobs at a time via a thread pool; reclaims a
+  dead worker's jobs after `RENDER_VISIBILITY_MS`; dead-letters a job redelivered past
+  `RENDER_MAX_DELIVERIES` to `render:dead` **and reports it `failed`** so the UI doesn't
+  hang on it. Consumer name is `${WORKER_ID}-${hostname}-${pid}` — must be unique per
+  instance (every container is PID 1, so pid alone collides).
+- `http_server.py` — `GET /health` (the compose healthcheck, always up on every intake)
+  and the `QUEUE_DRIVER=http` `POST /render` intake.
+- `storage.py` — `save_video()` (port of `storage.js`): writes to `MEDIA_DIR` when set
+  (a volume shared with chat-api, which re-serves it at `/media`) and/or uploads to the
+  GCS response bucket, returning the **durable `gs://` ref** chat-api signs on read. A
+  remote worker shares no volume, so GCS is its only real delivery path.
+- `mock.py` — `MOCK_COMFY=1`: a real playable MP4 from ffmpeg, no GPU (port of `mock.js`).
+- `gpu_lease.py` — the cross-service Redis mutex + Ollama eviction (port of `gpuLease.js`
+  + `freeOllama.js`), for a single-GPU box where ComfyUI shares the card with ai-chat's
+  llm-worker. Off by default; on RunPod the GPU is ours alone. **Keep in sync with the
+  two JS copies.**
 - `workflow_builder.py` — `build_workflow(name, …)`: load `workflows/<name>.json`, patch
   the nodes its `<name>.meta.json` sidecar names (prompt, lora, frames/fps, reference,
   save). Deliberately does NOT touch seed nodes.
@@ -49,10 +92,14 @@ report flow, reimplemented in Python). Human-facing deploy docs live in
   `COMFY_UNREACHABLE_TRIES` (3), `COMFY_WATCH_TIMEOUT_MS` (30m), `COMFY_POLL_TIMEOUT_MS` (8s).
 - `gcs.py` — upload the MP4; returns the **durable `gs://` ref** (never expires — chat-api signs a fresh short-lived read url from it on every read, mirroring render-worker/storage.js; `GCS_SIGN` now gates only the local `selftest` round-trip). Two buckets:
   `GCS_BUCKET` (`video-response`, per-turn) and `GCS_SEED_BUCKET` (`video-seed`, seed
-  clips). Creds resolve `GOOGLE_APPLICATION_CREDENTIALS`/`GCS_KEY_FILE` (paths) →
+  clips) — each also accepts ai-chat's spelling (`GCS_BUCKET_RESPONSE` /
+  `GCS_BUCKET_SEED`) so one env vocabulary drives every service. Creds resolve
+  `GOOGLE_APPLICATION_CREDENTIALS`/`GCS_KEY_FILE` (paths) →
   inline JSON in `GCS_SA_KEY_JSON`/`RUNPOD_SECRET_gcs_api_key` (RunPod injects the
   `gcs_api_key` secret under the latter). Run it directly to wire/verify locally:
   `python gcs.py selftest --bucket <b>` / `python gcs.py upload <file> --bucket <b>`.
+  Set **`GCS_PREFIX=""`** when replacing render-worker: that service wrote at the bucket
+  root, and the default `renders/` prefix would split one bucket across two layouts.
 - `reporter.py` — `POST {CHAT_API_INTERNAL_URL}/internal/render-events` (x-internal-token).
 - `fetch_models.py` + `models_manifest.json` — the boot-time model resolver (below).
 
@@ -124,13 +171,62 @@ land at the host's absolute path because the copied venv hardcoded it — is gon
 For local testing use `docker-compose.test.yml`, which bind-mounts `models/` instead of
 baking it; see the ComfyUI-only `comfy` service.
 
+**Normally you don't build it by hand:** ai-chat's `docker-compose.yml` has a
+`comfy-worker` service whose build context IS this checkout (`COMFY_DIR`, default
+`../ComfyUI`), so `docker compose up --build` from the ai-chat repo builds and runs it
+wired to Postgres/Redis/chat-api. `dockerBuild.sh` is for producing a **pushable** image
+(multi-arch SageAttention) that a remote GPU box or a RunPod endpoint pulls.
+
+## Running it against ai-chat's queue
+
+```bash
+# In the ai-chat repo (the normal path — builds + wires everything):
+docker compose up -d --build comfy-worker
+docker compose up --scale comfy-worker=2       # more GPUs = more workers
+
+# Anywhere else with a GPU (a second box, a RunPod Pod), against production:
+docker run --gpus all \
+  -e QUEUE_DRIVER=redis -e REDIS_URL=redis://<prod-redis>:6379 \
+  -e CHAT_API_INTERNAL_URL=https://api.example.com -e INTERNAL_TOKEN=<same as chat-api> \
+  -e GCS_BUCKET_RESPONSE=video-response -e GCS_KEY_FILE=/secrets/gcs-key.json \
+  -e WORKER_ID=gpu-box-2 \
+  -v /path/to/models:/opt/ComfyUI/models -v /path/to/key.json:/secrets/gcs-key.json:ro \
+  <registry>/comfy-runpod:latest
+```
+
+The second form needs **no inbound access and no chat-api change** — it dials out to
+Redis, claims jobs from the shared group, and reports over the webhook. A remote worker
+shares no volume with chat-api, so GCS (not `MEDIA_DIR`) is what makes its output
+reachable; the boot check refuses to start if neither is configured.
+
+Smoke-test the whole path with no GPU by adding `-e MOCK_COMFY=1` (ffmpeg renders a real
+MP4 and ComfyUI never boots).
+
 ## Gotchas / open items
+
+- **A blocking `XREADGROUP` needs `socket_timeout` > `BLOCK`.** redis-py applies its own
+  default (5s in 8.x), which exactly races the default `RENDER_BLOCK_MS=5000`: every idle
+  cycle raised `TimeoutError`, hit the loop's error branch and slept a second.
+  `queue_consumer.py` sets the timeout explicitly (BLOCK + 15s) rather than inheriting
+  whatever the installed version defaults to. Don't remove it.
+- **`RENDER_VISIBILITY_MS` must exceed the worst-case `process_job`** (≈ `JOB_MAX_ATTEMPTS`
+  × a full render), or a still-rendering job is reclaimed by another worker and rendered
+  twice.
+- **Delivery must be configured or the worker exits at boot** (`_check_delivery`): a GCS
+  response bucket + credentials, or a `MEDIA_DIR` shared with chat-api. This is
+  deliberate — the alternative is discovering it after a GPU render.
 
 - **Per-turn default LoRA.** `basic_workflow` / `latent_injection` now default node 4990 to
   `alinasverre_alxnxsvez_woman_000003500.safetensors`, which **is** in the manifest, so a
   job that omits `loraName` no longer fails at LoRA load (it just renders that persona).
   The handler still overrides the node whenever `loraName` is sent (`workflow_builder.py`).
   Keep the default pointing at a manifest entry when editing the templates.
+- **Assets arrive two ways, and the worker handles both.** With the `runpod` driver
+  chat-api pre-resolves every asset to a URL; with the `redis`/`http` drivers the payload
+  may carry only a `sourceSeedId` / `personaReference` / `personalitySlug`, and the worker
+  fetches the bytes itself from chat-api's token-guarded `/internal/seed-media` +
+  `/internal/persona-reference` (`_chat_api_asset` in `handler.py`). Precedence is
+  render.js's: **seed reuse > persona reference > img2video reference**.
 - **chat-api side is wired (push).** chat-api's `runpod` queue driver
   (`renderQueue.js` `submitRunpod`) POSTs each render job to this endpoint's `/run`
   when `QUEUE_DRIVER=runpod` + `RUNPOD_ENDPOINT_ID` + `RUNPOD_API_KEY` are set. Assets

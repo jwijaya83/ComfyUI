@@ -8,3 +8,6 @@ requests>=2.31.0
 # Resolve the base checkpoint + text encoder from RunPod's HF model cache at boot
 # (fetch_models.py) — keeps the 40GB of foundation models out of the image.
 huggingface_hub>=0.23.0
+# QUEUE_DRIVER=redis: drain ai-chat's render:<lane> Redis Streams as part of the shared
+# consumer group (queue_consumer.py), plus the cross-service single-GPU lease.
+redis>=5.0.0

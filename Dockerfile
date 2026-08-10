@@ -76,9 +76,13 @@ ENV COMFY_DIR=${COMFY_DIR} \
 # does not provide it). ffmpeg for video encode/decode; libgl/glib for opencv.
 # git is a RUNTIME dep, not just a build one: comfyui-manager imports GitPython,
 # which raises "Bad git executable" at import and takes the whole node down.
+# fonts-dejavu-core (~1 MB) is for MOCK_COMFY=1: ffmpeg's drawtext hard-fails on a
+# missing fontfile, and the mock renderer is how the queue path is smoke-tested
+# without a GPU.
 RUN apt-get update && apt-get install -y --no-install-recommends \
       python3.12 python3.12-venv \
       ffmpeg curl ca-certificates git \
+      fonts-dejavu-core \
       libgl1 libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
@@ -114,7 +118,10 @@ archs = {n[:4]: getattr(core, n) for n in dir(core) if n.endswith('_ENABLED')}; 
 print('torch', torch.__version__, '| sageattention archs', archs); \
 assert any(archs.values()), 'no SageAttention CUDA kernels loaded: ABI or arch mismatch'"
 
-# ComfyUI binds 8188; the handler reaches it over loopback and polls RunPod's
-# queue outbound, so no inbound port is exposed in production. Local testing
-# publishes it explicitly (see docker-compose.test.yml).
+# ComfyUI binds 8188; the worker reaches it over loopback. No inbound port is REQUIRED:
+# every intake is outbound (RunPod's queue, or ai-chat's Redis Streams), which is what
+# lets this image run behind NAT anywhere and still take work from production. 8080 is
+# the worker's own /health + the optional QUEUE_DRIVER=http intake; publish either
+# explicitly when you want them (see ai-chat/docker-compose.yml, docker-compose.test.yml).
+EXPOSE 8080
 ENTRYPOINT ["/entrypoint.sh"]
