@@ -43,6 +43,7 @@ from comfy_api_nodes.util import (
     download_url_to_image_tensor,
     download_url_to_video_output,
     get_number_of_images,
+    pad_images_to_common_channels,
     sync_op,
     tensor_to_base64_string,
     upload_audio_to_comfyapi,
@@ -76,8 +77,8 @@ GEMINI_IMAGE_2_PRICE_BADGE = IO.PriceBadge(
       $m := widgets.model;
       $r := widgets.resolution;
       $isFlash := $contains($m, "nano banana 2");
-      $flashPrices := {"1k": 0.0696, "2k": 0.1014, "4k": 0.154};
-      $proPrices := {"1k": 0.134, "2k": 0.134, "4k": 0.24};
+      $flashPrices := {"1k": 0.0835, "2k": 0.1217, "4k": 0.1848};
+      $proPrices := {"1k": 0.1608, "2k": 0.1608, "4k": 0.288};
       $prices := $isFlash ? $flashPrices : $proPrices;
       {"type":"usd","usd": $lookup($prices, $r), "format":{"suffix":"/Image","approximate":true}}
     )
@@ -233,8 +234,8 @@ async def get_image_from_response(response: GeminiGenerateContentResponse, thoug
                 "Try rephrasing your prompt or changing the response modality to 'IMAGE+TEXT' "
                 "to see the model's reasoning."
             )
-        return torch.zeros((1, 1024, 1024, 4))
-    return torch.cat(image_tensors, dim=0)
+        return torch.zeros((1, 1024, 1024, 3))
+    return torch.cat(pad_images_to_common_channels(image_tensors), dim=0)
 
 
 def get_text_from_interaction(interaction: GeminiInteraction) -> str:
@@ -1464,10 +1465,10 @@ class GeminiNanoBanana2V2(IO.ComfyNode):
                 expr="""
                 (
                   $contains(widgets.model, "lite")
-                    ? {"type":"usd","usd": 0.034, "format":{"suffix":"/Image","approximate":true}}
+                    ? {"type":"usd","usd": 0.0408, "format":{"suffix":"/Image","approximate":true}}
                     : (
                         $r := $lookup(widgets, "model.resolution");
-                        $prices := {"1k": 0.0696, "2k": 0.1014, "4k": 0.154};
+                        $prices := {"1k": 0.0835, "2k": 0.1217, "4k": 0.1848};
                         {"type":"usd","usd": $lookup($prices, $r), "format":{"suffix":"/Image","approximate":true}}
                       )
                 )

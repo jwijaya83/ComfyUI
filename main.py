@@ -58,11 +58,16 @@ if __name__ == "__main__" and args.debug_hang:
 import comfy_aimdo.control
 
 if enables_dynamic_vram():
+    simple_vram_headroom = None if args.reserve_vram is None else int(args.reserve_vram * 1024 ** 3)
     try:
-        comfy_aimdo.control.init(simple_vram_headroom=None if args.reserve_vram is None else int(args.reserve_vram * 1024 ** 3))
+        comfy_aimdo.control.init(simple_vram_headroom=simple_vram_headroom, nvml_pressure=not args.disable_nvml_pressure)
     except TypeError:
-        # comfy-aimdo 0.4.9 protocol.
-        comfy_aimdo.control.init()
+        # comfy-aimdo 0.4.10 protocol.
+        try:
+            comfy_aimdo.control.init(simple_vram_headroom=simple_vram_headroom)
+        except TypeError:
+            # comfy-aimdo 0.4.9 protocol.
+            comfy_aimdo.control.init()
 
 if os.name == "nt":
     os.environ['MIMALLOC_PURGE_DELAY'] = '0'
@@ -243,7 +248,17 @@ import hook_breaker_ac10a0
 import comfy.memory_management
 import comfy.model_patcher
 
-if args.enable_dynamic_vram or (enables_dynamic_vram() and comfy.model_management.is_nvidia() and not comfy.model_management.is_wsl()):
+
+def dynamic_vram_supported():
+    if comfy.model_management.is_nvidia():
+        return True
+    if comfy.model_management.is_amd():
+        if comfy.model_management.rocm_version >= (7, 14):
+            return True
+    return False
+
+
+if args.enable_dynamic_vram or (enables_dynamic_vram() and dynamic_vram_supported()):
     if (not args.enable_dynamic_vram) and (comfy.model_management.torch_version_numeric < (2, 8)):
         logging.warning("Unsupported Pytorch detected. DynamicVRAM support requires Pytorch version 2.8 or later. Falling back to legacy ModelPatcher. VRAM estimates may be unreliable especially on Windows")
     else:
