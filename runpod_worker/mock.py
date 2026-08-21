@@ -57,6 +57,17 @@ def render_mock(job, on_progress=None):
         duration = max(3, round(float(job.get("durationSeconds") or 8)))
     except (TypeError, ValueError):
         duration = 8
+    # Mirror the job's tier resolution so MOCK_COMFY=1 actually exercises the
+    # width/height wiring end to end (no GPU needed to sanity-check a tier's aspect
+    # ratio). libx264 + yuv420p require EVEN width AND height; every real tier value is
+    # already a multiple of 32, so this only matters for an ad-hoc/manual job.
+    try:
+        width = int(job.get("width") or 720)
+        height = int(job.get("height") or 404)
+    except (TypeError, ValueError):
+        width, height = 720, 404
+    width -= width % 2
+    height -= height % 2
 
     with tempfile.TemporaryDirectory(prefix="render-") as d:
         txt = os.path.join(d, "line.txt")
@@ -66,8 +77,7 @@ def render_mock(job, on_progress=None):
 
         cmd = [
             "ffmpeg", "-y",
-            # libx264 + yuv420p require EVEN width AND height.
-            "-f", "lavfi", "-i", f"color=c=0x10243a:s=720x404:d={duration}",
+            "-f", "lavfi", "-i", f"color=c=0x10243a:s={width}x{height}:d={duration}",
         ]
         font = _font()
         if font:

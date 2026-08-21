@@ -29,8 +29,9 @@ GPU (ComfyUI isn't even booted) — the way to smoke-test wiring without a GPU.
 `entrypoint.sh` boots ComfyUI in the background via `source runComfy` (its own venv),
 then starts `handler.py` on a **separate** `/opt/handler-venv` (no torch). The handler
 waits for ComfyUI on `127.0.0.1:8188`, then starts whichever intake `QUEUE_DRIVER`
-selects. Per job it renders, delivers the MP4 (GCS and/or a shared media dir), and
-reports status to chat-api's `/internal/render-events` webhook.
+selects. Per job it renders, delivers the MP4 (GCS when configured, else a shared media
+dir — see `MEDIA_DIR` below), and reports status to chat-api's
+`/internal/render-events` webhook.
 
 ## Run it
 

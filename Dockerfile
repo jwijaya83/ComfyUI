@@ -79,8 +79,16 @@ ENV COMFY_DIR=${COMFY_DIR} \
 # fonts-dejavu-core (~1 MB) is for MOCK_COMFY=1: ffmpeg's drawtext hard-fails on a
 # missing fontfile, and the mock renderer is how the queue path is smoke-tested
 # without a GPU.
+# gcc + python3.12-dev: torch 2.13's `torch._native` ops (e.g. the Gemma text
+# encoder's MixedPrecisionOps path used by LTX 2.5) JIT-compile a small Triton
+# launcher stub on first CALL, not at build/import time — so the builder stage's
+# build-essential (discarded; only /opt/venv is copied) doesn't cover it. Without
+# a compiler + Python.h here, that first call fails mid-render with "Failed to
+# find C compiler" (Triton's own error), independent of the SageAttention kernels
+# the build-time sanity check below already validates.
 RUN apt-get update && apt-get install -y --no-install-recommends \
-      python3.12 python3.12-venv \
+      python3.12 python3.12-venv python3.12-dev \
+      gcc \
       ffmpeg curl ca-certificates git \
       fonts-dejavu-core \
       libgl1 libglib2.0-0 \

@@ -1,57 +1,38 @@
 [
   {
     "repo_id": "jwijaya17/aichat",
-    "filename": "ltx-2.3-22b-distilled-1.1_transformer_only_int8_convrot.safetensors",
-    "target": "diffusion_models/ltx-2.3-22b-distilled-1.1_transformer_only_int8_convrot.safetensors",
-    "note": "LTX 2.3 22B distilled 1.1, transformer-only int8 convrot (~21.5GB). Loaded by UNETLoader (5012 basic / 5018 latent_injection). Replaces the old CheckpointLoaderSimple on ltx-2.3-22b-dev-fp8: it is ALREADY the distilled 1.1 weights, so the separate dynamic distilled LoRA (old node 4922) is gone, and being transformer-only it bundles NO vae/text encoder — those are now their own entries below. Mirrored on Kijai/LTX2.3_comfy as diffusion_models/<same name>."
+    "filename": "ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors",
+    "target": "diffusion_models/ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors",
+    "note": "LTX 2.5 22B distilled transformer, int8 convrot (~20GB). Loaded by UNETLoader (5012 basic_workflow / 5018 latent_injection). Replaces the LTX 2.3 ltx-2.3-22b-distilled-1.1_transformer_only_int8_convrot entry."
   },
   {
     "repo_id": "jwijaya17/aichat",
-    "filename": "gemma_3_12B_it_fp8_scaled.safetensors",
-    "target": "text_encoders/gemma_3_12B_it_fp8_scaled.safetensors",
-    "note": "Gemma 3 12B fp8-scaled text encoder LTX 2.3 uses (~13GB). DualCLIPLoader clip_name1 (5015 basic / 5019 latent_injection)."
+    "filename": "gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors",
+    "target": "text_encoders/gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors",
+    "note": "Gemma 4 12B text encoder for LTX 2.5, int8 convrot, with the text-projection head baked in (~14.3GB). Loaded by a single CLIPLoader (5016 basic_workflow / 5020 latent_injection). LTX 2.3's DualCLIPLoader + separate text-projection setup is gone, so this one file replaces both the old gemma_3_12B_it_fp8_scaled text encoder AND the old ltx-2.3_text_projection_bf16 entry."
   },
   {
     "repo_id": "jwijaya17/aichat",
-    "filename": "ltx-2.3_text_projection_bf16.safetensors",
-    "target": "text_encoders/ltx-2.3_text_projection_bf16.safetensors",
-    "note": "LTX 2.3 text-projection head bf16 (~2.3GB). DualCLIPLoader clip_name2 — the piece the old LTXAVTextEncoderLoader used to read out of the dev-fp8 checkpoint. Mirrored from Kijai/LTX2.3_comfy text_encoders/<same name>; note the repo is FLAT, so filename has no subdir while target does."
+    "filename": "ltx-2.5-video-vae-conv-bf16.safetensors",
+    "target": "vae/ltx-2.5-video-vae-conv-bf16.safetensors",
+    "note": "LTX 2.5 video VAE bf16 (~1.5GB). VAELoaderKJ (5014 basic_workflow / 5016 latent_injection). Replaces LTX23_video_vae_bf16."
   },
   {
     "repo_id": "jwijaya17/aichat",
-    "filename": "LTX23_video_vae_bf16.safetensors",
-    "target": "vae/LTX23_video_vae_bf16.safetensors",
-    "note": "LTX 2.3 video VAE bf16 (~1.5GB). VAELoaderKJ (5014 basic / 5016 latent_injection) — was the checkpoint's bundled VAE output before the switch to the transformer-only model. Mirrored from Kijai/LTX2.3_comfy vae/<same name>."
+    "filename": "ltx-2.5-audio-vae-bf16.safetensors",
+    "target": "vae/ltx-2.5-audio-vae-bf16.safetensors",
+    "note": "LTX 2.5 audio VAE bf16 (~0.4GB). VAELoaderKJ (5013 basic_workflow / 5017 latent_injection). Replaces LTX23_audio_vae_bf16."
   },
   {
     "repo_id": "jwijaya17/aichat",
-    "filename": "LTX23_audio_vae_bf16.safetensors",
-    "target": "vae/LTX23_audio_vae_bf16.safetensors",
-    "note": "LTX 2.3 audio VAE bf16 (~0.4GB). VAELoaderKJ (5013 basic / 5017 latent_injection) — replaces the old LTXVAudioVAELoader that read it out of the dev-fp8 checkpoint. Mirrored from Kijai/LTX2.3_comfy vae/<same name>."
+    "filename": "songHye_songkyexho_young_woman.safetensors",
+    "target": "loras/songHye_songkyexho_young_woman.safetensors",
+    "note": "PERSONA (production). workflow_builder patches loraNode 4990 with this exact filename when the job carries a matching loraName."
   },
   {
     "repo_id": "jwijaya17/aichat",
-    "filename": "LTX2.3_Crisp_Enhance.safetensors",
-    "target": "loras/LTX2.3_Crisp_Enhance.safetensors",
-    "note": "Detail-enhance LoRA (~0.7GB) on a static node (5011 basic / 5010 latent_injection). Was baked into the image until models/ was externalised."
-  },
-
-  {
-    "repo_id": "jwijaya17/aichat",
-    "filename": "alinasverre_alxnxsvez_woman_000003500.safetensors",
-    "target": "loras/alinasverre_alxnxsvez_woman_000003500.safetensors",
-    "note": "PERSONA (production). workflow_builder patches loraNode 4990 with this exact filename; also the templates' checked-in default."
-  },
-  {
-    "repo_id": "jwijaya17/aichat",
-    "filename": "evaCho_evxzxa_woman_000003500.safetensors",
-    "target": "loras/evaCho_evxzxa_woman_000003500.safetensors",
-    "note": "PERSONA (production). workflow_builder patches loraNode 4990 with this exact filename."
-  },
-  {
-    "repo_id": "jwijaya17/aichat",
-    "filename": "yuikoharu_yxuikxhxz_woman.safetensors",
-    "target": "loras/yuikoharu_yxuikxhxz_woman.safetensors",
-    "note": "PERSONA (production). workflow_builder patches loraNode 4990 with this exact filename."
+    "filename": "yunaKoharu_yunaxkoharuz_young_woman.safetensors",
+    "target": "loras/yunaKoharu_yunaxkoharuz_young_woman.safetensors",
+    "note": "PERSONA (production, default). Both templates' loraNode 4990 defaults to this exact filename, so a job that omits loraName still renders this persona instead of failing at LoRA load."
   }
 ]
