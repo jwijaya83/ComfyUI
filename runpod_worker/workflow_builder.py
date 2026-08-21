@@ -45,6 +45,8 @@ def build_workflow(
     use_reference_image=True,
     lora_name=None,
     duration_seconds=None,
+    width=None,
+    height=None,
     filename_prefix=None,
     source_video=None,
 ):
@@ -81,6 +83,19 @@ def build_workflow(
     lora_node = meta.get("loraNode")
     if lora_name and lora_node and lora_node in workflow:
         workflow[lora_node]["inputs"]["lora_name"] = lora_name
+
+    # Video dimensions: EmptyLTXVLatentVideo (basic_workflow) takes them as width/height;
+    # VHS_LoadVideo (latent_injection) takes them as custom_width/custom_height, where 0
+    # means "keep the source clip's native size" — so detect which key the node has.
+    width_node = meta.get("widthNode")
+    if width and width_node and width_node in workflow:
+        inputs = workflow[width_node]["inputs"]
+        inputs["width" if "width" in inputs else "custom_width"] = int(width)
+
+    height_node = meta.get("heightNode")
+    if height and height_node and height_node in workflow:
+        inputs = workflow[height_node]["inputs"]
+        inputs["height" if "height" in inputs else "custom_height"] = int(height)
 
     frames_node = meta.get("framesNode")
     fps_node = meta.get("fpsNode")

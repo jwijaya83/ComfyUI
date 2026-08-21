@@ -3,6 +3,8 @@
   "negativePromptNode": "2612",
   "framesNode": "4979",
   "fpsNode": "4978",
+  "widthNode": "5007",
+  "heightNode": "5007",
   "loraNode": "4990",
   "saveVideoNode": "4852",
   "seedNodes": ["5014"],

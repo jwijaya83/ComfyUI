@@ -30,9 +30,9 @@
   },
   "2483": {
     "inputs": {
-      "text": "Medium-close shot, camera locked off at eye level, front-on, the character filling the frame with the warmly lit Christmas scene behind and around her — alxnxsvez woman, a bright very pretty young Scandinavian woman with an expressive dazzling smile, her long wavy hair swept up into a sleek topknot, wearing a festive fair-isle patterned sweater in deep red and cream with a white-trimmed Santa hat perched slightly askew on her head, seated directly on the floor with her back resting against the front of a worn fabric sofa, legs stretched out and loosely crossed at the ankle in a low, grounded slouch, her weight settled comfortably back, a single half-unwrapped present resting across her lap with its ribbon still curled — a full decorated Christmas tree glowing with soft warm string lights stands to one side behind her, a scatter of wrapped gift boxes in red and gold paper arranged on the rug around her, the cosy Norwegian student residence common-room in Oslo enclosing the scene, the first snow falling silently outside the tall window behind her though none of it reaches inside — no flakes in the air, no snow or slush on the floor or furniture — the interior warm and snug; she holds the open flap of the box steady with one hand, glancing down at it with a glow of delighted disbelief, then looks up to camera and says — \"Okay so I literally just got here from Norway like three weeks ago —\" a small wondering exhale, \"and my family shipped me actual presents,\" she gives the box a gentle little shake, \"like, real ones —\" then a bright, slightly overwhelmed laugh before settling into a radiant smile, \"I'm kind of losing it a little bit\" — the dominant light source is the warm amber glow of the Christmas tree lights falling from the left, casting soft golden light across her face and the wrapped boxes, supplemented by the cool blue-grey of the overcast dawn light filtering through the snow-hazed window behind her, the two sources layering softly with gentle contact shadows, the room's worn-in student furniture and a string of paper stars tacked above the window visible in the background.",
+      "text": "yunaxkoharuz young woman a korean in a medium-close shot, standing on a sunlit front porch with white wooden railings soft behind her, wearing a fitted cream cable-knit cardigan over a simple white tee and a small pendant necklace catching the light. Her posture is relaxed, open, one hand resting gently on the railing as warm late-afternoon sunlight falls across her face and shoulders, casting a soft shadow behind her, golden tones picking up the cream of her cardigan and warming her skin. She glances toward the camera with a gentle smile, then speaks in a calm, warm, conversational voice, saying \"Hey!\" — a beat, her expression brightening — \"I'm doing well, thanks for asking.\" She pauses, looking briefly down with a thoughtful softness, then back up. \"You know, just taking things one day at a time —\" a small breath, her eyes steady and present — \"which honestly might be the best any of us can do.\" She tilts her head slightly, inviting. \"How about you?\" another beat, her jaw softens — \"What's on your mind?\" The camera holds steady at eye level as a faint breeze moves a strand of her hair. The ambient sound is the gentle rustle of the porch, distant birdsong, and the warm hush of late afternoon.",
       "clip": [
-        "5015",
+        "5016",
         0
       ]
     },
@@ -45,7 +45,7 @@
     "inputs": {
       "text": "pc game, console game, video game, cartoon, childish, ugly, subtitle, anime",
       "clip": [
-        "5015",
+        "5016",
         0
       ]
     },
@@ -170,7 +170,7 @@
   },
   "4831": {
     "inputs": {
-      "sampler_name": "euler_ancestral_cfg_pp"
+      "sampler_name": "euler_ancestral"
     },
     "class_type": "KSamplerSelect",
     "_meta": {
@@ -237,10 +237,9 @@
   },
   "4852": {
     "inputs": {
-      "filename_prefix": "ltx23/chat_ce11620e-e60c-4258-923d-e69b54954a59",
+      "filename_prefix": "ltx25/chat_ce11620e-e60c-4258-923d-e69b54954a59",
       "format": "auto",
       "codec": "auto",
-      "video-preview": "",
       "video": [
         "4849",
         0
@@ -280,7 +279,7 @@
   },
   "4979": {
     "inputs": {
-      "value": 481
+      "value": 241
     },
     "class_type": "PrimitiveInt",
     "_meta": {
@@ -304,15 +303,15 @@
   },
   "4990": {
     "inputs": {
-      "lora_name": "alinasverre_alxnxsvez_woman_000003500.safetensors",
+      "lora_name": "yunaKoharu_yunaxkoharuz_young_woman.safetensors",
       "strength_model": 1,
       "strength_clip": 1,
       "model": [
-        "5011",
+        "5012",
         0
       ],
       "clip": [
-        "5015",
+        "5016",
         0
       ]
     },
@@ -374,23 +373,9 @@
       "title": "🅛🅣🅧 Float To Int"
     }
   },
-  "5011": {
-    "inputs": {
-      "lora_name": "LTX2.3_Crisp_Enhance.safetensors",
-      "strength_model": 1,
-      "model": [
-        "5012",
-        0
-      ]
-    },
-    "class_type": "LoraLoaderModelOnly",
-    "_meta": {
-      "title": "Load LoRA"
-    }
-  },
   "5012": {
     "inputs": {
-      "unet_name": "ltx-2.3-22b-distilled-1.1_transformer_only_int8_convrot.safetensors",
+      "unet_name": "ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors",
       "weight_dtype": "default"
     },
     "class_type": "UNETLoader",
@@ -400,7 +385,7 @@
   },
   "5013": {
     "inputs": {
-      "vae_name": "LTX23_audio_vae_bf16.safetensors",
+      "vae_name": "ltx-2.5-audio-vae-bf16.safetensors",
       "device": "main_device",
       "weight_dtype": "bf16"
     },
@@ -411,7 +396,7 @@
   },
   "5014": {
     "inputs": {
-      "vae_name": "LTX23_video_vae_bf16.safetensors",
+      "vae_name": "ltx-2.5-video-vae-conv-bf16.safetensors",
       "device": "main_device",
       "weight_dtype": "bf16"
     },
@@ -420,16 +405,15 @@
       "title": "VAELoader KJ"
     }
   },
-  "5015": {
+  "5016": {
     "inputs": {
-      "clip_name1": "gemma_3_12B_it_fp8_scaled.safetensors",
-      "clip_name2": "ltx-2.3_text_projection_bf16.safetensors",
+      "clip_name": "gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors",
       "type": "ltxv",
       "device": "default"
     },
-    "class_type": "DualCLIPLoader",
+    "class_type": "CLIPLoader",
     "_meta": {
-      "title": "DualCLIPLoader"
+      "title": "Load CLIP"
     }
   }
 }

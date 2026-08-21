@@ -128,6 +128,8 @@ def _render_comfy(job, on_progress):
         use_reference_image=use_ref,
         lora_name=job.get("loraName"),
         duration_seconds=(float(job["durationSeconds"]) if job.get("durationSeconds") else None),
+        width=(int(job["width"]) if job.get("width") else None),
+        height=(int(job["height"]) if job.get("height") else None),
         filename_prefix=(f"ltx23/chat_{job['chatId']}" if job.get("chatId") else None),
         source_video=source_video,
     )

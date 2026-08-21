@@ -3,6 +3,8 @@
   "negativePromptNode": "2612",
   "framesNode": "4979",
   "fpsNode": "4978",
+  "widthNode": "3059",
+  "heightNode": "3059",
   "loraNode": "4990",
   "referenceImageNode": "2004",
   "bypassReferenceImageNode": "4977",

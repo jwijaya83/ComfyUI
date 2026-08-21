@@ -21,9 +21,9 @@
   },
   "2483": {
     "inputs": {
-      "text": "Medium-close shot, camera locked off at eye level, facing alxnxsvez woman front-on — a bright, very pretty young Scandinavian woman with long hair swept up into a voluminous French pleat, face-framing soft volume at the crown, wearing a sleek black dress and a delicate diamond necklace catching the candlelight at her collarbone, seated at a white-linen table on the open stone terrace of a fine-dining restaurant perched above the Adriatic in Dubrovnik Old Town; it is early evening in the dry season, the sky a deep gradient of amber and violet over the darkening sea behind her, the last warm sun dropping below the limestone horizon and casting a long, golden-rose lateral light across her face and bare shoulders with soft contact shadows falling on the tablecloth; the restaurant terrace glows with the amber flicker of pillar candles set in glass holders on the table and small warm Edison bulbs strung between stone arches overhead, the sea far below shimmering with the last of the evening light, the old city walls just visible in soft silhouette to one side; she is settled into the moment, one hand resting lightly on the stem of a wine glass on the table in front of her, the other at ease in her lap, her gaze finds the camera and she gives a small, almost amused breath — then speaks: \"Takk.\" a quiet smile crosses her face, a beat, her eyes drift briefly with warmth — \"You are not so bad yourself, Justin.\" a small tilt of her head as she lets her gaze linger for a moment — \"Dubrovnik suits you.\" another beat, she lets her eyes drift toward the glowing horizon beyond the terrace rail and back, a gentle breath — \"This view... it reminds me a little of home. Different sea, but the same feeling.\" a pause, her expression softens with curiosity, a slight lean forward — \"You planned this?\"",
+      "text": "yunaxkoharuz young woman a korean in a medium-close shot, standing on a sunlit front porch with white wooden railings soft behind her, wearing a fitted red cable-knit cardigan over a simple white tee. Her posture is relaxed, open, one hand resting gently on the railing as warm late-afternoon sunlight falls across her face and shoulders, casting a soft shadow behind her, golden tones picking up the cream of her cardigan and warming her skin. She glances toward the camera with a gentle smile, then speaks in a calm, warm, conversational voice, saying \"Hey!\" — a beat, her expression brightening — \"let's go find my brother, he is in Korea\" She pauses, looking briefly down with a thoughtful softness, then back up. \"Will you help me ?\" a small breath, her eyes steady and present — \"I am afraid he is in danger\" She tilts her head slightly, inviting. \"help me\" another beat, her jaw softens — \"please ?\" The camera holds steady at eye level as a faint breeze moves a strand of her hair. The ambient sound is the gentle rustle of the porch, distant birdsong, and the warm hush of late afternoon.",
       "clip": [
-        "5019",
+        "5020",
         0
       ]
     },
@@ -36,7 +36,7 @@
     "inputs": {
       "text": "pc game, console game, video game, cartoon, childish, ugly, subtitle, anime",
       "clip": [
-        "5019",
+        "5020",
         0
       ]
     },
@@ -176,7 +176,7 @@
   },
   "4979": {
     "inputs": {
-      "value": 377
+      "value": 241
     },
     "class_type": "PrimitiveInt",
     "_meta": {
@@ -185,15 +185,15 @@
   },
   "4990": {
     "inputs": {
-      "lora_name": "alinasverre_alxnxsvez_woman_000003500.safetensors",
+      "lora_name": "yunaKoharu_yunaxkoharuz_young_woman.safetensors",
       "strength_model": 1,
       "strength_clip": 1,
       "model": [
-        "5010",
+        "5018",
         0
       ],
       "clip": [
-        "5019",
+        "5020",
         0
       ]
     },
@@ -220,7 +220,7 @@
   },
   "5007": {
     "inputs": {
-      "video": "e05f4ad1-d0d8-4e60-a25d-4251fbff8f68.mp4",
+      "video": "chat_ce11620e-e60c-4258-923d-e69b54954a59_00044_.mp4",
       "force_rate": 0,
       "custom_width": 0,
       "custom_height": 0,
@@ -248,20 +248,6 @@
     "class_type": "VAEEncode",
     "_meta": {
       "title": "VAE Encode"
-    }
-  },
-  "5010": {
-    "inputs": {
-      "lora_name": "LTX2.3_Crisp_Enhance.safetensors",
-      "strength_model": 1,
-      "model": [
-        "5018",
-        0
-      ]
-    },
-    "class_type": "LoraLoaderModelOnly",
-    "_meta": {
-      "title": "Load LoRA"
     }
   },
   "5011": {
@@ -303,7 +289,7 @@
   },
   "5014": {
     "inputs": {
-      "noise_seed": 42
+      "noise_seed": 1080528886909327
     },
     "class_type": "RandomNoise",
     "_meta": {
@@ -321,7 +307,7 @@
   },
   "5016": {
     "inputs": {
-      "vae_name": "LTX23_video_vae_bf16.safetensors",
+      "vae_name": "ltx-2.5-video-vae-conv-bf16.safetensors",
       "device": "main_device",
       "weight_dtype": "bf16"
     },
@@ -332,7 +318,7 @@
   },
   "5017": {
     "inputs": {
-      "vae_name": "LTX23_audio_vae_bf16.safetensors",
+      "vae_name": "ltx-2.5-audio-vae-bf16.safetensors",
       "device": "main_device",
       "weight_dtype": "bf16"
     },
@@ -343,7 +329,7 @@
   },
   "5018": {
     "inputs": {
-      "unet_name": "ltx-2.3-22b-distilled-1.1_transformer_only_int8_convrot.safetensors",
+      "unet_name": "ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors",
       "weight_dtype": "default"
     },
     "class_type": "UNETLoader",
@@ -351,16 +337,15 @@
       "title": "Load Diffusion Model"
     }
   },
-  "5019": {
+  "5020": {
     "inputs": {
-      "clip_name1": "gemma_3_12B_it_fp8_scaled.safetensors",
-      "clip_name2": "ltx-2.3_text_projection_bf16.safetensors",
-      "type": "ltxv",
+      "clip_name": "gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors",
+      "type": "stable_diffusion",
       "device": "default"
     },
-    "class_type": "DualCLIPLoader",
+    "class_type": "CLIPLoader",
     "_meta": {
-      "title": "DualCLIPLoader"
+      "title": "Load CLIP"
     }
   }
 }
