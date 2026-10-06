@@ -136,6 +136,8 @@ def _render_comfy(job, on_progress):
         filename_prefix=(f"ltx23/chat_{job['chatId']}" if job.get("chatId") else None),
         source_video=source_video,
         source_seconds=(float(job["sourceSeconds"]) if job.get("sourceSeconds") else None),
+        lora_strength=job.get("loraStrength"),
+        seed=job.get("seed"),
     )
 
     prompt_id, client_id = submit_prompt(workflow)

@@ -2,9 +2,14 @@
 
 A faithful Python port of the render-worker's workflowLoader.js: load
 `workflows/<name>.json`, patch the nodes the meta sidecar names (prompt, lora,
-frame count, source video, reference image, save prefix), return the graph.
-Note: like the Node version, this deliberately does NOT touch the seed nodes —
-each turn's `positive` prompt differs, so ComfyUI's input-hash cache never collides.
+frame count, length in seconds, source video, reference image, save prefix), return the
+graph. The SEED NODES keep the template's fixed seed, so a tested graph renders the way
+it was tested — unless the job sends a `seed`. Only one job does: a Krea 2 picture drawn
+again after the vision check rejected it, because the same seed and prompt would draw the
+same picture. Each turn's `positive` prompt differs, so ComfyUI's input-hash cache never
+collides.
+
+Run it directly for the assert-based self-check: `python workflow_builder.py`.
 """
 import json
 import math
@@ -51,6 +56,8 @@ def build_workflow(
     filename_prefix=None,
     source_video=None,
     source_seconds=None,
+    lora_strength=None,
+    seed=None,
 ):
     safe = _safe_name(name)
     with open(os.path.join(WORKFLOWS_DIR, f"{safe}.json")) as f:
@@ -60,7 +67,9 @@ def build_workflow(
     pos = meta.get("positivePromptNode")
     if pos not in workflow:
         raise ValueError(f"Workflow '{safe}' has no positive-prompt node '{pos}'.")
-    workflow[pos]["inputs"]["text"] = prompt
+    # A CLIPTextEncode takes `text`; a primitive text box (H3's node 138) takes `value`.
+    pos_inputs = workflow[pos]["inputs"]
+    pos_inputs["text" if "text" in pos_inputs else "value"] = prompt
 
     # Latent injection: point the VHS_LoadVideo node at the uploaded seed clip. Only
     # workflows whose meta declares a sourceVideoNode have one.
@@ -85,6 +94,17 @@ def build_workflow(
     lora_node = meta.get("loraNode")
     if lora_name and lora_node and lora_node in workflow:
         workflow[lora_node]["inputs"]["lora_name"] = lora_name
+    # The LoRA's strength, when the job sends one. Krea 2 switches her LoRA per picture:
+    # 0 (the export's value) leaves her out of a view or a side character's sheet.
+    if lora_strength is not None and lora_node and lora_node in workflow:
+        workflow[lora_node]["inputs"]["strength_model"] = float(lora_strength)
+
+    # Another seed, only when the job sends one (see the module docstring).
+    if seed is not None:
+        for node in meta.get("seedNodes") or []:
+            if node in workflow:
+                inputs = workflow[node]["inputs"]
+                inputs["noise_seed" if "noise_seed" in inputs else "seed"] = int(seed)
 
     # Video dimensions: EmptyLTXVLatentVideo (basic_workflow) takes them as width/height;
     # VHS_LoadVideo (latent_injection) takes them as custom_width/custom_height, where 0
@@ -98,6 +118,12 @@ def build_workflow(
     if height and height_node and height_node in workflow:
         inputs = workflow[height_node]["inputs"]
         inputs["height" if "height" in inputs else "custom_height"] = int(height)
+
+    # A template that takes its length in SECONDS (H3's node 132) and snaps the frames
+    # itself; the framesNode/fpsNode path below is LTX's.
+    duration_node = meta.get("durationNode")
+    if duration_seconds and duration_node and duration_node in workflow:
+        workflow[duration_node]["inputs"]["value"] = float(duration_seconds)
 
     frames_node = meta.get("framesNode")
     fps_node = meta.get("fpsNode")
@@ -136,3 +162,34 @@ def build_workflow(
         workflow[save_node]["inputs"]["filename_prefix"] = filename_prefix
 
     return workflow
+
+
+if __name__ == "__main__":
+    # The self-check (ai-chat docs/v1.1.1/ImplementationPlan.md W3).
+    def template(name):
+        with open(os.path.join(WORKFLOWS_DIR, f"{name}.json")) as f:
+            return json.load(f)
+
+    h3, h3_t = build_workflow(name="minimax_h3_r2v_hybrid", prompt="P", duration_seconds=10), template("minimax_h3_r2v_hybrid")
+    assert h3["138"]["inputs"]["value"] == "P"
+    assert h3["132"]["inputs"]["value"] == 10
+    assert h3["129"] == h3_t["129"], "a job without a seed keeps the template's"
+
+    krea, krea_t = build_workflow(name="krea2_image_creator", prompt="K", lora_strength=0.8), template("krea2_image_creator")
+    assert krea["70"]["inputs"]["text"] == "K"
+    assert krea["57"]["inputs"]["strength_model"] == 0.8
+    assert krea["52"] == krea_t["52"]
+    krea7 = build_workflow(name="krea2_image_creator", prompt="K", seed=7)
+    assert krea7["52"]["inputs"]["seed"] == 7
+    assert krea7["57"]["inputs"]["strength_model"] == krea_t["57"]["inputs"]["strength_model"]
+
+    # basic_workflow exactly as before: only the nodes a job has always patched change.
+    ltx, ltx_t = build_workflow(
+        name="basic_workflow", prompt="B", lora_name="x.safetensors", duration_seconds=5,
+        width=576, height=768, filename_prefix="p", use_reference_image=False,
+    ), template("basic_workflow")
+    changed = {n for n in ltx_t if ltx_t[n] != ltx[n]}
+    assert changed <= {"2483", "4990", "4979", "3059", "4977", "2004", "4852"}, changed
+    assert ltx["4832"] == ltx_t["4832"], "the fixed seed"
+    assert ltx["4990"]["inputs"]["strength_model"] == ltx_t["4990"]["inputs"]["strength_model"]
+    print("workflow_builder self-check ok")

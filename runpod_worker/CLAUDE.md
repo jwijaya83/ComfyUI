@@ -83,7 +83,12 @@ how the queue path is smoke-tested on a box with no GPU.
   two JS copies.**
 - `workflow_builder.py` — `build_workflow(name, …)`: load `workflows/<name>.json`, patch
   the nodes its `<name>.meta.json` sidecar names (prompt, lora, frames/fps, reference,
-  save). Deliberately does NOT touch seed nodes.
+  save). The prompt goes into `text`, or `value` on a primitive text box (H3's 138);
+  `durationNode` takes the length in seconds (H3 snaps its own frames); the job's
+  `loraStrength` goes into the `loraNode`'s `strength_model` (Krea 2 switches her LoRA per
+  picture); and the job's `seed`, ONLY when it sends one, into every `seedNodes` node — a
+  job without one keeps the template's fixed seed (only a picture drawn again after a
+  rejection sends one). `python workflow_builder.py` runs its assert self-check.
 - `comfy_client.py` — submit + poll ComfyUI over `127.0.0.1:8188`. `watch_prompt()`
   **actively monitors** the render (mirrors render-worker's `comfyui.js`): the WS gives
   fast progress + fast terminal signals (`executing`→null / `execution_success` = done;
