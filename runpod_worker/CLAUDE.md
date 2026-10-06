@@ -147,6 +147,15 @@ how the queue path is smoke-tested on a box with no GPU.
   `models/latent_upscale_models/ltx-2.5-latent-spatial-upscaler-x2-bf16-1.0.safetensors`
   exists on disk but neither template references it yet, so it's deliberately **not** in
   the manifest — add it if/when a workflow wires it in.
+- **The SCENE POOL has a manifest of its own** (ai-chat v1.1.1): `models_manifest.scene.json`,
+  the files `krea2_image_creator` loads — Krea 2 Turbo int8, its Qwen3-VL 4B text encoder and
+  VAE from the public `Comfy-Org/Krea-2` repo, and the realism LoRA + her Krea 2 LoRA from
+  `jwijaya17/aichat` (MiniMax H3 and Music 3 join it in later milestones). Same image; a
+  scene-pool worker runs with `MODELS_MANIFEST=/opt/ComfyUI/runpod_worker/models_manifest.scene.json`
+  (a FULL path: `fetch_models.py` opens it as given) and `RENDER_LANES=scene-high,scene-low`.
+  A RunPod scene endpoint's Model Caching then lists `Comfy-Org/Krea-2` as well as
+  `jwijaya17/aichat`. The LTX pool keeps `models_manifest.json` and never runs Krea 2; one
+  dev GPU can drain all four lanes with both manifests merged, and pays for the model swaps.
 - **Scope = the per-turn render path only** (`basic_workflow` / `latent_injection`). The
   admin **seed-video** workflow (`seed_workflow.json`) was removed in the LTX 2.5 update —
   seeding, if it comes back, isn't runnable in this image today.
