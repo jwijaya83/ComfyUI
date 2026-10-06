@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
-# Production image build. For local viability testing use docker-compose.test.yml
-# instead — it bind-mounts models/ so you are not rebuilding around 35 GB.
+# Production image build (pushable, multi-arch SageAttention). For local viability
+# testing use ai-chat's docker-compose.yml `comfy-worker` service instead — it builds
+# from this checkout and bind-mounts models/ so you are not rebuilding around 35 GB:
+#   cd ../ai-chat && docker compose up -d --build comfy-worker
 set -euo pipefail
 
 # Compute capabilities to compile SageAttention kernels for. Must cover every GPU

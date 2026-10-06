@@ -130,6 +130,6 @@ assert any(archs.values()), 'no SageAttention CUDA kernels loaded: ABI or arch m
 # every intake is outbound (RunPod's queue, or ai-chat's Redis Streams), which is what
 # lets this image run behind NAT anywhere and still take work from production. 8080 is
 # the worker's own /health + the optional QUEUE_DRIVER=http intake; publish either
-# explicitly when you want them (see ai-chat/docker-compose.yml, docker-compose.test.yml).
+# explicitly when you want them (see ai-chat/docker-compose.yml's `comfy-worker` service).
 EXPOSE 8080
 ENTRYPOINT ["/entrypoint.sh"]

@@ -14,9 +14,10 @@ import re
 
 WORKFLOWS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "workflows")
 
-# Every seed clip is rendered at exactly this length (mirrors chat-api's
-# SEED_DURATION_SECONDS — this worker is stateless and can't import it), so we can work
-# out how many frames a source seed holds and pick a random in-bounds start offset.
+# The length of a seed clip when the job doesn't say (mirrors render-plane's
+# SEED_DURATION_SECONDS — this worker is stateless and can't import it). Seeds are no
+# longer all this long: a full render follows its line, so render-plane sends the source
+# seed's real length as `sourceSeconds`, and this is only the fallback for an older caller.
 SEED_DURATION_SECONDS = 20
 
 
@@ -49,6 +50,7 @@ def build_workflow(
     height=None,
     filename_prefix=None,
     source_video=None,
+    source_seconds=None,
 ):
     safe = _safe_name(name)
     with open(os.path.join(WORKFLOWS_DIR, f"{safe}.json")) as f:
@@ -113,8 +115,8 @@ def build_workflow(
 
     # Seed-reuse start offset: a latent-injection reuse loads the window
     # [skip_first_frames, skip_first_frames + frame_load_cap] out of the source seed.
-    # Every seed is rendered at exactly SEED_DURATION_SECONDS, so we can compute how many
-    # frames it has and start at a RANDOM in-bounds point — otherwise every reuse of a
+    # From the seed's length (`source_seconds`, else SEED_DURATION_SECONDS) we compute how
+    # many frames it has and start at a RANDOM in-bounds point — otherwise every reuse of a
     # clip begins on the same frame and they all look alike. Clamped so the window never
     # runs past the seed's end. (Port of workflowLoader.js; the Node worker is stateless
     # too, hence the duplicated constant.)
@@ -124,7 +126,7 @@ def build_workflow(
         fps = 24
         if fps_node and fps_node in workflow:
             fps = float(workflow[fps_node]["inputs"].get("value") or 24)
-        total_seed_frames = round(SEED_DURATION_SECONDS * fps)
+        total_seed_frames = round((source_seconds or SEED_DURATION_SECONDS) * fps)
         load_cap = int(loader["inputs"].get("frame_load_cap") or total_seed_frames)
         max_skip = max(0, total_seed_frames - load_cap)
         loader["inputs"]["skip_first_frames"] = random.randint(0, max_skip) if max_skip > 0 else 0

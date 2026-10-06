@@ -4,6 +4,7 @@ __pycache__/
 /input/
 !/input/example.png
 /models/
+/realtime/
 /temp/
 /custom_nodes/
 !custom_nodes/example_node.py.example

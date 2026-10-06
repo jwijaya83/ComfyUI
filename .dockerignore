@@ -19,10 +19,10 @@
 
 # ---------------------------------------------------------------- models ----
 # Nothing under models/ is baked any more. Locally they are bind-mounted from
-# the host (see docker-compose.test.yml); in production they come from the
-# network volume / HF cache via runpod_worker/fetch_models.py.
+# the host (see ai-chat/docker-compose.yml's `comfy-worker` service); in production
+# they come from the network volume / HF cache via runpod_worker/fetch_models.py.
 models/
-# Local HF cache created by docker-compose.test.yml (tens of GB).
+# Local HF cache created by ai-chat's comfy-worker service (tens of GB).
 .hf-cache/
 
 # ------------------------------------------------------------------ venv ----
@@ -55,4 +55,3 @@ tests-unit/
 .ci/
 Dockerfile
 .dockerignore
-docker-compose.test.yml

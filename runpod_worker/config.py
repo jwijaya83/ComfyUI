@@ -64,6 +64,14 @@ RENDER_PORT = _int("RENDER_PORT", _int("PORT", 8080))
 MOCK_COMFY = _flag("MOCK_COMFY")
 JOB_MAX_ATTEMPTS = _int("JOB_MAX_ATTEMPTS", 3)
 
+# --- cost capture (ai-chat docs/UnitEconomicsDesign.md) -----------------------
+# Reported on every terminal status so render-plane can price the render: which card
+# this is (rtx4080 | rtx5090 | …) and which pool it runs in (serverless_flex | pod …).
+# The $/hour rates live in render-plane (GPU_RATES_JSON), not here, so a price change
+# never needs a worker redeploy. Unset = not reported (render-plane leaves cost NULL).
+GPU_TYPE = (os.environ.get("GPU_TYPE") or ("mock" if MOCK_COMFY else "")).strip().lower()
+GPU_POOL = (os.environ.get("GPU_POOL") or ("serverless_flex" if QUEUE_DRIVER == "runpod" else "")).strip().lower()
+
 # --- delivery ----------------------------------------------------------------
 # Local shared media dir (chat-api re-serves it at /media). Set ONLY when this worker
 # shares a volume with chat-api; a remote worker leaves it unset and delivers via GCS.

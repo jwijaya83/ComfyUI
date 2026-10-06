@@ -19,6 +19,8 @@ never the queue.
 """
 import os
 import sys
+import threading
+import time
 import traceback
 
 import requests
@@ -132,6 +134,7 @@ def _render_comfy(job, on_progress):
         height=(int(job["height"]) if job.get("height") else None),
         filename_prefix=(f"ltx23/chat_{job['chatId']}" if job.get("chatId") else None),
         source_video=source_video,
+        source_seconds=(float(job["sourceSeconds"]) if job.get("sourceSeconds") else None),
     )
 
     prompt_id, client_id = submit_prompt(workflow)
@@ -173,11 +176,42 @@ def _render(job, on_progress):
                 free_comfy_vram()
 
 
+# COLD START: the first render in this process pays the model load (ComfyUI loads the
+# checkpoints lazily on the first prompt). On RunPod Serverless that is exactly the cost a
+# scaled-from-zero worker adds, and render-plane records it per job so idle timeouts can be
+# chosen from data. The mock loads nothing, so it is never cold.
+_warm_lock = threading.Lock()
+_warm = bool(config.MOCK_COMFY)
+
+
+def _claim_cold_start():
+    global _warm
+    with _warm_lock:
+        cold = not _warm
+        _warm = True
+        return cold
+
+
+def _cost_fields(gpu_seconds, cold_start):
+    """The UnitEconomics fields every terminal report carries. Missing ones are omitted,
+    and render-plane treats an omitted field as NULL — never an error."""
+    fields = {"gpuSeconds": round(gpu_seconds, 2), "coldStart": bool(cold_start)}
+    if config.GPU_TYPE:
+        fields["gpuType"] = config.GPU_TYPE
+    if config.GPU_POOL:
+        fields["gpuPool"] = config.GPU_POOL
+    return fields
+
+
 def process_job(job, rp_event=None):
     """Render one job with internal retry, then report the terminal status. NEVER raises:
     on exhaustion it reports `failed` and returns, so an intake can ACK unconditionally."""
     job_id = job.get("jobId")
     report({"jobId": job_id, "status": "running"})
+    cold_start = _claim_cold_start()
+    # GPU time across every attempt: a render that failed twice before succeeding billed
+    # all three, and a render that never succeeded still billed us.
+    gpu_seconds = 0.0
 
     def on_progress(value, maximum, node=None):
         report({
@@ -196,13 +230,20 @@ def process_job(job, rp_event=None):
     last_err = None
     for attempt in range(1, config.JOB_MAX_ATTEMPTS + 1):
         try:
-            buffer = _render(job, on_progress)
+            started = time.monotonic()
+            try:
+                buffer = _render(job, on_progress)
+            finally:
+                gpu_seconds += time.monotonic() - started
             # One naming scheme for every intake, matching render-worker/storage.js:
             # chat_<jobId>.mp4 in the RESPONSE bucket. chat-api owns what happens next —
             # for an admin seed render it server-side-copies the object into video-seed
             # and reclaims this one (seedService.mirrorCompletedSeedRender).
             output_url = storage.save_video(buffer, f"chat_{job_id}.mp4")
-            report({"jobId": job_id, "status": "completed", "outputUrl": output_url})
+            report({
+                "jobId": job_id, "status": "completed", "outputUrl": output_url,
+                **_cost_fields(gpu_seconds, cold_start),
+            })
             print(f"✓ job {job_id} completed -> {output_url}", flush=True)
             return {"jobId": job_id, "status": "completed", "outputUrl": output_url}
         except Exception as e:  # noqa: BLE001 - retry then report failed
@@ -217,7 +258,7 @@ def process_job(job, rp_event=None):
                 break
 
     msg = str(last_err)
-    report({"jobId": job_id, "status": "failed", "error": msg})
+    report({"jobId": job_id, "status": "failed", "error": msg, **_cost_fields(gpu_seconds, cold_start)})
     print(f"✗ job {job_id} failed permanently: {msg}", flush=True)
     return {"jobId": job_id, "status": "failed", "error": msg}
 

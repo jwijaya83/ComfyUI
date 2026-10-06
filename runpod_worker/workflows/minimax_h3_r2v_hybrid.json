@@ -1,0 +1,397 @@
+{
+  "92": {
+    "inputs": {
+      "filename_prefix": "video/MiniMax_H3",
+      "format": "auto",
+      "format.codec": "auto",
+      "codec": "auto",
+      "video": [
+        "130",
+        0
+      ]
+    },
+    "class_type": "SaveVideo",
+    "_meta": {
+      "title": "Save Video"
+    }
+  },
+  "115": {
+    "inputs": {
+      "aspect_ratio": "3:4 (Portrait Standard)",
+      "megapixels": 0.4,
+      "multiple": 32
+    },
+    "class_type": "ResolutionSelector",
+    "_meta": {
+      "title": "Resolution Selector (Size)"
+    }
+  },
+  "119": {
+    "inputs": {
+      "vae_name": "minimax_h3_video_vae_int8_convrot.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "120": {
+    "inputs": {
+      "vae_name": "minimax_h3_audio_vae_fp32.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "121": {
+    "inputs": {
+      "samples": [
+        "125",
+        0
+      ],
+      "vae": [
+        "120",
+        0
+      ]
+    },
+    "class_type": "VAEDecodeAudio",
+    "_meta": {
+      "title": "VAE Decode Audio"
+    }
+  },
+  "122": {
+    "inputs": {
+      "samples": [
+        "125",
+        0
+      ],
+      "vae": [
+        "119",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "123": {
+    "inputs": {
+      "sampler_name": "res_multistep"
+    },
+    "class_type": "KSamplerSelect",
+    "_meta": {
+      "title": "KSamplerSelect"
+    }
+  },
+  "124": {
+    "inputs": {
+      "scheduler": "simple",
+      "steps": [
+        "142",
+        0
+      ],
+      "denoise": 1,
+      "model": [
+        "127",
+        0
+      ]
+    },
+    "class_type": "BasicScheduler",
+    "_meta": {
+      "title": "BasicScheduler"
+    }
+  },
+  "125": {
+    "inputs": {
+      "noise": [
+        "129",
+        0
+      ],
+      "guider": [
+        "126",
+        0
+      ],
+      "sampler": [
+        "123",
+        0
+      ],
+      "sigmas": [
+        "124",
+        0
+      ],
+      "latent_image": [
+        "136",
+        1
+      ]
+    },
+    "class_type": "SamplerCustomAdvanced",
+    "_meta": {
+      "title": "SamplerCustomAdvanced"
+    }
+  },
+  "126": {
+    "inputs": {
+      "model": [
+        "141",
+        0
+      ],
+      "conditioning": [
+        "136",
+        0
+      ]
+    },
+    "class_type": "BasicGuider",
+    "_meta": {
+      "title": "Basic Guider"
+    }
+  },
+  "127": {
+    "inputs": {
+      "unet_name": "minimax_h3_hybrid_fl2va_ref2va_b30-49-int8.safetensors",
+      "weight_dtype": "default"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "Load Diffusion Model"
+    }
+  },
+  "128": {
+    "inputs": {
+      "clip_name": "qwen3vl_32b_minimax_h3_int8_convrot.safetensors",
+      "type": "minimax",
+      "device": "default"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "Load CLIP"
+    }
+  },
+  "129": {
+    "inputs": {
+      "noise_seed": 432626635592143
+    },
+    "class_type": "RandomNoise",
+    "_meta": {
+      "title": "RandomNoise"
+    }
+  },
+  "130": {
+    "inputs": {
+      "fps": 24,
+      "bit_depth": 8,
+      "color_space": "sRGB",
+      "codec": "none",
+      "images": [
+        "122",
+        0
+      ],
+      "audio": [
+        "121",
+        0
+      ]
+    },
+    "class_type": "CreateVideo",
+    "_meta": {
+      "title": "Create Video"
+    }
+  },
+  "131": {
+    "inputs": {
+      "expression": "max(5, round(a * 24)) + (5 - (max(5, round(a * 24)) % 17)) % 17",
+      "values.a": [
+        "132",
+        0
+      ]
+    },
+    "class_type": "ComfyMathExpression",
+    "_meta": {
+      "title": "Math Expression"
+    }
+  },
+  "132": {
+    "inputs": {
+      "value": 20
+    },
+    "class_type": "PrimitiveFloat",
+    "_meta": {
+      "title": "Float (Duration)"
+    }
+  },
+  "136": {
+    "inputs": {
+      "prompt": [
+        "138",
+        0
+      ],
+      "width": [
+        "115",
+        0
+      ],
+      "height": [
+        "115",
+        1
+      ],
+      "length": [
+        "131",
+        1
+      ],
+      "ref_image_size": "match",
+      "clip": [
+        "128",
+        0
+      ],
+      "vae": [
+        "119",
+        0
+      ],
+      "audio_vae": [
+        "120",
+        0
+      ],
+      "ref_images.ref_image_0": [
+        "137",
+        0
+      ],
+      "ref_images.ref_image_1": [
+        "148",
+        0
+      ],
+      "ref_images.ref_image_2": [
+        "147",
+        0
+      ]
+    },
+    "class_type": "MiniMaxH3ReferenceToVideo",
+    "_meta": {
+      "title": "MiniMax H3 Reference to Video"
+    }
+  },
+  "137": {
+    "inputs": {
+      "image": "Krea2_turbo_00126_.png"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "138": {
+    "inputs": {
+      "value": "DIRECT CONTINUATION OF THE PREVIOUS SCENE.\n\nCHARACTER REFERENCES:\n\n<Picture 1> = S1, the Asian woman.\n<Picture 2> = S2, the young white man.\n<Picture 3> = S3, the jealous ex-girlfriend.\n\nPreserve exact facial identity, facial structure, hairstyle, apparent age, skin tone, body proportions, clothing, and continuity from every previous scene.\n\nThis begins immediately after S2 says, \"I was afraid you'd leave.\"\n\nS1 is deeply hurt and angry. She decides she cannot continue the argument and leaves the apartment.\n\nS2 desperately tries to explain himself and follows her toward the door, but he does not physically restrain her.\n\nSame damaged living room after the earthquake. Fallen television, tipped lamp, scattered popcorn, spilled drinks, dim nighttime lighting.\n\nOnly close-up, tight close-up, medium close-up, and half-body shots. No wide shots. No full-body shots.\n\nMaximum 60 spoken English words. Keep dialogue sparse and allow silence, movement, facial reactions, and emotion to carry the scene.\n\n[Shot 1 — 00:00–00:05]\n\nTight close-up of S1.\n\nShe absorbs S2's words in silence.\n\nHer eyes are hurt and disappointed.\n\nShe takes a slow breath and looks away.\n\nS2 steps closer into the edge of frame.\n\nS2 says urgently:\n\n<d>[English] S1, please. Let me explain.</d>\n\nS1 shakes her head.\n\nShe quietly answers:\n\n<d>[English] I need to go.</d>\n\nShe turns away from him.\n\nS2 looks devastated.\n\n[Shot 2 — 00:05–00:10]\n\nMedium close-up / half-body tracking shot.\n\nS1 quickly gathers her belongings from the sofa and coffee table.\n\nShe picks up her phone and bag.\n\nS2 follows a few steps behind her.\n\nS2 says:\n\n<d>[English] It wasn't what you think.</d>\n\nS1 stops briefly.\n\nShe turns toward him.\n\nHer expression is deeply frustrated.\n\nS1 says:\n\n<d>[English] Then why didn't you tell me?</d>\n\nS2 struggles to answer.\n\nHe takes a breath.\n\nS2 says:\n\n<d>[English] I should have.</d>\n\nS1 looks away.\n\n[Shot 3 — 00:10–00:15]\n\nTight half-body shot near the apartment doorway.\n\nS1 puts on her jacket.\n\nHer movements are quick and determined.\n\nS2 stands several feet away, visibly anxious.\n\nS2 says:\n\n<d>[English] I was going to tell you.</d>\n\nS1 looks at him.\n\nS1 replies:\n\n<d>[English] When?</d>\n\nSilence.\n\nS2 has no immediate answer.\n\nS1 opens the apartment door.\n\nShe hesitates for the smallest moment, looking back at him.\n\nThen she steps through.\n\nS2 remains inside.\n\n[Shot 4 — 00:15–00:20]\n\nTight cinematic tracking shot following S1 from close behind and then shifting to her face as she moves through the building hallway toward the exit.\n\nS2 follows to the doorway, still trying to explain himself.\n\nS2 calls after her:\n\n<d>[English] Please, wait!</d>\n\nS1 keeps walking.\n\nThe building is dim and quiet after the earthquake. Emergency lights and distant city light enter through the windows.\n\nS1 reaches the building entrance.\n\nShe pauses at the door.\n\nFor a brief moment, she looks back toward S2 in the distance.\n\nTheir eyes meet.\n\nS1 looks heartbroken.\n\nThen she opens the door and leaves.\n\nS2 stops at the doorway, unable to follow immediately.\n\nHe watches the door close.\n\nEnd at 20.00 seconds.\n\nEMOTIONAL PERFORMANCE:\n\nS1 is not simply angry anymore. She feels betrayed and emotionally overwhelmed.\n\nHer decision to leave should feel like a painful choice rather than a dramatic tantrum.\n\nShe avoids looking at S2 because looking at him makes leaving harder.\n\nS2 becomes increasingly desperate as he realizes she is actually leaving.\n\nHe wants to explain himself but cannot find the right words.\n\nHis frustration should turn into fear of losing her.\n\nNeither character screams.\n\nNo physical aggression.\n\nNo grabbing.\n\nNo blocking the doorway.\n\nThe emotional intensity comes from restraint.\n\nFACIAL PERFORMANCE:\n\nS1:\n\nHurt eyes.\n\nTense jaw.\n\nControlled breathing.\n\nBrief moments of vulnerability.\n\nForced composure while putting on her jacket.\n\nA final lingering look toward S2 before leaving.\n\nS2:\n\nAnxious expression.\n\nRegret.\n\nUncertainty.\n\nAttempts to maintain eye contact.\n\nVisible realization that his explanation may have come too late.\n\nCAMERA:\n\nUse intimate handheld cinematic camera language.\n\nShot 1: very tight emotional close-up.\n\nShot 2: restrained half-body tracking as S1 gathers her things.\n\nShot 3: intimate doorway composition.\n\nShot 4: close tracking movement following S1 through the hallway toward the building entrance.\n\nKeep the camera close to S1.\n\nNo wide establishing shots.\n\nNo full-body shots.\n\nNo distant views.\n\nThe camera should gradually feel farther emotionally even while remaining physically close: S1 moves away from S2 while he remains behind.\n\nVISUAL STYLE:\n\nPhotorealistic live action.\n\nPremium Hollywood relationship drama.\n\nNatural skin texture.\n\nHighly consistent facial identity.\n\nRealistic eye movement.\n\nSubtle micro-expressions.\n\nNatural body mechanics.\n\nNatural nighttime lighting.\n\nSoft depth of field.\n\nRealistic apartment and building environment.\n\nSubtle cinematic film grain.\n\nNo soap-opera exaggeration.\n\nNo artificial crying.\n\noverall_soundscape:\n\nQuiet damaged apartment ambience.\n\nSoft footsteps.\n\nClothing and jacket movement.\n\nBag and phone sounds.\n\nDistant sirens following the earthquake.\n\nDoor hinges.\n\nHallway room tone.\n\nS2's voice echoing slightly through the doorway.\n\nThe apartment becomes quieter as S1 moves farther away.\n\nThe building entrance door closes softly at the end.\n\nnon_diegetic_music:\n\nVery restrained emotional piano begins after S1 says, \"I need to go.\"\n\nAdd soft sustained strings as she gathers her belongings.\n\nMusic becomes slightly more emotional while she puts on her jacket.\n\nAs she walks through the hallway, reduce the score and allow footsteps and silence to dominate.\n\nWhen S1 looks back at S2 for the final time, introduce one quiet piano chord.\n\nEnd unresolved as the door closes.\n"
+    },
+    "class_type": "PrimitiveStringMultiline",
+    "_meta": {
+      "title": "Input Text (Prompt)"
+    }
+  },
+  "141": {
+    "inputs": {
+      "switch": [
+        "146",
+        0
+      ],
+      "on_false": [
+        "127",
+        0
+      ],
+      "on_true": [
+        "145",
+        0
+      ]
+    },
+    "class_type": "ComfySwitchNode",
+    "_meta": {
+      "title": "If/Else Switch (model)"
+    }
+  },
+  "142": {
+    "inputs": {
+      "switch": [
+        "146",
+        0
+      ],
+      "on_false": [
+        "143",
+        0
+      ],
+      "on_true": [
+        "144",
+        0
+      ]
+    },
+    "class_type": "ComfySwitchNode",
+    "_meta": {
+      "title": "If/Else Switch (Steps)"
+    }
+  },
+  "143": {
+    "inputs": {
+      "value": 20
+    },
+    "class_type": "PrimitiveInt",
+    "_meta": {
+      "title": "Int (Full)"
+    }
+  },
+  "144": {
+    "inputs": {
+      "value": 6
+    },
+    "class_type": "PrimitiveInt",
+    "_meta": {
+      "title": "Int (Lightning LoRA)"
+    }
+  },
+  "145": {
+    "inputs": {
+      "lora_name": "minimax_h3_turbo_v4_step600_ema_pruned_comfyui.safetensors",
+      "strength_model": 1,
+      "model": [
+        "127",
+        0
+      ]
+    },
+    "class_type": "LoraLoaderModelOnly",
+    "_meta": {
+      "title": "Load LoRA"
+    }
+  },
+  "146": {
+    "inputs": {
+      "value": true
+    },
+    "class_type": "PrimitiveBoolean",
+    "_meta": {
+      "title": "Boolean (Enable Lightning LoRA)"
+    }
+  },
+  "147": {
+    "inputs": {
+      "image": "Krea2_turbo_00130_.png"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "148": {
+    "inputs": {
+      "image": "Krea2_turbo_00128_.png"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "151": {
+    "inputs": {
+      "image": "Krea2_turbo_00122_.png"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  }
+}

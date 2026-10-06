@@ -41,7 +41,7 @@ else
     # Activate the prebuilt venv so `python3` resolves to it (runComfy calls python3).
     # shellcheck disable=SC1091
     source venv/bin/activate
-    # runComfy = python3 main.py --listen 0.0.0.0 --reserve-vram 1 --use-sage-attention --disable-pinned-memory
+    # runComfy = python3 main.py --listen 0.0.0.0 --reserve-vram 0.5 --use-sage-attention
     # shellcheck disable=SC1091
     source runComfy
   ) &

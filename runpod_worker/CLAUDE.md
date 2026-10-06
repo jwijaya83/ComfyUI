@@ -103,6 +103,20 @@ how the queue path is smoke-tested on a box with no GPU.
   Set **`GCS_PREFIX=""`** when replacing render-worker: that service wrote at the bucket
   root, and the default `renders/` prefix would split one bucket across two layouts.
 - `reporter.py` — `POST {CHAT_API_INTERNAL_URL}/internal/render-events` (x-internal-token).
+  Every TERMINAL report (`completed` and `failed`) also carries the cost fields
+  ai-chat's render-plane prices the render from (docs/UnitEconomicsDesign.md):
+  `gpuSeconds` (render time summed across every attempt — a failed attempt billed the GPU
+  too), `coldStart` (the first render in this process pays the model load; the mock never
+  does), and `gpuType` / `gpuPool` from `GPU_TYPE` / `GPU_POOL` (`GPU_POOL` defaults to
+  `serverless_flex` under `QUEUE_DRIVER=runpod`). The $/hour rates live in render-plane
+  (`GPU_RATES_JSON`), so a price change never needs a worker redeploy. Omitted fields are
+  NULL there, never an error.
+- `bench/batch_bench.py` — NOT product code: the render-batching experiment harness
+  (ai-chat docs/RenderBatchingDesign.md, Stage 1). Times a graph end to end, samples VRAM +
+  GPU util with nvidia-smi and saves every output for a blind side-by-side. E0/E4 build
+  batch 1 from `workflows/`; E1–E3 take a hand-built batched API graph (`--graph`, `--items`).
+  Results append to `bench/results.jsonl`. Run on the GPU you'd buy (a 5090), nothing else
+  on the card. Build the micro-batcher only if E2 batch-2 clears 1.4× clips/GPU-second.
 - `fetch_models.py` + `models_manifest.json` — the boot-time model resolver (below).
 
 ## Model strategy (baked vs fetched)
@@ -169,8 +183,8 @@ The venv is built at `/opt/venv` and symlinked to `$COMFY_DIR/venv`, so `COMFY_D
 free to change (it defaults to `/opt/ComfyUI`). The old constraint — that the tree had to
 land at the host's absolute path because the copied venv hardcoded it — is gone.
 
-For local testing use `docker-compose.test.yml`, which bind-mounts `models/` instead of
-baking it; see the ComfyUI-only `comfy` service.
+For local testing use ai-chat's `docker-compose.yml` `comfy-worker` service (below), which
+bind-mounts `models/` instead of baking it and defaults `FETCH_MODELS=0` accordingly.
 
 **Normally you don't build it by hand:** ai-chat's `docker-compose.yml` has a
 `comfy-worker` service whose build context IS this checkout (`COMFY_DIR`, default
@@ -204,6 +218,10 @@ Smoke-test the whole path with no GPU by adding `-e MOCK_COMFY=1` (ffmpeg render
 MP4 and ComfyUI never boots).
 
 ## Gotchas / open items
+
+- **A remote (RunPod) endpoint's `INTERNAL_TOKEN` is render-plane's `WORKER_TOKEN`**, and
+  its `CHAT_API_INTERNAL_URL` is `https://<WORKER_DOMAIN>` — the hostname where Caddy exposes
+  only the worker routes (ai-chat `docs/runbooks/runpod.md`). RunPod retries stay OFF.
 
 - **A blocking `XREADGROUP` needs `socket_timeout` > `BLOCK`.** redis-py applies its own
   default (5s in 8.x), which exactly races the default `RENDER_BLOCK_MS=5000`: every idle
