@@ -1,7 +1,9 @@
 """Persist a finished render and return the value chat-api stores in
 render_jobs.output_url. Python port of render-worker/src/storage.js — same two
 delivery paths, but GCS is tried FIRST and local disk is a true fallback, not a
-redundant write on every render:
+redundant write on every render. The file keeps the type ComfyUI wrote (an LTX .mp4, a
+Krea 2 .png, Music 3's .flac): a picture goes to the image-response bucket, anything else
+to the response bucket.
 
   1. GCS    — when a response bucket + credentials are configured, upload and return
      the DURABLE `gs://bucket/object` ref. chat-api signs a fresh short-lived read url
@@ -16,6 +18,7 @@ redundant write on every render:
 A worker with NEITHER configured cannot deliver its output at all, so we raise rather
 than report a `completed` job whose url nobody can fetch.
 """
+import mimetypes
 import os
 
 import gcs
@@ -26,7 +29,7 @@ def describe():
     """Human-readable delivery target for the boot log."""
     bucket = gcs.response_bucket()
     if gcs.enabled(bucket):
-        target = f"gcs gs://{bucket}"
+        target = f"gcs gs://{bucket} (pictures gs://{gcs.image_response_bucket()})"
         if MEDIA_DIR:
             target += f" (falls back to local {MEDIA_DIR} -> {PUBLIC_BASE}/media on upload failure)"
         return target
@@ -42,11 +45,12 @@ def _save_local(data, filename):
     return f"{PUBLIC_BASE}/media/{filename}"
 
 
-def save_video(data, filename):
-    bucket = gcs.response_bucket()
+def save_output(data, filename):
+    content_type = mimetypes.guess_type(filename)[0] or "application/octet-stream"
+    bucket = gcs.image_response_bucket() if content_type.startswith("image/") else gcs.response_bucket()
     if gcs.enabled(bucket):
         try:
-            gs_uri = gcs.upload_video(data, filename, bucket=bucket)
+            gs_uri = gcs.upload_video(data, filename, content_type=content_type, bucket=bucket)
             print(f"⬆ {filename} -> {gs_uri}", flush=True)
             return gs_uri
         except Exception as e:  # noqa: BLE001 - a storage hiccup must not fail a good render

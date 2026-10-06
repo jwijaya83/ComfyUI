@@ -132,6 +132,7 @@ drop-in replacement for that service's compose environment block.
 | `RUNPOD_SECRET_gcs_api_key` *or* `GCS_SA_KEY_JSON` | **the only GCS var you must set.** SA key JSON pasted inline (V4 signing needs the SA key). RunPod exposes the `gcs_api_key` secret to the worker under `RUNPOD_SECRET_gcs_api_key` automatically. |
 | `GCS_KEY_FILE` *or* `GOOGLE_APPLICATION_CREDENTIALS` | alternative to the above: path to an SA key file (used for local testing) |
 | `GCS_BUCKET` (or `GCS_BUCKET_RESPONSE`) | response bucket — per-turn renders (**default `video-response`**) |
+| `GCS_BUCKET_IMAGE_RESPONSE` | where a finished picture (a Krea 2 job) goes (**default `image-response`**) |
 | `GCS_SEED_BUCKET` (or `GCS_BUCKET_SEED`) | seed-video bucket (**default `video-seed`**); unset → falls back to `GCS_BUCKET` |
 | `GCS_PREFIX` | object prefix (default `renders`). **Set it EMPTY when replacing render-worker** — that service wrote at the bucket root, and a prefix would split one bucket across two layouts |
 | `GCS_SIGN` | `1` (default) — signs the local `selftest` probe url; does **not** affect delivery (renders always return a durable `gs://` ref chat-api signs on read) |

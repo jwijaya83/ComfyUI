@@ -53,7 +53,7 @@ how the queue path is smoke-tested on a box with no GPU.
 ## Module map
 
 - `handler.py` — the shared render path: `_resolve_assets` → `build_workflow` → submit →
-  `storage.save_video` → report, with `JOB_MAX_ATTEMPTS` retries. **Never raises**: on
+  `storage.save_output` → report, with `JOB_MAX_ATTEMPTS` retries. **Never raises**: on
   exhaustion it reports `failed` and returns, so an intake can ACK unconditionally.
   `main()` dispatches on `QUEUE_DRIVER`; `handler(event)` is the RunPod entry point.
 - `config.py` — every knob, with **the same env names render-worker used**, so this image
@@ -66,13 +66,17 @@ how the queue path is smoke-tested on a box with no GPU.
   instance (every container is PID 1, so pid alone collides).
 - `http_server.py` — `GET /health` (the compose healthcheck, always up on every intake)
   and the `QUEUE_DRIVER=http` `POST /render` intake.
-- `storage.py` — `save_video()` (port of `storage.js`): uploads to the GCS response
-  bucket FIRST when configured, returning the **durable `gs://` ref** chat-api signs on
+- `storage.py` — `save_output()` (port of `storage.js`): the file keeps the type ComfyUI
+  wrote, as `chat_<jobId>.<ext>` (`handler._pick_output` takes the job's `kind` of output by
+  its filename's media type — ComfyUI files a `SaveVideo` under `"images"`, so the key can't
+  tell). A picture goes to `GCS_BUCKET_IMAGE_RESPONSE` (`image-response`), anything else to
+  the response bucket. It uploads to the GCS bucket FIRST when configured, returning the **durable `gs://` ref** chat-api signs on
   read; `MEDIA_DIR` (a volume shared with chat-api, which re-serves it at `/media`) is
   only used when GCS isn't configured, or as the fallback if a configured upload fails —
   never a redundant second write on a successful GCS upload. A remote worker shares no
   volume, so GCS is its only real delivery path there regardless.
-- `mock.py` — `MOCK_COMFY=1`: a real playable MP4 from ffmpeg, no GPU (port of `mock.js`).
+- `mock.py` — `MOCK_COMFY=1`: a real playable file from ffmpeg, no GPU (port of `mock.js`):
+  an MP4, a PNG for a job of `kind: "image"`, a short FLAC tone for `kind: "audio"`.
 - `gpu_lease.py` — the cross-service Redis mutex + Ollama eviction (port of `gpuLease.js`
   + `freeOllama.js`), for a single-GPU box where ComfyUI shares the card with ai-chat's
   llm-worker. Off by default; on RunPod the GPU is ours alone. **Keep in sync with the
@@ -93,8 +97,9 @@ how the queue path is smoke-tested on a box with no GPU.
   non-retriable (deliberate) cancel. Env mirrors render-worker: `COMFY_POLL_MS` (5000),
   `COMFY_UNREACHABLE_TRIES` (3), `COMFY_WATCH_TIMEOUT_MS` (30m), `COMFY_POLL_TIMEOUT_MS` (8s).
 - `gcs.py` — upload the MP4; returns the **durable `gs://` ref** (never expires — chat-api signs a fresh short-lived read url from it on every read, mirroring render-worker/storage.js; `GCS_SIGN` now gates only the local `selftest` round-trip). Two buckets:
-  `GCS_BUCKET` (`video-response`, per-turn) and `GCS_SEED_BUCKET` (`video-seed`, seed
-  clips) — each also accepts ai-chat's spelling (`GCS_BUCKET_RESPONSE` /
+  `GCS_BUCKET` (`video-response`, per-turn), `GCS_BUCKET_IMAGE_RESPONSE` (`image-response`,
+  finished pictures) and `GCS_SEED_BUCKET` (`video-seed`, seed clips) — the first and last
+  each also accept ai-chat's spelling (`GCS_BUCKET_RESPONSE` /
   `GCS_BUCKET_SEED`) so one env vocabulary drives every service. Creds resolve
   `GOOGLE_APPLICATION_CREDENTIALS`/`GCS_KEY_FILE` (paths) →
   inline JSON in `GCS_SA_KEY_JSON`/`RUNPOD_SECRET_gcs_api_key` (RunPod injects the

@@ -1,4 +1,4 @@
-"""The render worker: one fully-resolved job -> an MP4 -> a status report.
+"""The render worker: one fully-resolved job -> a file (an MP4, a picture, a track) -> a status report.
 
 This is the Python port of ai-chat/services/render-worker (render.js processJob +
 server.js), bundled in the same container as the ComfyUI it drives. It is STATELESS —
@@ -17,6 +17,7 @@ All three call process_job(), and all three report progress/terminal status to c
 /internal/render-events webhook — chat-api's render_jobs row stays the source of truth,
 never the queue.
 """
+import mimetypes
 import os
 import sys
 import threading
@@ -148,10 +149,19 @@ def _render_comfy(job, on_progress):
 
     watch_prompt(client_id, prompt_id, on_event=on_event)
     outputs = collect_outputs(get_history(prompt_id))
-    file = next((o for o in outputs if o.get("kind") == "videos"), outputs[0] if outputs else None)
+    file = _pick_output(outputs, job.get("kind"))
     if not file:
         raise RuntimeError("ComfyUI produced no outputs")
-    return download_output(file)
+    return download_output(file), file.get("filename") or ""
+
+
+def _pick_output(outputs, kind):
+    """The file this job made: the first output of its kind (an `image` or `audio` job,
+    else a video), by the media type of its filename. ComfyUI files a SaveVideo under
+    "images", so the output's key can't tell. Falls back to the first output, as before."""
+    want = (kind if kind in ("image", "audio") else "video") + "/"
+    media = lambda o: mimetypes.guess_type(o.get("filename") or "")[0] or ""  # noqa: E731
+    return next((o for o in outputs if media(o).startswith(want)), outputs[0] if outputs else None)
 
 
 def _render(job, on_progress):
@@ -232,14 +242,16 @@ def process_job(job, rp_event=None):
         try:
             started = time.monotonic()
             try:
-                buffer = _render(job, on_progress)
+                buffer, produced = _render(job, on_progress)
             finally:
                 gpu_seconds += time.monotonic() - started
-            # One naming scheme for every intake, matching render-worker/storage.js:
-            # chat_<jobId>.mp4 in the RESPONSE bucket. chat-api owns what happens next —
+            # One naming scheme for every intake: chat_<jobId> plus the extension of the
+            # file ComfyUI wrote (.mp4, a Krea 2 .png, Music 3's .flac), in the response
+            # bucket, or image-response for a picture. chat-api owns what happens next —
             # for an admin seed render it server-side-copies the object into video-seed
             # and reclaims this one (seedService.mirrorCompletedSeedRender).
-            output_url = storage.save_video(buffer, f"chat_{job_id}.mp4")
+            ext = os.path.splitext(produced)[1].lower() or ".mp4"
+            output_url = storage.save_output(buffer, f"chat_{job_id}{ext}")
             report({
                 "jobId": job_id, "status": "completed", "outputUrl": output_url,
                 **_cost_fields(gpu_seconds, cold_start),

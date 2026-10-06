@@ -154,7 +154,7 @@ def collect_outputs(history_entry):
         return []
     files = []
     for node_output in history_entry["outputs"].values():
-        for key in ("videos", "gifs", "images"):
+        for key in ("videos", "gifs", "images", "audio"):
             for f in node_output.get(key, []) or []:
                 files.append({**f, "kind": key})
     return files
