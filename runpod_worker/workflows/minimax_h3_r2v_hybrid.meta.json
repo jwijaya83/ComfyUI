@@ -1,0 +1,10 @@
+{
+  "positivePromptNode": "138",
+  "durationNode": "132",
+  "widthNode": "136",
+  "heightNode": "136",
+  "seedNodes": ["129"],
+  "saveVideoNode": "92",
+  "refImageNode": "136",
+  "refImageLoaders": ["137", "148", "147", "151", "152", "153", "154", "155", "156"]
+}

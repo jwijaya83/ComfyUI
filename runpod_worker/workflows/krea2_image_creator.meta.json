@@ -1,0 +1,7 @@
+{
+  "positivePromptNode": "70",
+  "loraNode": "57",
+  "widthNode": "51",
+  "heightNode": "51",
+  "seedNodes": ["52"]
+}

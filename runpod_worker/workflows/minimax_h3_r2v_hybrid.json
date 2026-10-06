@@ -5,6 +5,7 @@
       "format": "auto",
       "format.codec": "auto",
       "codec": "auto",
+      "video-preview": "",
       "video": [
         "130",
         0
@@ -18,7 +19,7 @@
   "115": {
     "inputs": {
       "aspect_ratio": "3:4 (Portrait Standard)",
-      "megapixels": 0.4,
+      "megapixels": 0.3,
       "multiple": 32
     },
     "class_type": "ResolutionSelector",
@@ -170,7 +171,7 @@
   },
   "129": {
     "inputs": {
-      "noise_seed": 432626635592143
+      "noise_seed": 170205015578093
     },
     "class_type": "RandomNoise",
     "_meta": {
@@ -387,7 +388,52 @@
   },
   "151": {
     "inputs": {
-      "image": "Krea2_turbo_00122_.png"
+      "image": "person.jpg"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "152": {
+    "inputs": {
+      "image": "person.jpg"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "153": {
+    "inputs": {
+      "image": "person.jpg"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "154": {
+    "inputs": {
+      "image": "person.jpg"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "155": {
+    "inputs": {
+      "image": "person.jpg"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "156": {
+    "inputs": {
+      "image": "person.jpg"
     },
     "class_type": "LoadImage",
     "_meta": {
