@@ -156,12 +156,18 @@ how the queue path is smoke-tested on a box with no GPU.
 - **The SCENE POOL has a manifest of its own** (ai-chat v1.1.1): `models_manifest.scene.json`,
   the files `krea2_image_creator` loads — Krea 2 Turbo int8, its Qwen3-VL 4B text encoder and
   VAE from the public `Comfy-Org/Krea-2` repo, and the realism LoRA + her Krea 2 LoRA from
-  `jwijaya17/aichat` (MiniMax H3 and Music 3 join it in later milestones). Same image; a
-  scene-pool worker runs with `MODELS_MANIFEST=/opt/ComfyUI/runpod_worker/models_manifest.scene.json`
+  `jwijaya17/aichat` — and the files `minimax_h3_r2v_hybrid` loads (~52 GB): H3's Qwen3-VL
+  32B text encoder and both VAEs from `Comfy-Org/MiniMax-H3`, plus two community files, the
+  hybrid fl2va/ref2va checkpoint (`smhfacct/Minimax-H3-fl2va-ref2va-hybrid-models`) and the
+  turbo LoRA (`drbaph/MiniMax-H3-Turbo-Lora-ComfyUI`); mirror those two into
+  `jwijaya17/aichat` if the endpoint shouldn't depend on someone else's repo. Music 3 joins
+  it later. Same image; a scene-pool worker runs with
+  `MODELS_MANIFEST=/opt/ComfyUI/runpod_worker/models_manifest.scene.json`
   (a FULL path: `fetch_models.py` opens it as given) and `RENDER_LANES=scene-high,scene-low`.
-  A RunPod scene endpoint's Model Caching then lists `Comfy-Org/Krea-2` as well as
-  `jwijaya17/aichat`. The LTX pool keeps `models_manifest.json` and never runs Krea 2; one
-  dev GPU can drain all four lanes with both manifests merged, and pays for the model swaps.
+  A RunPod scene endpoint's Model Caching then lists every repo the manifest names. The LTX
+  pool keeps `models_manifest.json` and never runs Krea 2 or H3; one dev GPU can drain all
+  four lanes with both manifests merged, and pays for the model swaps. On the RTX 4080
+  (16 GB) a 6 s, two-picture H3 scene took 103 s with the model loads and 68 s warm.
 - **Scope = the per-turn render path only** (`basic_workflow` / `latent_injection`). The
   admin **seed-video** workflow (`seed_workflow.json`) was removed in the LTX 2.5 update —
   seeding, if it comes back, isn't runnable in this image today.
