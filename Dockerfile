@@ -51,6 +51,12 @@ COPY requirements.txt install.sh ./
 COPY custom_nodes/ ./custom_nodes/
 COPY SageAttention/ ./SageAttention/
 
+# setup.py hands every -gencode to every extension, so a multi-arch list like
+# "8.9;9.0" compiles the Hopper-only sm90 kernel (wgmma/TMA) for sm_89 too, and ptxas
+# rejects it. Give that one extension just sm_90a.
+RUN sed -i '/_qattn_sm90/,/extra_link_args/ s#"nvcc": NVCC_FLAGS#"nvcc": [f for f in NVCC_FLAGS if f != "-gencode" and not f.startswith("arch=")] + ["-gencode", "arch=compute_90a,code=sm_90a"]#' SageAttention/setup.py \
+    && grep -q 'code=sm_90a' SageAttention/setup.py
+
 # The pip cache lives in a BuildKit cache mount, not in the layer, so repeat
 # builds skip re-downloading ~5 GB of wheels without inflating the image.
 RUN --mount=type=cache,target=/root/.cache/pip \
