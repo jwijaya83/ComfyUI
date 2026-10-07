@@ -120,9 +120,24 @@ def _resolve_assets(job):
     return reference_image, source_video, use_ref
 
 
+def _upload_ref_images(job):
+    """A scene's pictures (H3 ref2va, ai-chat v1.1.1): `refImages: [{ url, name }]`, each
+    downloaded (a signed GCS url or a render-plane token url) and uploaded under its own name,
+    in order. The order is the prompt's <Picture N> numbering. Returns the uploaded names."""
+    names = [
+        upload_image(_download(ref["url"]), filename=os.path.basename(str(ref["name"])))
+        for ref in job.get("refImages") or []
+    ]
+    if names:
+        print(f"↺ job {job.get('jobId')} has {len(names)} reference picture(s): {', '.join(names)}", flush=True)
+    return names
+
+
 def _render_comfy(job, on_progress):
     job_id = job.get("jobId")
-    reference_image, source_video, use_ref = _resolve_assets(job)
+    # A job with reference pictures takes them INSTEAD of the one conditioning input.
+    ref_images = _upload_ref_images(job)
+    reference_image, source_video, use_ref = (None, None, False) if ref_images else _resolve_assets(job)
 
     workflow = build_workflow(
         name=job["workflow"],
@@ -138,6 +153,7 @@ def _render_comfy(job, on_progress):
         source_seconds=(float(job["sourceSeconds"]) if job.get("sourceSeconds") else None),
         lora_strength=job.get("loraStrength"),
         seed=job.get("seed"),
+        ref_images=ref_images,
     )
 
     prompt_id, client_id = submit_prompt(workflow)

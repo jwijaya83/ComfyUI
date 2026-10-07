@@ -88,7 +88,13 @@ how the queue path is smoke-tested on a box with no GPU.
   `loraStrength` goes into the `loraNode`'s `strength_model` (Krea 2 switches her LoRA per
   picture); and the job's `seed`, ONLY when it sends one, into every `seedNodes` node — a
   job without one keeps the template's fixed seed (only a picture drawn again after a
-  rejection sends one). `python workflow_builder.py` runs its assert self-check.
+  rejection sends one). A scene's pictures (`refImages: [{ url, name }]` on the job,
+  downloaded and uploaded in order by `handler._upload_ref_images`, INSTEAD of the one
+  conditioning input) are wired through `refImageNode` + `refImageLoaders`: for N pictures,
+  `ref_images.ref_image_0…N-1` point at the first N loaders, every other `ref_image_*` key
+  is removed, and the leftover loaders are dropped from the graph (ComfyUI would otherwise
+  look for the export's test pictures they name). Their order is the prompt's
+  `<Picture N>` numbering. `python workflow_builder.py` runs its assert self-check.
 - `comfy_client.py` — submit + poll ComfyUI over `127.0.0.1:8188`. `watch_prompt()`
   **actively monitors** the render (mirrors render-worker's `comfyui.js`): the WS gives
   fast progress + fast terminal signals (`executing`→null / `execution_success` = done;

@@ -2,8 +2,8 @@
 
 A faithful Python port of the render-worker's workflowLoader.js: load
 `workflows/<name>.json`, patch the nodes the meta sidecar names (prompt, lora,
-frame count, length in seconds, source video, reference image, save prefix), return the
-graph. The SEED NODES keep the template's fixed seed, so a tested graph renders the way
+frame count, length in seconds, source video, reference image, a scene's reference
+pictures, save prefix), return the graph. The SEED NODES keep the template's fixed seed, so a tested graph renders the way
 it was tested — unless the job sends a `seed`. Only one job does: a Krea 2 picture drawn
 again after the vision check rejected it, because the same seed and prompt would draw the
 same picture. Each turn's `positive` prompt differs, so ComfyUI's input-hash cache never
@@ -58,6 +58,7 @@ def build_workflow(
     source_seconds=None,
     lora_strength=None,
     seed=None,
+    ref_images=None,
 ):
     safe = _safe_name(name)
     with open(os.path.join(WORKFLOWS_DIR, f"{safe}.json")) as f:
@@ -157,6 +158,24 @@ def build_workflow(
         max_skip = max(0, total_seed_frames - load_cap)
         loader["inputs"]["skip_first_frames"] = random.randint(0, max_skip) if max_skip > 0 else 0
 
+    # A scene's pictures (H3 ref2va, ai-chat v1.1.1): the reference node's
+    # ref_images.ref_image_0…N-1 point at the first N loaders, in order, each loader set to
+    # its uploaded picture, and every other ref_image key is removed. The order is the
+    # prompt's <Picture N> numbering. The loaders left over are dropped: nothing reads them,
+    # but ComfyUI would still look for the export's test pictures they name.
+    refs_node, loaders = meta.get("refImageNode"), meta.get("refImageLoaders") or []
+    if ref_images and refs_node in workflow:
+        if len(ref_images) > len(loaders):
+            raise ValueError(f"Workflow '{safe}' takes at most {len(loaders)} reference pictures, not {len(ref_images)}.")
+        inputs = workflow[refs_node]["inputs"]
+        for key in [k for k in inputs if k.startswith("ref_images.ref_image_")]:
+            del inputs[key]
+        for i, image in enumerate(ref_images):
+            inputs[f"ref_images.ref_image_{i}"] = [loaders[i], 0]
+            workflow[loaders[i]]["inputs"]["image"] = image
+        for unused in loaders[len(ref_images):]:
+            workflow.pop(unused, None)
+
     save_node = meta.get("saveVideoNode")
     if filename_prefix and save_node and save_node in workflow:
         workflow[save_node]["inputs"]["filename_prefix"] = filename_prefix
@@ -182,6 +201,17 @@ if __name__ == "__main__":
     krea7 = build_workflow(name="krea2_image_creator", prompt="K", seed=7)
     assert krea7["52"]["inputs"]["seed"] == 7
     assert krea7["57"]["inputs"]["strength_model"] == krea_t["57"]["inputs"]["strength_model"]
+
+    # W2: two pictures wire exactly the first two loaders, in order; a job with none keeps the export's.
+    h3r = build_workflow(name="minimax_h3_r2v_hybrid", prompt="P", ref_images=["sheet.png", "place.png"])
+    refs = {k: v for k, v in h3r["136"]["inputs"].items() if k.startswith("ref_images.")}
+    assert refs == {"ref_images.ref_image_0": ["137", 0], "ref_images.ref_image_1": ["148", 0]}, refs
+    assert (h3r["137"]["inputs"]["image"], h3r["148"]["inputs"]["image"]) == ("sheet.png", "place.png")
+    dropped = set(h3_t) - set(h3r)
+    assert dropped == {"147", "151", "152", "153", "154", "155", "156"}, dropped
+    assert not any(isinstance(v, list) and v and v[0] in dropped for n in h3r.values() for v in n["inputs"].values()), \
+        "nothing points at a dropped loader"
+    assert h3["136"] == h3_t["136"], "no pictures: the template's own wiring"
 
     # basic_workflow exactly as before: only the nodes a job has always patched change.
     ltx, ltx_t = build_workflow(
