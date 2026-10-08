@@ -6,8 +6,10 @@ __pycache__/
 /models/
 /realtime/
 /temp/
-/custom_nodes/
+/custom_nodes/*
 !custom_nodes/example_node.py.example
+# ai-chat's own node pack (refmods for MiniMax H3); the image copies custom_nodes/ whole.
+!custom_nodes/aichat_refmod/
 extra_model_paths.yaml
 /.vs
 .vscode/

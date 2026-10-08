@@ -60,18 +60,21 @@ def build_workflow(
     seed=None,
     ref_images=None,
     ref_videos=None,
+    refmods=None,
 ):
     safe = _safe_name(name)
     with open(os.path.join(WORKFLOWS_DIR, f"{safe}.json")) as f:
         workflow = json.load(f)
     meta = _load_meta(safe)
 
+    # Every template but the refmod one (which encodes a video, and has no prompt) names one.
     pos = meta.get("positivePromptNode")
-    if pos not in workflow:
-        raise ValueError(f"Workflow '{safe}' has no positive-prompt node '{pos}'.")
-    # A CLIPTextEncode takes `text`; a primitive text box (H3's node 138) takes `value`.
-    pos_inputs = workflow[pos]["inputs"]
-    pos_inputs["text" if "text" in pos_inputs else "value"] = prompt
+    if pos:
+        if pos not in workflow:
+            raise ValueError(f"Workflow '{safe}' has no positive-prompt node '{pos}'.")
+        # A CLIPTextEncode takes `text`; a primitive text box (H3's node 138) takes `value`.
+        pos_inputs = workflow[pos]["inputs"]
+        pos_inputs["text" if "text" in pos_inputs else "value"] = prompt
 
     # Latent injection: point the VHS_LoadVideo node at the uploaded seed clip. Only
     # workflows whose meta declares a sourceVideoNode have one.
@@ -197,6 +200,29 @@ def build_workflow(
         for unused in vloaders[len(videos):]:
             workflow.pop(unused, None)
 
+    # REFMODS (ai-chat milestone D): a reference video's latents, encoded once, which
+    # MiniMaxH3RefmodVAE (custom_nodes/aichat_refmod) returns instead of encoding the video again.
+    # A refmod is keyed on the VAE that made it, by file name, so every `refmodNodes` node takes
+    # its names from the loaders it is wired to: a template whose VAE changes can never match a
+    # stale one. A job with no refmods has the pass-through taken out, so its graph is the one it
+    # always was (and needs no node pack).
+    for node_id in [n for n in meta.get("refmodNodes") or [] if n in workflow]:
+        inputs = workflow[node_id]["inputs"]
+        for k in ("vae", "audio_vae"):
+            src = inputs.get(k)
+            if isinstance(src, list) and src[0] in workflow:
+                inputs[f"{k}_name"] = workflow[src[0]]["inputs"].get("vae_name", "")
+        if workflow[node_id]["class_type"] != "MiniMaxH3RefmodVAE":
+            continue
+        if refmods:
+            inputs["refmods"] = "\n".join(refmods)
+            continue
+        for other in workflow.values():
+            for key, value in other["inputs"].items():
+                if value == [node_id, 0]:
+                    other["inputs"][key] = inputs["vae"]
+        del workflow[node_id]
+
     save_node = meta.get("saveVideoNode")
     if filename_prefix and save_node and save_node in workflow:
         workflow[save_node]["inputs"]["filename_prefix"] = filename_prefix
@@ -229,10 +255,15 @@ if __name__ == "__main__":
     assert refs == {"ref_images.ref_image_0": ["137", 0], "ref_images.ref_image_1": ["148", 0]}, refs
     assert (h3r["137"]["inputs"]["image"], h3r["148"]["inputs"]["image"]) == ("sheet.png", "place.png")
     dropped = set(h3_t) - set(h3r)
-    assert dropped == {"147", "151", "152", "153", "154", "155", "156", "157", "158", "159"}, dropped
+    assert dropped == {"147", "151", "152", "153", "154", "155", "156", "157", "158", "159", "160", "161"}, dropped
     assert not any(isinstance(v, list) and v and v[0] in dropped for n in h3r.values() for v in n["inputs"].values()), \
         "nothing points at a dropped loader"
-    assert h3["136"] == h3_t["136"], "no pictures: the template's own wiring"
+    vaes = ("vae", "audio_vae")
+    assert {k: v for k, v in h3["136"]["inputs"].items() if k not in vaes} == {k: v for k, v in h3_t["136"]["inputs"].items() if k not in vaes}, \
+        "no pictures: the template's own wiring"
+    # W6: no refmods, no pass-through: the H3 node reads the loaders directly, as it always did.
+    assert (h3["136"]["inputs"]["vae"], h3["136"]["inputs"]["audio_vae"]) == (["119", 0], ["120", 0])
+    assert "160" not in h3 and "161" not in h3
 
     # W5: one picture and one video leave exactly ref_image_0, ref_video_0 and ref_video_audio_0
     # on node 136, and no other loader.
@@ -247,6 +278,20 @@ if __name__ == "__main__":
     assert (h3v["157"]["inputs"]["force_rate"], h3v["157"]["inputs"]["frame_load_cap"]) == (24, 124)
     loaders = {n for n, v in h3v.items() if v["class_type"] in ("LoadImage", "VHS_LoadVideo")}
     assert loaders == {"137", "157"}, loaders
+
+    # W6: with refmods, both pass-throughs stand in front of the H3 node, with the job's files
+    # and the VAE names of the loaders they are wired to.
+    h3m = build_workflow(name="minimax_h3_r2v_hybrid", prompt="P", ref_images=["s.png"], ref_videos=["v.mp4"], refmods=["a.safetensors", "b.safetensors"])
+    assert (h3m["136"]["inputs"]["vae"], h3m["136"]["inputs"]["audio_vae"]) == (["160", 0], ["161", 0])
+    assert h3m["160"]["inputs"]["refmods"] == "a.safetensors\nb.safetensors"
+    assert h3m["160"]["inputs"]["vae_name"] == h3_t["119"]["inputs"]["vae_name"]
+    assert h3m["161"]["inputs"]["vae_name"] == h3_t["120"]["inputs"]["vae_name"]
+    # The refmod template: no prompt, the reference video into its loader, the VAE names copied.
+    rm, rm_t = build_workflow(name="minimax_h3_refmod", prompt=None, source_video="ref.mp4"), template("minimax_h3_refmod")
+    assert rm["3"]["inputs"]["video"] == "ref.mp4"
+    assert (rm["4"]["inputs"]["vae_name"], rm["4"]["inputs"]["audio_vae_name"]) == (h3_t["119"]["inputs"]["vae_name"], h3_t["120"]["inputs"]["vae_name"])
+    assert {k: v for k, v in rm["3"]["inputs"].items() if k != "video"} == {k: v for k, v in h3_t["157"]["inputs"].items() if k != "video"}, \
+        "the refmod's video is loaded exactly as a scene loads it, or its hash never matches"
 
     # basic_workflow exactly as before: only the nodes a job has always patched change.
     ltx, ltx_t = build_workflow(

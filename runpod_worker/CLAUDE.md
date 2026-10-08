@@ -69,14 +69,17 @@ how the queue path is smoke-tested on a box with no GPU.
 - `storage.py` — `save_output()` (port of `storage.js`): the file keeps the type ComfyUI
   wrote, as `chat_<jobId>.<ext>` (`handler._pick_output` takes the job's `kind` of output by
   its filename's media type — ComfyUI files a `SaveVideo` under `"images"`, so the key can't
-  tell). A picture goes to `GCS_BUCKET_IMAGE_RESPONSE` (`image-response`), anything else to
+  tell). A picture goes to `GCS_BUCKET_IMAGE_RESPONSE` (`image-response`), a refmod (a
+  `.safetensors`, ai-chat milestone D) to `GCS_BUCKET_REFMOD` (`refmod`), anything else to
   the response bucket. It uploads to the GCS bucket FIRST when configured, returning the **durable `gs://` ref** chat-api signs on
   read; `MEDIA_DIR` (a volume shared with chat-api, which re-serves it at `/media`) is
   only used when GCS isn't configured, or as the fallback if a configured upload fails —
   never a redundant second write on a successful GCS upload. A remote worker shares no
   volume, so GCS is its only real delivery path there regardless.
 - `mock.py` — `MOCK_COMFY=1`: a real playable file from ffmpeg, no GPU (port of `mock.js`):
-  an MP4, a PNG for a job of `kind: "image"`, a short FLAC tone for `kind: "audio"`.
+  an MP4, a PNG for a job of `kind: "image"`, a short FLAC tone for `kind: "audio"`, and a
+  stub `.safetensors` for `kind: "latent"` (a refmod; it reads as no refmod, so a scene given
+  it just misses).
 - `gpu_lease.py` — the cross-service Redis mutex + Ollama eviction (port of `gpuLease.js`
   + `freeOllama.js`), for a single-GPU box where ComfyUI shares the card with ai-chat's
   llm-worker. Off by default; on RunPod the GPU is ours alone. **Keep in sync with the
@@ -99,7 +102,19 @@ how the queue path is smoke-tested on a box with no GPU.
   `VHS_LoadVideo`, 24 fps, capped at 124 frames, so H3 never cuts one): video i's frames on
   `ref_videos.ref_video_i` and its soundtrack on `ref_video_audios.ref_video_audio_i` of the
   same node; unused video loaders are dropped, all three on a job with none. Their order is the
-  prompt's `<Video k>`. `python workflow_builder.py` runs its assert self-check.
+  prompt's `<Video k>`. REFMODS (ai-chat milestone D, `custom_nodes/aichat_refmod` in this
+  checkout): a reference video's latents, encoded once by the `minimax_h3_refmod` template
+  (a `kind: "latent"` job whose `sourceVideoUrl` is the video; `MiniMaxH3EncodeRefmod`
+  prepares it exactly as the H3 node does and writes the `.safetensors`), and given back to a
+  scene as `refmods: [{ url, name }]`, uploaded like its pictures. In the H3 template a
+  `MiniMaxH3RefmodVAE` stands in front of each of node 136's VAEs (`refmodNodes`): its encode
+  returns a stored latent when the tensor's sha256 and the VAE's file name match, logging
+  `[refmod] hit`, and encodes as before otherwise. The builder fills every `refmodNodes`
+  node's VAE names from the loaders it is wired to, so a changed VAE can't match a stale
+  refmod, and takes the pass-through out of a job with no refmods, so its graph is unchanged.
+  A template with no prompt (the refmod one) leaves out `positivePromptNode`.
+  `python workflow_builder.py` runs its assert self-check, and the node pack's own
+  `__init__.py` one with a stub VAE (in ComfyUI's venv).
 - `comfy_client.py` — submit + poll ComfyUI over `127.0.0.1:8188`. `watch_prompt()`
   **actively monitors** the render (mirrors render-worker's `comfyui.js`): the WS gives
   fast progress + fast terminal signals (`executing`→null / `execution_success` = done;
@@ -114,7 +129,8 @@ how the queue path is smoke-tested on a box with no GPU.
   `COMFY_UNREACHABLE_TRIES` (3), `COMFY_WATCH_TIMEOUT_MS` (30m), `COMFY_POLL_TIMEOUT_MS` (8s).
 - `gcs.py` — upload the MP4; returns the **durable `gs://` ref** (never expires — chat-api signs a fresh short-lived read url from it on every read, mirroring render-worker/storage.js; `GCS_SIGN` now gates only the local `selftest` round-trip). Two buckets:
   `GCS_BUCKET` (`video-response`, per-turn), `GCS_BUCKET_IMAGE_RESPONSE` (`image-response`,
-  finished pictures) and `GCS_SEED_BUCKET` (`video-seed`, seed clips) — the first and last
+  finished pictures), `GCS_BUCKET_REFMOD` (`refmod`, refmods: a derived cache that can be
+  wiped) and `GCS_SEED_BUCKET` (`video-seed`, seed clips) — the first and last
   each also accept ai-chat's spelling (`GCS_BUCKET_RESPONSE` /
   `GCS_BUCKET_SEED`) so one env vocabulary drives every service. Creds resolve
   `GOOGLE_APPLICATION_CREDENTIALS`/`GCS_KEY_FILE` (paths) →

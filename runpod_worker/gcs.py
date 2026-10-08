@@ -45,6 +45,10 @@ GCS_SEED_BUCKET = os.environ.get("GCS_BUCKET_SEED") or os.environ.get("GCS_SEED_
 # Where a finished PICTURE goes (a Krea 2 job): image-response, the image twin of
 # video-response. render-plane copies an approved one into image-seed.
 GCS_BUCKET_IMAGE_RESPONSE = os.environ.get("GCS_BUCKET_IMAGE_RESPONSE") or "image-response"
+# Where a REFMOD goes (ai-chat milestone D): a reference video's pre-encoded latent, a derived
+# cache with no response/seed pair, so a bucket of its own that can be wiped or given a
+# lifecycle rule without touching anything an admin approved.
+GCS_BUCKET_REFMOD = os.environ.get("GCS_BUCKET_REFMOD") or "refmod"
 # Object-name prefix. Set it EMPTY to write at the bucket root, which is what
 # render-worker/storage.js does — keep it empty when this worker replaces that service
 # so one bucket doesn't end up with two layouts.
@@ -139,6 +143,11 @@ def image_response_bucket():
     return GCS_BUCKET_IMAGE_RESPONSE
 
 
+def refmod_bucket():
+    """Where a refmod goes (refmod)."""
+    return GCS_BUCKET_REFMOD
+
+
 def upload_video(data, filename, content_type="video/mp4", bucket=None, prefix=None):
     """Upload bytes and return the DURABLE gs://bucket/object reference to persist.
 
@@ -179,7 +188,7 @@ def log_config():
     source = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS") or "<application-default>"
     print(
         f"[gcs] response={GCS_BUCKET or '(unset)'} "
-        f"images={GCS_BUCKET_IMAGE_RESPONSE or '(unset)'} "
+        f"images={GCS_BUCKET_IMAGE_RESPONSE or '(unset)'} refmods={GCS_BUCKET_REFMOD or '(unset)'} "
         f"seed={GCS_SEED_BUCKET or GCS_BUCKET or '(unset)'} "
         f"prefix={GCS_PREFIX or '(none)'} deliver=gs://ref (chat-api signs on read)",
         flush=True,

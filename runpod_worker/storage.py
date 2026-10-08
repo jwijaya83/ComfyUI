@@ -2,8 +2,8 @@
 render_jobs.output_url. Python port of render-worker/src/storage.js — same two
 delivery paths, but GCS is tried FIRST and local disk is a true fallback, not a
 redundant write on every render. The file keeps the type ComfyUI wrote (an LTX .mp4, a
-Krea 2 .png, Music 3's .flac): a picture goes to the image-response bucket, anything else
-to the response bucket.
+Krea 2 .png, Music 3's .flac, a refmod's .safetensors): a picture goes to the image-response
+bucket, a refmod to the refmod bucket, anything else to the response bucket.
 
   1. GCS    — when a response bucket + credentials are configured, upload and return
      the DURABLE `gs://bucket/object` ref. chat-api signs a fresh short-lived read url
@@ -47,7 +47,10 @@ def _save_local(data, filename):
 
 def save_output(data, filename):
     content_type = mimetypes.guess_type(filename)[0] or "application/octet-stream"
-    bucket = gcs.image_response_bucket() if content_type.startswith("image/") else gcs.response_bucket()
+    if filename.endswith(".safetensors"):
+        bucket = gcs.refmod_bucket()
+    else:
+        bucket = gcs.image_response_bucket() if content_type.startswith("image/") else gcs.response_bucket()
     if gcs.enabled(bucket):
         try:
             gs_uri = gcs.upload_video(data, filename, content_type=content_type, bucket=bucket)

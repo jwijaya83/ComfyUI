@@ -82,6 +82,10 @@ def render_mock(job, on_progress=None):
         duration = 8
 
     with tempfile.TemporaryDirectory(prefix="render-") as d:
+        if kind == "latent":
+            # A refmod job (ai-chat milestone D): a stub, so the path from the worker to the row
+            # runs with no GPU. It never matches a real tensor, so a scene given it just misses.
+            return b"refmod stub: not a safetensors file\n", "mock.safetensors"
         if kind == "audio":
             out = os.path.join(d, "out.flac")
             return _ffmpeg(["ffmpeg", "-y", "-f", "lavfi", "-i", f"sine=frequency=440:duration={duration}", "-c:a", "flac"], out), "mock.flac"

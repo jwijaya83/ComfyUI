@@ -124,14 +124,15 @@ def _upload_ref_images(job, key="refImages"):
     """A scene's pictures (H3 ref2va, ai-chat v1.1.1): `refImages: [{ url, name }]`, each
     downloaded (a signed GCS url or a render-plane token url) and uploaded under its own name,
     in order. The order is the prompt's <Picture N> numbering. Its reference videos
-    (`refVideos`, milestone D) are fetched the same way, in <Video k> order. Returns the
+    (`refVideos`, milestone D) are fetched the same way, in <Video k> order, and so are its
+    refmods (`refmods`, the pass-through VAE reads them from the input folder). Returns the
     uploaded names."""
     names = [
         upload_image(_download(ref["url"]), filename=os.path.basename(str(ref["name"])))
         for ref in job.get(key) or []
     ]
     if names:
-        what = "picture" if key == "refImages" else "video"
+        what = {"refImages": "picture", "refVideos": "video", "refmods": "refmod"}[key]
         print(f"↺ job {job.get('jobId')} has {len(names)} reference {what}(s): {', '.join(names)}", flush=True)
     return names
 
@@ -141,6 +142,7 @@ def _render_comfy(job, on_progress):
     # A job with reference pictures takes them INSTEAD of the one conditioning input.
     ref_images = _upload_ref_images(job)
     ref_videos = _upload_ref_images(job, "refVideos")
+    refmods = _upload_ref_images(job, "refmods")
     reference_image, source_video, use_ref = (None, None, False) if ref_images else _resolve_assets(job)
 
     workflow = build_workflow(
@@ -159,6 +161,7 @@ def _render_comfy(job, on_progress):
         seed=job.get("seed"),
         ref_images=ref_images,
         ref_videos=ref_videos,
+        refmods=refmods,
     )
 
     prompt_id, client_id = submit_prompt(workflow)
@@ -180,8 +183,11 @@ def _render_comfy(job, on_progress):
 
 def _pick_output(outputs, kind):
     """The file this job made: the first output of its kind (an `image` or `audio` job,
-    else a video), by the media type of its filename. ComfyUI files a SaveVideo under
-    "images", so the output's key can't tell. Falls back to the first output, as before."""
+    a refmod for a `latent` job, else a video), by the media type of its filename. ComfyUI
+    files a SaveVideo under "images", so the output's key can't tell. Falls back to the first
+    output, as before."""
+    if kind == "latent":
+        return next((o for o in outputs if str(o.get("filename") or "").endswith(".safetensors")), None)
     want = (kind if kind in ("image", "audio") else "video") + "/"
     media = lambda o: mimetypes.guess_type(o.get("filename") or "")[0] or ""  # noqa: E731
     return next((o for o in outputs if media(o).startswith(want)), outputs[0] if outputs else None)
