@@ -94,7 +94,12 @@ how the queue path is smoke-tested on a box with no GPU.
   `ref_images.ref_image_0…N-1` point at the first N loaders, every other `ref_image_*` key
   is removed, and the leftover loaders are dropped from the graph (ComfyUI would otherwise
   look for the export's test pictures they name). Their order is the prompt's
-  `<Picture N>` numbering. `python workflow_builder.py` runs its assert self-check.
+  `<Picture N>` numbering. A scene's reference VIDEOS (`refVideos: [{ url, name }]`, ai-chat
+  milestone D) are fetched the same way and wired through `refVideoLoaders` (three
+  `VHS_LoadVideo`, 24 fps, capped at 124 frames, so H3 never cuts one): video i's frames on
+  `ref_videos.ref_video_i` and its soundtrack on `ref_video_audios.ref_video_audio_i` of the
+  same node; unused video loaders are dropped, all three on a job with none. Their order is the
+  prompt's `<Video k>`. `python workflow_builder.py` runs its assert self-check.
 - `comfy_client.py` — submit + poll ComfyUI over `127.0.0.1:8188`. `watch_prompt()`
   **actively monitors** the render (mirrors render-worker's `comfyui.js`): the WS gives
   fast progress + fast terminal signals (`executing`→null / `execution_success` = done;

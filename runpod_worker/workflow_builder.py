@@ -3,7 +3,7 @@
 A faithful Python port of the render-worker's workflowLoader.js: load
 `workflows/<name>.json`, patch the nodes the meta sidecar names (prompt, lora,
 frame count, length in seconds, source video, reference image, a scene's reference
-pictures, save prefix), return the graph. The SEED NODES keep the template's fixed seed, so a tested graph renders the way
+pictures and videos, save prefix), return the graph. The SEED NODES keep the template's fixed seed, so a tested graph renders the way
 it was tested — unless the job sends a `seed`. Only one job does: a Krea 2 picture drawn
 again after the vision check rejected it, because the same seed and prompt would draw the
 same picture. Each turn's `positive` prompt differs, so ComfyUI's input-hash cache never
@@ -59,6 +59,7 @@ def build_workflow(
     lora_strength=None,
     seed=None,
     ref_images=None,
+    ref_videos=None,
 ):
     safe = _safe_name(name)
     with open(os.path.join(WORKFLOWS_DIR, f"{safe}.json")) as f:
@@ -176,6 +177,26 @@ def build_workflow(
         for unused in loaders[len(ref_images):]:
             workflow.pop(unused, None)
 
+    # A scene's reference VIDEOS (ai-chat milestone D): each one's frames on
+    # ref_videos.ref_video_i and its soundtrack on ref_video_audios.ref_video_audio_i of the same
+    # node, from the i-th of `refVideoLoaders` (VHS_LoadVideo at 24 fps, capped at 124 frames,
+    # the shortest scene's length, so H3 never cuts one). The order is the prompt's <Video k>.
+    # Loaders left over are dropped, as for pictures, and so are all three on a job with none.
+    vloaders = meta.get("refVideoLoaders") or []
+    if vloaders and refs_node in workflow:
+        videos = ref_videos or []
+        if len(videos) > len(vloaders):
+            raise ValueError(f"Workflow '{safe}' takes at most {len(vloaders)} reference videos, not {len(videos)}.")
+        inputs = workflow[refs_node]["inputs"]
+        for key in [k for k in inputs if k.startswith(("ref_videos.", "ref_video_audios."))]:
+            del inputs[key]
+        for i, video in enumerate(videos):
+            inputs[f"ref_videos.ref_video_{i}"] = [vloaders[i], 0]
+            inputs[f"ref_video_audios.ref_video_audio_{i}"] = [vloaders[i], 2]
+            workflow[vloaders[i]]["inputs"]["video"] = video
+        for unused in vloaders[len(videos):]:
+            workflow.pop(unused, None)
+
     save_node = meta.get("saveVideoNode")
     if filename_prefix and save_node and save_node in workflow:
         workflow[save_node]["inputs"]["filename_prefix"] = filename_prefix
@@ -208,10 +229,24 @@ if __name__ == "__main__":
     assert refs == {"ref_images.ref_image_0": ["137", 0], "ref_images.ref_image_1": ["148", 0]}, refs
     assert (h3r["137"]["inputs"]["image"], h3r["148"]["inputs"]["image"]) == ("sheet.png", "place.png")
     dropped = set(h3_t) - set(h3r)
-    assert dropped == {"147", "151", "152", "153", "154", "155", "156"}, dropped
+    assert dropped == {"147", "151", "152", "153", "154", "155", "156", "157", "158", "159"}, dropped
     assert not any(isinstance(v, list) and v and v[0] in dropped for n in h3r.values() for v in n["inputs"].values()), \
         "nothing points at a dropped loader"
     assert h3["136"] == h3_t["136"], "no pictures: the template's own wiring"
+
+    # W5: one picture and one video leave exactly ref_image_0, ref_video_0 and ref_video_audio_0
+    # on node 136, and no other loader.
+    h3v = build_workflow(name="minimax_h3_r2v_hybrid", prompt="P", ref_images=["sheet.png"], ref_videos=["voice.mp4"])
+    refs = {k: v for k, v in h3v["136"]["inputs"].items() if k.startswith(("ref_images.", "ref_videos.", "ref_video_audios."))}
+    assert refs == {
+        "ref_images.ref_image_0": ["137", 0],
+        "ref_videos.ref_video_0": ["157", 0],
+        "ref_video_audios.ref_video_audio_0": ["157", 2],
+    }, refs
+    assert h3v["157"]["inputs"]["video"] == "voice.mp4"
+    assert (h3v["157"]["inputs"]["force_rate"], h3v["157"]["inputs"]["frame_load_cap"]) == (24, 124)
+    loaders = {n for n, v in h3v.items() if v["class_type"] in ("LoadImage", "VHS_LoadVideo")}
+    assert loaders == {"137", "157"}, loaders
 
     # basic_workflow exactly as before: only the nodes a job has always patched change.
     ltx, ltx_t = build_workflow(
