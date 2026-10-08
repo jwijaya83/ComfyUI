@@ -127,10 +127,16 @@ def _upload_ref_images(job, key="refImages"):
     (`refVideos`, milestone D) are fetched the same way, in <Video k> order, and so are its
     refmods (`refmods`, the pass-through VAE reads them from the input folder). Returns the
     uploaded names."""
-    names = [
-        upload_image(_download(ref["url"]), filename=os.path.basename(str(ref["name"])))
-        for ref in job.get(key) or []
-    ]
+    names = []
+    for ref in job.get(key) or []:
+        try:
+            names.append(upload_image(_download(ref["url"]), filename=os.path.basename(str(ref["name"]))))
+        except Exception as e:  # noqa: BLE001
+            # A refmod is a cache that can only miss: one that can't be fetched is a miss, never
+            # a failed scene. A picture or a video the scene needs still fails it.
+            if key != "refmods":
+                raise
+            print(f"⚠ job {job.get('jobId')}: refmod {ref.get('name')} not fetched, encoding instead: {e}", flush=True)
     if names:
         what = {"refImages": "picture", "refVideos": "video", "refmods": "refmod"}[key]
         print(f"↺ job {job.get('jobId')} has {len(names)} reference {what}(s): {', '.join(names)}", flush=True)
