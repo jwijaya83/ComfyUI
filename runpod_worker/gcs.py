@@ -48,7 +48,7 @@ GCS_BUCKET_IMAGE_RESPONSE = os.environ.get("GCS_BUCKET_IMAGE_RESPONSE") or "imag
 # Where a REFMOD goes (ai-chat milestone D): a reference video's pre-encoded latent, a derived
 # cache with no response/seed pair, so a bucket of its own that can be wiped or given a
 # lifecycle rule without touching anything an admin approved.
-GCS_BUCKET_REFMOD = os.environ.get("GCS_BUCKET_REFMOD") or "refmod"
+GCS_BUCKET_REFMOD = os.environ.get("GCS_BUCKET_REFMOD") or "refmods"
 # Object-name prefix. Set it EMPTY to write at the bucket root, which is what
 # render-worker/storage.js does — keep it empty when this worker replaces that service
 # so one bucket doesn't end up with two layouts.
@@ -144,7 +144,7 @@ def image_response_bucket():
 
 
 def refmod_bucket():
-    """Where a refmod goes (refmod)."""
+    """Where a refmod goes (refmods)."""
     return GCS_BUCKET_REFMOD
 
 

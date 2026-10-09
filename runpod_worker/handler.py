@@ -121,34 +121,37 @@ def _resolve_assets(job):
 
 
 def _upload_ref_images(job, key="refImages"):
-    """A scene's pictures (H3 ref2va, ai-chat v1.1.1): `refImages: [{ url, name }]`, each
+    """A scene's pictures (H3 ref2va, ai-chat v1.1.1): `refImages: [{ url, name, refmod? }]`, each
     downloaded (a signed GCS url or a render-plane token url) and uploaded under its own name,
     in order. The order is the prompt's <Picture N> numbering. Its reference videos
-    (`refVideos`, milestone D) are fetched the same way, in <Video k> order, and so are its
-    refmods (`refmods`, the pass-through VAE reads them from the input folder). Returns the
-    uploaded names."""
-    names = []
+    (`refVideos`, milestone D) are fetched the same way, in <Video k> order. Each may bring its
+    REFMOD (`refmod: { url, name }`, milestone D), uploaded beside it for the cached H3 node,
+    which loads the reference itself only when the refmod doesn't fit. Returns (names, refmod
+    names), the second None where there is none."""
+    names, refmods = [], []
     for ref in job.get(key) or []:
+        names.append(upload_image(_download(ref["url"]), filename=os.path.basename(str(ref["name"]))))
+        refmod = ref.get("refmod")
         try:
-            names.append(upload_image(_download(ref["url"]), filename=os.path.basename(str(ref["name"]))))
+            refmods.append(upload_image(_download(refmod["url"]), filename=os.path.basename(str(refmod["name"]))) if refmod else None)
         except Exception as e:  # noqa: BLE001
             # A refmod is a cache that can only miss: one that can't be fetched is a miss, never
-            # a failed scene. A picture or a video the scene needs still fails it.
-            if key != "refmods":
-                raise
-            print(f"⚠ job {job.get('jobId')}: refmod {ref.get('name')} not fetched, encoding instead: {e}", flush=True)
+            # a failed scene.
+            refmods.append(None)
+            print(f"⚠ job {job.get('jobId')}: refmod {refmod.get('name')} not fetched, encoding instead: {e}", flush=True)
     if names:
-        what = {"refImages": "picture", "refVideos": "video", "refmods": "refmod"}[key]
-        print(f"↺ job {job.get('jobId')} has {len(names)} reference {what}(s): {', '.join(names)}", flush=True)
-    return names
+        what = {"refImages": "picture", "refVideos": "video"}[key]
+        with_refmods = sum(1 for r in refmods if r)
+        print(f"↺ job {job.get('jobId')} has {len(names)} reference {what}(s): {', '.join(names)}"
+              f"{f' ({with_refmods} with a refmod)' if with_refmods else ''}", flush=True)
+    return names, refmods
 
 
 def _render_comfy(job, on_progress):
     job_id = job.get("jobId")
     # A job with reference pictures takes them INSTEAD of the one conditioning input.
-    ref_images = _upload_ref_images(job)
-    ref_videos = _upload_ref_images(job, "refVideos")
-    refmods = _upload_ref_images(job, "refmods")
+    ref_images, image_refmods = _upload_ref_images(job)
+    ref_videos, video_refmods = _upload_ref_images(job, "refVideos")
     reference_image, source_video, use_ref = (None, None, False) if ref_images else _resolve_assets(job)
 
     workflow = build_workflow(
@@ -167,7 +170,7 @@ def _render_comfy(job, on_progress):
         seed=job.get("seed"),
         ref_images=ref_images,
         ref_videos=ref_videos,
-        refmods=refmods,
+        refmods={"image": image_refmods, "video": video_refmods},
     )
 
     prompt_id, client_id = submit_prompt(workflow)

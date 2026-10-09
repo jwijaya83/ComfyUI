@@ -1,0 +1,57 @@
+{
+  "1": {
+    "inputs": {
+      "vae_name": "minimax_h3_video_vae_int8_convrot.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE (video)"
+    }
+  },
+  "2": {
+    "inputs": {
+      "image": "sheet.png"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Reference Picture"
+    }
+  },
+  "3": {
+    "inputs": {
+      "aspect_ratio": "3:4 (Portrait Standard)",
+      "megapixels": 0.4,
+      "multiple": 32
+    },
+    "class_type": "ResolutionSelector",
+    "_meta": {
+      "title": "Scene canvas (the H3 template's)"
+    }
+  },
+  "4": {
+    "inputs": {
+      "image": [
+        "2",
+        0
+      ],
+      "vae": [
+        "1",
+        0
+      ],
+      "vae_name": "",
+      "width": [
+        "3",
+        0
+      ],
+      "height": [
+        "3",
+        1
+      ],
+      "filename_prefix": "refmod/refmod"
+    },
+    "class_type": "MiniMaxH3EncodeRefmod",
+    "_meta": {
+      "title": "MiniMax H3 Encode Refmod"
+    }
+  }
+}

@@ -70,7 +70,7 @@ how the queue path is smoke-tested on a box with no GPU.
   wrote, as `chat_<jobId>.<ext>` (`handler._pick_output` takes the job's `kind` of output by
   its filename's media type — ComfyUI files a `SaveVideo` under `"images"`, so the key can't
   tell). A picture goes to `GCS_BUCKET_IMAGE_RESPONSE` (`image-response`), a refmod (a
-  `.safetensors`, ai-chat milestone D) to `GCS_BUCKET_REFMOD` (`refmod`), anything else to
+  `.safetensors`, ai-chat milestone D) to `GCS_BUCKET_REFMOD` (`refmods`), anything else to
   the response bucket. It uploads to the GCS bucket FIRST when configured, returning the **durable `gs://` ref** chat-api signs on
   read; `MEDIA_DIR` (a volume shared with chat-api, which re-serves it at `/media`) is
   only used when GCS isn't configured, or as the fallback if a configured upload fails —
@@ -103,18 +103,24 @@ how the queue path is smoke-tested on a box with no GPU.
   `ref_videos.ref_video_i` and its soundtrack on `ref_video_audios.ref_video_audio_i` of the
   same node; unused video loaders are dropped, all three on a job with none. Their order is the
   prompt's `<Video k>`. REFMODS (ai-chat milestone D, `custom_nodes/aichat_refmod` in this
-  checkout): a reference video's latents, encoded once by the `minimax_h3_refmod` template
-  (a `kind: "latent"` job whose `sourceVideoUrl` is the video; `MiniMaxH3EncodeRefmod`
-  prepares it exactly as the H3 node does and writes the `.safetensors`), and given back to a
-  scene as `refmods: [{ url, name }]`, uploaded like its pictures. In the H3 template a
-  `MiniMaxH3RefmodVAE` stands in front of each of node 136's VAEs (`refmodNodes`): its encode
-  returns a stored latent when the tensor's sha256 and the VAE's file name match, logging
-  `[refmod] hit`, and encodes as before otherwise. The builder fills every `refmodNodes`
-  node's VAE names from the loaders it is wired to, so a changed VAE can't match a stale
-  refmod, and takes the pass-through out of a job with no refmods, so its graph is unchanged.
+  checkout): a reference's VAE latents and the prepared pixels Qwen3-VL reads (8-bit, exact:
+  the H3 node resizes through 8-bit), made once by `MiniMaxH3EncodeRefmod` on the
+  `minimax_h3_refmod` template (a `kind: "latent"` job whose `sourceVideoUrl` is the video) or
+  `minimax_h3_refmod_image` (the sheet as `referenceImageUrl` into its `LoadImage`, sized as
+  `ref_image_size: match` sizes it for the scene canvas: the H3 template's own
+  `ResolutionSelector`, unless the job sends `width`/`height`). A scene's reference brings its
+  refmod beside it (`refImages`/`refVideos` entries' `refmod: { url, name }`, one that can't be
+  fetched is dropped), and on a job with any the builder turns node 136 into
+  `MiniMaxH3ReferenceToVideoCached`: the H3 node's reference step with each reference a lazy
+  input, run only when its refmod doesn't fit (format, the VAE names the builder copies from
+  the loaders, its size at this canvas, its length against the scene). So a fitting reference
+  is never loaded, resized or VAE-encoded (`[refmod] hit`), a misfit is (`[refmod] miss <why>`),
+  and the conditioning is the H3 node's either way. A job without refmods keeps the H3 node.
   A template with no prompt (the refmod one) leaves out `positivePromptNode`.
-  `python workflow_builder.py` runs its assert self-check, and the node pack's own
-  `__init__.py` one with a stub VAE (in ComfyUI's venv).
+  `python workflow_builder.py` runs its assert self-check; the node pack's own (`python
+  custom_nodes/aichat_refmod/__init__.py` from the ComfyUI directory, in its venv) checks the
+  cached node against ComfyUI's H3 node with stubs, and is the thing to run after a ComfyUI
+  update, because the cached node copies the H3 node's reference code.
 - `comfy_client.py` — submit + poll ComfyUI over `127.0.0.1:8188`. `watch_prompt()`
   **actively monitors** the render (mirrors render-worker's `comfyui.js`): the WS gives
   fast progress + fast terminal signals (`executing`→null / `execution_success` = done;
@@ -129,7 +135,7 @@ how the queue path is smoke-tested on a box with no GPU.
   `COMFY_UNREACHABLE_TRIES` (3), `COMFY_WATCH_TIMEOUT_MS` (30m), `COMFY_POLL_TIMEOUT_MS` (8s).
 - `gcs.py` — upload the MP4; returns the **durable `gs://` ref** (never expires — chat-api signs a fresh short-lived read url from it on every read, mirroring render-worker/storage.js; `GCS_SIGN` now gates only the local `selftest` round-trip). Two buckets:
   `GCS_BUCKET` (`video-response`, per-turn), `GCS_BUCKET_IMAGE_RESPONSE` (`image-response`,
-  finished pictures), `GCS_BUCKET_REFMOD` (`refmod`, refmods: a derived cache that can be
+  finished pictures), `GCS_BUCKET_REFMOD` (`refmods`, refmods: a derived cache that can be
   wiped) and `GCS_SEED_BUCKET` (`video-seed`, seed clips) — the first and last
   each also accept ai-chat's spelling (`GCS_BUCKET_RESPONSE` /
   `GCS_BUCKET_SEED`) so one env vocabulary drives every service. Creds resolve

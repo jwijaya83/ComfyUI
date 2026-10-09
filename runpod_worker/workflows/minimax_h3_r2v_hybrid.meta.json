@@ -7,6 +7,5 @@
   "saveVideoNode": "92",
   "refImageNode": "136",
   "refImageLoaders": ["137", "148", "147", "151", "152", "153", "154", "155", "156"],
-  "refVideoLoaders": ["157", "158", "159"],
-  "refmodNodes": ["160", "161"]
+  "refVideoLoaders": ["157", "158", "159"]
 }

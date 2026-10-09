@@ -200,28 +200,27 @@ def build_workflow(
         for unused in vloaders[len(videos):]:
             workflow.pop(unused, None)
 
-    # REFMODS (ai-chat milestone D): a reference video's latents, encoded once, which
-    # MiniMaxH3RefmodVAE (custom_nodes/aichat_refmod) returns instead of encoding the video again.
-    # A refmod is keyed on the VAE that made it, by file name, so every `refmodNodes` node takes
-    # its names from the loaders it is wired to: a template whose VAE changes can never match a
-    # stale one. A job with no refmods has the pass-through taken out, so its graph is the one it
-    # always was (and needs no node pack).
-    for node_id in [n for n in meta.get("refmodNodes") or [] if n in workflow]:
+    # REFMODS (ai-chat milestone D, custom_nodes/aichat_refmod): a reference's prepared pixels
+    # and latents, made once. `refmods` = {"image": [...], "video": [...]}, a file or None per
+    # reference, in ref_images / ref_videos order. On a job with any, the H3 node becomes
+    # MiniMaxH3ReferenceToVideoCached: the same node, with each reference's loader a lazy input
+    # it runs only when that refmod doesn't fit. A job with none keeps the H3 node itself.
+    lines = [f"{kind} {i} {name}" for kind in ("image", "video") for i, name in enumerate((refmods or {}).get(kind) or []) if name]
+    cached = []
+    if lines and refs_node in workflow and workflow[refs_node]["class_type"] == "MiniMaxH3ReferenceToVideo":
+        node = workflow[refs_node]
+        node["class_type"] = "MiniMaxH3ReferenceToVideoCached"
+        node["inputs"] = {k.split(".", 1)[-1]: v for k, v in node["inputs"].items()}  # ref_images.ref_image_0 -> ref_image_0
+        node["inputs"]["refmods"] = "\n".join(lines)
+        cached = [refs_node]
+    # A refmod is made with, and only fits, the VAEs named in it, so every refmod node takes its
+    # VAE names from the loaders it is wired to: a template whose VAE changes never uses a stale one.
+    for node_id in [n for n in (meta.get("refmodNodes") or []) + cached if n in workflow]:
         inputs = workflow[node_id]["inputs"]
         for k in ("vae", "audio_vae"):
             src = inputs.get(k)
             if isinstance(src, list) and src[0] in workflow:
                 inputs[f"{k}_name"] = workflow[src[0]]["inputs"].get("vae_name", "")
-        if workflow[node_id]["class_type"] != "MiniMaxH3RefmodVAE":
-            continue
-        if refmods:
-            inputs["refmods"] = "\n".join(refmods)
-            continue
-        for other in workflow.values():
-            for key, value in other["inputs"].items():
-                if value == [node_id, 0]:
-                    other["inputs"][key] = inputs["vae"]
-        del workflow[node_id]
 
     save_node = meta.get("saveVideoNode")
     if filename_prefix and save_node and save_node in workflow:
@@ -255,15 +254,10 @@ if __name__ == "__main__":
     assert refs == {"ref_images.ref_image_0": ["137", 0], "ref_images.ref_image_1": ["148", 0]}, refs
     assert (h3r["137"]["inputs"]["image"], h3r["148"]["inputs"]["image"]) == ("sheet.png", "place.png")
     dropped = set(h3_t) - set(h3r)
-    assert dropped == {"147", "151", "152", "153", "154", "155", "156", "157", "158", "159", "160", "161"}, dropped
+    assert dropped == {"147", "151", "152", "153", "154", "155", "156", "157", "158", "159"}, dropped
     assert not any(isinstance(v, list) and v and v[0] in dropped for n in h3r.values() for v in n["inputs"].values()), \
         "nothing points at a dropped loader"
-    vaes = ("vae", "audio_vae")
-    assert {k: v for k, v in h3["136"]["inputs"].items() if k not in vaes} == {k: v for k, v in h3_t["136"]["inputs"].items() if k not in vaes}, \
-        "no pictures: the template's own wiring"
-    # W6: no refmods, no pass-through: the H3 node reads the loaders directly, as it always did.
-    assert (h3["136"]["inputs"]["vae"], h3["136"]["inputs"]["audio_vae"]) == (["119", 0], ["120", 0])
-    assert "160" not in h3 and "161" not in h3
+    assert h3["136"] == h3_t["136"], "no pictures: the template's own wiring"
 
     # W5: one picture and one video leave exactly ref_image_0, ref_video_0 and ref_video_audio_0
     # on node 136, and no other loader.
@@ -279,19 +273,36 @@ if __name__ == "__main__":
     loaders = {n for n, v in h3v.items() if v["class_type"] in ("LoadImage", "VHS_LoadVideo")}
     assert loaders == {"137", "157"}, loaders
 
-    # W6: with refmods, both pass-throughs stand in front of the H3 node, with the job's files
-    # and the VAE names of the loaders they are wired to.
-    h3m = build_workflow(name="minimax_h3_r2v_hybrid", prompt="P", ref_images=["s.png"], ref_videos=["v.mp4"], refmods=["a.safetensors", "b.safetensors"])
-    assert (h3m["136"]["inputs"]["vae"], h3m["136"]["inputs"]["audio_vae"]) == (["160", 0], ["161", 0])
-    assert h3m["160"]["inputs"]["refmods"] == "a.safetensors\nb.safetensors"
-    assert h3m["160"]["inputs"]["vae_name"] == h3_t["119"]["inputs"]["vae_name"]
-    assert h3m["161"]["inputs"]["vae_name"] == h3_t["120"]["inputs"]["vae_name"]
+    # Refmods: the H3 node becomes the cached one, each reference still wired (a lazy fallback),
+    # with the job's refmods by slot and the VAE names of its loaders. None means no refmod.
+    h3m = build_workflow(name="minimax_h3_r2v_hybrid", prompt="P", ref_images=["s.png", "p.png"], ref_videos=["v.mp4"],
+                         refmods={"image": ["s.safetensors", None], "video": ["v.safetensors"]})
+    m = h3m["136"]["inputs"]
+    assert h3m["136"]["class_type"] == "MiniMaxH3ReferenceToVideoCached"
+    assert m["refmods"] == "image 0 s.safetensors\nvideo 0 v.safetensors"
+    assert (m["ref_image_0"], m["ref_image_1"], m["ref_video_0"], m["ref_video_audio_0"]) == (["137", 0], ["148", 0], ["157", 0], ["157", 2])
+    assert not any("." in k for k in m), "no autogrow keys left"
+    assert (m["vae_name"], m["audio_vae_name"]) == (h3_t["119"]["inputs"]["vae_name"], h3_t["120"]["inputs"]["vae_name"])
+    assert {k: v for k, v in m.items() if not k.startswith(("ref_", "refmods", "vae_name", "audio_vae_name"))} == \
+        {k: v for k, v in h3v["136"]["inputs"].items() if not k.startswith("ref_")}, "every other input as the H3 node had it"
+    assert build_workflow(name="minimax_h3_r2v_hybrid", prompt="P", ref_images=["s.png"], refmods={"image": [None]})["136"]["class_type"] \
+        == "MiniMaxH3ReferenceToVideo", "no refmod: the H3 node itself"
     # The refmod template: no prompt, the reference video into its loader, the VAE names copied.
     rm, rm_t = build_workflow(name="minimax_h3_refmod", prompt=None, source_video="ref.mp4"), template("minimax_h3_refmod")
     assert rm["3"]["inputs"]["video"] == "ref.mp4"
     assert (rm["4"]["inputs"]["vae_name"], rm["4"]["inputs"]["audio_vae_name"]) == (h3_t["119"]["inputs"]["vae_name"], h3_t["120"]["inputs"]["vae_name"])
     assert {k: v for k, v in rm["3"]["inputs"].items() if k != "video"} == {k: v for k, v in h3_t["157"]["inputs"].items() if k != "video"}, \
         "the refmod's video is loaded exactly as a scene loads it, or its hash never matches"
+    # A picture's refmod (a character sheet): the picture into its loader, at the scene's canvas,
+    # which is the H3 template's own unless the job sends one.
+    rmi, rmi_t = build_workflow(name="minimax_h3_refmod_image", prompt=None, reference_image="sheet_g.png"), template("minimax_h3_refmod_image")
+    assert rmi["2"]["inputs"]["image"] == "sheet_g.png"
+    assert rmi["4"]["inputs"]["vae_name"] == h3_t["119"]["inputs"]["vae_name"]
+    assert rmi_t["3"]["inputs"] == h3_t["115"]["inputs"] and (rmi["4"]["inputs"]["width"], rmi["4"]["inputs"]["height"]) == (["3", 0], ["3", 1]), \
+        "the template's canvas is the scene's, or a sheet's hash never matches"
+    rmi_sized = build_workflow(name="minimax_h3_refmod_image", prompt=None, reference_image="s.png", width=480, height=640)
+    assert (rmi_sized["4"]["inputs"]["width"], rmi_sized["4"]["inputs"]["height"]) == (480, 640)
+    assert h3["136"]["inputs"]["ref_image_size"] == "match", "a sheet's refmod resizes as 'match' does"
 
     # basic_workflow exactly as before: only the nodes a job has always patched change.
     ltx, ltx_t = build_workflow(

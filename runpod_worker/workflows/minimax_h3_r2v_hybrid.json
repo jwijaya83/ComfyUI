@@ -244,11 +244,11 @@
         0
       ],
       "vae": [
-        "160",
+        "119",
         0
       ],
       "audio_vae": [
-        "161",
+        "120",
         0
       ],
       "ref_images.ref_image_0": [
@@ -486,34 +486,6 @@
     "class_type": "VHS_LoadVideo",
     "_meta": {
       "title": "Load Reference Video"
-    }
-  },
-  "160": {
-    "inputs": {
-      "vae": [
-        "119",
-        0
-      ],
-      "vae_name": "minimax_h3_video_vae_int8_convrot.safetensors",
-      "refmods": ""
-    },
-    "class_type": "MiniMaxH3RefmodVAE",
-    "_meta": {
-      "title": "Refmod VAE (video)"
-    }
-  },
-  "161": {
-    "inputs": {
-      "vae": [
-        "120",
-        0
-      ],
-      "vae_name": "minimax_h3_audio_vae_fp32.safetensors",
-      "refmods": ""
-    },
-    "class_type": "MiniMaxH3RefmodVAE",
-    "_meta": {
-      "title": "Refmod VAE (audio)"
     }
   }
 }
